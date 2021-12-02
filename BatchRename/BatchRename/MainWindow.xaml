@@ -1,0 +1,42 @@
+﻿<Fluent:RibbonWindow x:Class="BatchRename.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BatchRename"
+        xmlns:Fluent="clr-namespace:Fluent;assembly=Fluent"               
+        mc:Ignorable="d"
+        Title="MainWindow" Height="540" Width="800" Loaded="MainWindow_Loaded">
+    <StackPanel Orientation="Vertical">
+        <Fluent:Ribbon>
+            <Fluent:RibbonTabItem Header="Home">
+                <Fluent:RibbonGroupBox Header="Preset">
+                    <Fluent:Button Header="Open" Icon="icons/ic_open.png" LargeIcon="icons/ic_open.png" Padding="8, 8, 8, 0"/>
+                    <Fluent:Button Header="Save" Icon="icons/ic_save.png" LargeIcon="icons/ic_save.png" Padding="8, 8, 8, 0"/>
+                </Fluent:RibbonGroupBox>
+                <Fluent:RibbonGroupBox Header="Rename Methods">
+                    <Fluent:ComboBox Width="150" Height="25" Margin="0, 24, 0, 0">
+                        <TextBlock Text="Replace"/>
+                        <TextBlock Text="UPPERCASE"/>
+                        <TextBlock Text="lowercase"/>
+                        <TextBlock Text="PascalCase"/>
+                        <TextBlock Text="Add prefix"/>
+                        <TextBlock Text="Add subfix"/>
+                    </Fluent:ComboBox>
+                    <Fluent:Button Header="Add" Icon="icons/ic_add.png" LargeIcon="icons/ic_add.png" Padding="8,8,8,0"/>
+                </Fluent:RibbonGroupBox>
+                <Fluent:RibbonGroupBox Header="Batch Actions">
+                    <Fluent:Button Header="Reset" Icon="icons/ic_reset.png" LargeIcon="icons/ic_reset.png" Padding="8, 8, 8, 0"/>
+                    <Fluent:Button Header="Start" Icon="icons/ic_start.png" LargeIcon="icons/ic_start.png" Padding="8, 8, 8, 0"/>
+                </Fluent:RibbonGroupBox>
+            </Fluent:RibbonTabItem>
+            <Fluent:RibbonTabItem Header="Options"/>
+            <Fluent:RibbonTabItem Header="Help">
+                <Fluent:RibbonGroupBox>
+                    <Fluent:Button Header="Readme" Icon="icons/ic_readme.png" LargeIcon="icons/ic_readme.png" Padding="8, 8, 8, 0"/>
+                </Fluent:RibbonGroupBox>
+            </Fluent:RibbonTabItem>
+        </Fluent:Ribbon>
+        
+    </StackPanel>
+</Fluent:RibbonWindow>

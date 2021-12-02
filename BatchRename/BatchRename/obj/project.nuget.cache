@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "kEidlpBsrij07thXSJbw7UXnAgZuFEJfmbp2wQgg2L2ht/mKNHNrxyQYBM8I8M10BQqQsJG5JjZ7bcuSWLKcQg==",
+  "success": true,
+  "projectFilePath": "D:\\Document\\Nam 3\\Lap trinh Windows\\Do an mon hoc\\BatchRename\\BatchRename\\BatchRename.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\ASUS\\.nuget\\packages\\controlzex\\4.4.0\\controlzex.4.4.0.nupkg.sha512",
+    "C:\\Users\\ASUS\\.nuget\\packages\\fluent.ribbon\\8.0.3\\fluent.ribbon.8.0.3.nupkg.sha512",
+    "C:\\Users\\ASUS\\.nuget\\packages\\microsoft.xaml.behaviors.wpf\\1.1.19\\microsoft.xaml.behaviors.wpf.1.1.19.nupkg.sha512",
+    "C:\\Users\\ASUS\\.nuget\\packages\\system.text.json\\4.7.2\\system.text.json.4.7.2.nupkg.sha512"
+  ],
+  "logs": []
+}

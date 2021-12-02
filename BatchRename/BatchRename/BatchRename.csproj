@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="icons\ic_add.jpg" />
+    <None Remove="icons\ic_add.png" />
+    <None Remove="icons\ic_open.png" />
+    <None Remove="icons\ic_readme.png" />
+    <None Remove="icons\ic_reset.png" />
+    <None Remove="icons\ic_save.png" />
+    <None Remove="icons\ic_start.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Fluent.Ribbon" Version="8.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="icons\ic_add.png" />
+    <Resource Include="icons\ic_open.png" />
+    <Resource Include="icons\ic_readme.png" />
+    <Resource Include="icons\ic_reset.png" />
+    <Resource Include="icons\ic_save.png" />
+    <Resource Include="icons\ic_start.png" />
+  </ItemGroup>
+
+</Project>
