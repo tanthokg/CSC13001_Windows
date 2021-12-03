@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Document\\Nam 3\\Lap trinh Windows\\Do an mon hoc\\BatchRename\\BatchRename\\BatchRename.csproj": {}
+    "D:\\Programming\\GitHub\\CSC13001_Windows\\BatchRename\\BatchRename\\BatchRename.csproj": {}
   },
   "projects": {
-    "D:\\Document\\Nam 3\\Lap trinh Windows\\Do an mon hoc\\BatchRename\\BatchRename\\BatchRename.csproj": {
+    "D:\\Programming\\GitHub\\CSC13001_Windows\\BatchRename\\BatchRename\\BatchRename.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Document\\Nam 3\\Lap trinh Windows\\Do an mon hoc\\BatchRename\\BatchRename\\BatchRename.csproj",
+        "projectUniqueName": "D:\\Programming\\GitHub\\CSC13001_Windows\\BatchRename\\BatchRename\\BatchRename.csproj",
         "projectName": "BatchRename",
-        "projectPath": "D:\\Document\\Nam 3\\Lap trinh Windows\\Do an mon hoc\\BatchRename\\BatchRename\\BatchRename.csproj",
+        "projectPath": "D:\\Programming\\GitHub\\CSC13001_Windows\\BatchRename\\BatchRename\\BatchRename.csproj",
         "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "D:\\Document\\Nam 3\\Lap trinh Windows\\Do an mon hoc\\BatchRename\\BatchRename\\obj\\",
+        "outputPath": "D:\\Programming\\GitHub\\CSC13001_Windows\\BatchRename\\BatchRename\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

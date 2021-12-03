@@ -9,6 +9,10 @@
   <ItemGroup>
     <None Remove="icons\ic_add.jpg" />
     <None Remove="icons\ic_add.png" />
+    <None Remove="icons\ic_move_to_low.png" />
+    <None Remove="icons\ic_move_to_next.png" />
+    <None Remove="icons\ic_move_to_prev.png" />
+    <None Remove="icons\ic_move_to_top.png" />
     <None Remove="icons\ic_open.png" />
     <None Remove="icons\ic_readme.png" />
     <None Remove="icons\ic_reset.png" />
@@ -22,6 +26,10 @@
 
   <ItemGroup>
     <Resource Include="icons\ic_add.png" />
+    <Resource Include="icons\ic_move_to_low.png" />
+    <Resource Include="icons\ic_move_to_next.png" />
+    <Resource Include="icons\ic_move_to_prev.png" />
+    <Resource Include="icons\ic_move_to_top.png" />
     <Resource Include="icons\ic_open.png" />
     <Resource Include="icons\ic_readme.png" />
     <Resource Include="icons\ic_reset.png" />

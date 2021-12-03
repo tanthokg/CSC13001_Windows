@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "kEidlpBsrij07thXSJbw7UXnAgZuFEJfmbp2wQgg2L2ht/mKNHNrxyQYBM8I8M10BQqQsJG5JjZ7bcuSWLKcQg==",
+  "dgSpecHash": "TG+F9eBennSSPDE8VG6BFfLIY7MBBM2OjGUJaCH7yscNYzpvOXV3guzrklVupm+0thpWRUAxF8v3FXs6F3J+mg==",
   "success": true,
-  "projectFilePath": "D:\\Document\\Nam 3\\Lap trinh Windows\\Do an mon hoc\\BatchRename\\BatchRename\\BatchRename.csproj",
+  "projectFilePath": "D:\\Programming\\GitHub\\CSC13001_Windows\\BatchRename\\BatchRename\\BatchRename.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ASUS\\.nuget\\packages\\controlzex\\4.4.0\\controlzex.4.4.0.nupkg.sha512",
     "C:\\Users\\ASUS\\.nuget\\packages\\fluent.ribbon\\8.0.3\\fluent.ribbon.8.0.3.nupkg.sha512",
