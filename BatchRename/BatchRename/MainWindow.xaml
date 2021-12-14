@@ -11,42 +11,62 @@
         <Fluent:Ribbon>
             <Fluent:RibbonTabItem Header="Home">
                 <Fluent:RibbonGroupBox Header="Preset">
-                    <Fluent:Button Header="Open" Icon="icons/ic_open.png" LargeIcon="icons/ic_open.png" Padding="8, 8, 4, 0"/>
-                    <Fluent:Button Header="Save" Icon="icons/ic_save.png" LargeIcon="icons/ic_save.png" Padding="4, 8, 8, 0"/>
+                    <Fluent:Button Header="Open" Icon="icons/ic_open.png" LargeIcon="icons/ic_open.png" Padding="8, 4, 4, 0"/>
+                    <Fluent:Button Header="Save" Icon="icons/ic_save.png" LargeIcon="icons/ic_save.png" Padding="4, 4, 8, 0"/>
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Rename Rules">
-                    <Fluent:ComboBox Name="methodComboxBox" Width="150" Height="25" Margin="0, 24, 0, 0">
+                    <Fluent:ComboBox Name="rulesComboxBox" Width="150" Height="25" Margin="0, 8, 0, 0" Text="-- Choose a rule --">
                         <Fluent:ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding}"/>
                             </DataTemplate>
                         </Fluent:ComboBox.ItemTemplate>
                     </Fluent:ComboBox>
-                    <Fluent:Button Header="Add" Icon="icons/ic_add.png" LargeIcon="icons/ic_add.png" Padding="8,8,8,0"
+                    <Fluent:ComboBox Name="typeComboBox" Width="150" Height="25" Margin="0,4,0,0" Text="-- Choose items type --">
+                        <Fluent:ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}"/>
+                            </DataTemplate>
+                        </Fluent:ComboBox.ItemTemplate>
+                    </Fluent:ComboBox>
+                    <Fluent:Button Header="Add Rules" Icon="icons/ic_add_rule.png" LargeIcon="icons/ic_add_rule.png" Padding="4,4,0,0"
                                    Click="AddRules"/>
+                    <Fluent:Button Header="Add Items" Icon="icons/ic_add_item.png" LargeIcon="icons/ic_add_item.png" Padding="0,4,4,0"
+                                   Click="AddItems"/>
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Chosen Rules Actions">
-                    <Fluent:Button Header="First" Icon="icons/ic_move_to_top.png" LargeIcon="icons/ic_move_to_top.png" Padding="4, 8, 4, 0" Click="MoveRuleToTop"/>
-                    <Fluent:Button Header="Previous" Icon="icons/ic_move_to_prev.png" LargeIcon="icons/ic_move_to_prev.png" Padding="4, 8, 4, 0" Click="MoveRuleToPrev"/>
-                    <Fluent:Button Header="Next" Icon="icons/ic_move_to_next.png" LargeIcon="icons/ic_move_to_next.png" Padding="4, 8, 4, 0" Click="MoveRuleToNext"/>
-                    <Fluent:Button Header="Last" Icon="icons/ic_move_to_low.png" LargeIcon="icons/ic_move_to_low.png" Padding="4, 8, 4, 0" Click="MoveRuleToLow"/>
+                    <Fluent:Button Header="First" Icon="icons/ic_move_to_top.png" LargeIcon="icons/ic_move_to_top.png" Padding="4, 4, 0, 0" Click="MoveRuleToTop"/>
+                    <Fluent:Button Header="Previous" Icon="icons/ic_move_to_prev.png" LargeIcon="icons/ic_move_to_prev.png" Padding="0, 4, 0, 0" Click="MoveRuleToPrev"/>
+                    <Fluent:Button Header="Next" Icon="icons/ic_move_to_next.png" LargeIcon="icons/ic_move_to_next.png" Padding="0, 4, 0, 0" Click="MoveRuleToNext"/>
+                    <Fluent:Button Header="Last" Icon="icons/ic_move_to_low.png" LargeIcon="icons/ic_move_to_low.png" Padding="0, 4, 4, 0" Click="MoveRuleToLow"/>
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Batch Actions">
-                    <Fluent:Button Header="Reset" Icon="icons/ic_reset.png" LargeIcon="icons/ic_reset.png" Padding="8, 8, 8, 0" Click="ResetChosenRules"/>
-                    <Fluent:Button Header="Start" Icon="icons/ic_start.png" LargeIcon="icons/ic_start.png" Padding="8, 8, 8, 0"/>
+                    <Fluent:Button Header="Reset All" Icon="icons/ic_reset.png" LargeIcon="icons/ic_reset.png" Padding="8, 4, 4, 0" Click="ResetChosenRules"/>
+                    <Fluent:Button Header="Preview" Icon="icons/ic_preview.png" LargeIcon="icons/ic_preview.png" Padding="4, 4, 4, 0"/>
+                    <Fluent:Button Header="Start" Icon="icons/ic_start.png" LargeIcon="icons/ic_start.png" Padding="4, 4, 8, 0"/>
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
-            <Fluent:RibbonTabItem Header="Options"/>
+            <Fluent:RibbonTabItem Header="Options">
+                <Fluent:RibbonGroupBox Header="Resolve Conflicts">
+                    <Fluent:ComboBox Name="conflictComboBox" Width="150" Height="25" Margin="0, 8, 0, 0" Text="-- Choose an action --">
+                        <Fluent:ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}"/>
+                            </DataTemplate>
+                        </Fluent:ComboBox.ItemTemplate>
+                    </Fluent:ComboBox>
+                </Fluent:RibbonGroupBox>
+            </Fluent:RibbonTabItem>
+            
             <Fluent:RibbonTabItem Header="Help">
                 <Fluent:RibbonGroupBox>
                     <Fluent:Button Header="Readme" Icon="icons/ic_readme.png" LargeIcon="icons/ic_readme.png" Padding="8, 8, 8, 0"/>
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
         </Fluent:Ribbon>
-        <StackPanel HorizontalAlignment="Left" >
+        <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
             <StackPanel>
-                <Label Content="Chosen Rename Rule(s)" Margin="8,0,0,0">
-                </Label>
+                <Label Content="Chosen Rename Rule(s)" Margin="8,0,0,0"/>
                 <ListView Name="chosenListView" Width="200" Height="360" Margin="8,0,0,0">
                     <ListView.Resources>
                         <ContextMenu x:Key="ItemContextMenu">
@@ -66,6 +86,25 @@
                     </ListView.ItemContainerStyle>
                 </ListView>
             </StackPanel>
+            <StackPanel Margin="8, 0, 8, 0">
+                <Label Content="Chosen Item(s)" Margin="8,0,0,0"/>
+                <ListView Height="360" Width="560" VerticalAlignment="Top">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Current Name" Width="120" 
+                                            DisplayMemberBinding="{Binding}" />
+                            <GridViewColumn Header="New Name" Width="150" 
+                                            DisplayMemberBinding="{Binding}" />
+                            <GridViewColumn Header="Path" Width="150" 
+                                            DisplayMemberBinding="{Binding}" />
+                            <GridViewColumn Header="Result" Width="150" 
+                                            DisplayMemberBinding="{Binding}" />
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </StackPanel>
+            
         </StackPanel>
+        
     </StackPanel>
 </Fluent:RibbonWindow>

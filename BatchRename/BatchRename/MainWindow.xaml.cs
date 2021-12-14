@@ -23,7 +23,8 @@ namespace BatchRename
     {
         private BindingList<string> rules;
         private BindingList<string> chosenRules;
-        private int methodCounter = 0;
+        private BindingList<string> itemTypes;
+        private BindingList<string> conflictActions;
         public MainWindow()
         {
             InitializeComponent();
@@ -34,17 +35,29 @@ namespace BatchRename
             rules = new BindingList<string>() {
                 "Replace", "UPPERCASE", "lowercase", "PascalCase", "Add Prefix", "Add Suffix"
             };
+            itemTypes = new BindingList<string>()
+            {
+                "File", "Folder"
+            };
             chosenRules = new BindingList<string>();
-            methodComboxBox.ItemsSource = rules;
+            conflictActions = new BindingList<string>()
+            {
+                "Stop batching",
+                "Add a number as prefix",
+                "Add a number as suffix",
+                "Add created date as suffix"
+            };
+            rulesComboxBox.ItemsSource = rules;
+            typeComboBox.ItemsSource = itemTypes;
             chosenListView.ItemsSource = chosenRules;
+            conflictComboBox.ItemsSource = conflictActions;
         }
 
         private void AddRules(object sender, RoutedEventArgs e)
         {
-            int index = methodComboxBox.SelectedIndex;
+            int index = rulesComboxBox.SelectedIndex;
             if (index != -1)
             {
-                methodCounter++;
                 chosenRules.Add(rules[index]);
             }
         }
@@ -105,6 +118,11 @@ namespace BatchRename
                     chosenRules[i] = chosenRules[i + 1];
                 chosenRules[chosenRules.Count - 1] = temp;
             }
+        }
+
+        private void AddItems(object sender, RoutedEventArgs e)
+        {
+            typeComboBox.IsEnabled = false;
         }
     }
 }
