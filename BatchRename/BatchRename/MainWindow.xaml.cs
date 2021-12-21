@@ -61,7 +61,6 @@ namespace BatchRename
             conflictComboBox.ItemsSource = conflictActions;
 
             chosenListView.ItemsSource = chosenRules;
-            // ItemListView.ItemsSource = filenames;
         }
 
         private void AddRules(object sender, RoutedEventArgs e)
@@ -141,46 +140,46 @@ namespace BatchRename
             if (typeComboBox.SelectedItem.ToString() == "File")
             {
                 typeComboBox.IsEnabled = false;
-                System.Windows.Forms.FolderBrowserDialog folderDlg = new System.Windows.Forms.FolderBrowserDialog();
+                System.Windows.Forms.FolderBrowserDialog explorerDialog = new System.Windows.Forms.FolderBrowserDialog();
 
-                // show dialog
-                System.Windows.Forms.DialogResult result = folderDlg.ShowDialog();
+                System.Windows.Forms.DialogResult result = explorerDialog.ShowDialog();
                 if (result == System.Windows.Forms.DialogResult.OK)
                 {
                     ItemListView.ItemsSource = filenames;
-                    // get all filenames in path
-                    string path = folderDlg.SelectedPath + "\\";
+
+                    string path = explorerDialog.SelectedPath + "\\";
                     string[] files = Directory.GetFiles(path);
 
-                    // add all to filenameList
                     foreach (var file in files)
                     {
                         string filename = file.Remove(0, path.Length);
                         filenames.Add(new Filename() { CurrentName = filename, Path = path });
                     }
+
                     MessageBox.Show(filenames.Count + " file(s) Added Successfully");
                 }
 
             }
             else if (typeComboBox.SelectedItem.ToString() == "Folder")
             {
-                System.Windows.Forms.FolderBrowserDialog folderDlg = new System.Windows.Forms.FolderBrowserDialog();
+                typeComboBox.IsEnabled = false;
 
-                // show dialog
-                System.Windows.Forms.DialogResult result = folderDlg.ShowDialog();
+                System.Windows.Forms.FolderBrowserDialog explorerDialog = new System.Windows.Forms.FolderBrowserDialog();
+                System.Windows.Forms.DialogResult result = explorerDialog.ShowDialog();
+                
                 if (result == System.Windows.Forms.DialogResult.OK)
                 {
                     ItemListView.ItemsSource = foldernames;
-                    // get all foldernames
-                    string path = folderDlg.SelectedPath + "\\";
+
+                    string path = explorerDialog.SelectedPath + "\\";
                     string[] folders = Directory.GetDirectories(path);
 
-                    // add all to foldername list
                     foreach (var folder in folders)
                     {
                         string foldername = folder.Remove(0, path.Length);
                         foldernames.Add(new Foldername() { CurrentName = foldername, Path = path });
                     }
+
                     MessageBox.Show(foldernames.Count + " folder(s) Added Successfully");
                 }
             }
