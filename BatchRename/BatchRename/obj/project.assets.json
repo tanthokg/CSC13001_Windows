@@ -2,50 +2,50 @@
   "version": 3,
   "targets": {
     "net5.0-windows7.0": {
-      "ControlzEx/4.4.0": {
+      "ControlzEx/5.0.1": {
         "type": "package",
         "dependencies": {
-          "Microsoft.Xaml.Behaviors.Wpf": "1.1.19",
-          "System.Text.Json": "4.7.2"
+          "Microsoft.Xaml.Behaviors.Wpf": "1.1.31",
+          "System.Text.Json": "5.0.1"
         },
         "compile": {
-          "lib/netcoreapp3.1/ControlzEx.dll": {}
+          "lib/net5.0-windows7.0/ControlzEx.dll": {}
         },
         "runtime": {
-          "lib/netcoreapp3.1/ControlzEx.dll": {}
+          "lib/net5.0-windows7.0/ControlzEx.dll": {}
         },
         "frameworkReferences": [
           "Microsoft.WindowsDesktop.App.WPF"
         ]
       },
-      "Fluent.Ribbon/8.0.3": {
+      "Fluent.Ribbon/9.0.0": {
         "type": "package",
         "dependencies": {
-          "ControlzEx": "4.4.0"
+          "ControlzEx": "[5.0.1, 6.0.0)"
         },
         "compile": {
-          "lib/netcoreapp3.0/Fluent.dll": {}
+          "lib/net5.0-windows7.0/Fluent.dll": {}
         },
         "runtime": {
-          "lib/netcoreapp3.0/Fluent.dll": {}
+          "lib/net5.0-windows7.0/Fluent.dll": {}
         },
         "frameworkReferences": [
           "Microsoft.WindowsDesktop.App"
         ]
       },
-      "Microsoft.Xaml.Behaviors.Wpf/1.1.19": {
+      "Microsoft.Xaml.Behaviors.Wpf/1.1.31": {
         "type": "package",
         "compile": {
-          "lib/netcoreapp3.0/Microsoft.Xaml.Behaviors.dll": {}
+          "lib/net5.0-windows7.0/Microsoft.Xaml.Behaviors.dll": {}
         },
         "runtime": {
-          "lib/netcoreapp3.0/Microsoft.Xaml.Behaviors.dll": {}
+          "lib/net5.0-windows7.0/Microsoft.Xaml.Behaviors.dll": {}
         },
         "frameworkReferences": [
           "Microsoft.WindowsDesktop.App.WPF"
         ]
       },
-      "System.Text.Json/4.7.2": {
+      "System.Text.Json/5.0.1": {
         "type": "package",
         "compile": {
           "lib/netcoreapp3.0/System.Text.Json.dll": {}
@@ -57,39 +57,39 @@
     }
   },
   "libraries": {
-    "ControlzEx/4.4.0": {
-      "sha512": "pZ5z4hYWwE4R13UMCVs6vII//nL7hz+Nwn4oJlnsZJRGqJNy6Z9KnJiTZfly6lKFu0pMc1aWBZpx+VqFTQKP1Q==",
+    "ControlzEx/5.0.1": {
+      "sha512": "DVJJmmnKXcVh3Bs2gKpAdPCT8HrkYTagSbFg0P9xHjp8dox9bKeaoVj9VGhPRzP9+LHs5MUXxN07/oGqeXNNcg==",
       "type": "package",
-      "path": "controlzex/4.4.0",
+      "path": "controlzex/5.0.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "controlzex.4.4.0.nupkg.sha512",
+        "controlzex.5.0.1.nupkg.sha512",
         "controlzex.nuspec",
-        "lib/net45/ControlzEx.dll",
-        "lib/net45/ControlzEx.pdb",
-        "lib/net45/ControlzEx.xml",
+        "lib/net452/ControlzEx.dll",
+        "lib/net452/ControlzEx.pdb",
+        "lib/net452/ControlzEx.xml",
         "lib/net462/ControlzEx.dll",
         "lib/net462/ControlzEx.pdb",
         "lib/net462/ControlzEx.xml",
-        "lib/netcoreapp3.0/ControlzEx.dll",
-        "lib/netcoreapp3.0/ControlzEx.pdb",
-        "lib/netcoreapp3.0/ControlzEx.xml",
+        "lib/net5.0-windows7.0/ControlzEx.dll",
+        "lib/net5.0-windows7.0/ControlzEx.pdb",
+        "lib/net5.0-windows7.0/ControlzEx.xml",
         "lib/netcoreapp3.1/ControlzEx.dll",
         "lib/netcoreapp3.1/ControlzEx.pdb",
         "lib/netcoreapp3.1/ControlzEx.xml",
         "logo-mini.png"
       ]
     },
-    "Fluent.Ribbon/8.0.3": {
-      "sha512": "iFSeb2SYKdyDa3M4m3qz/6ljIAou/9e5a3NupJsRg1KBZtR9MvoVsK0xYrqx+Dshn0D5SQYTE5wly38f02iAcA==",
+    "Fluent.Ribbon/9.0.0": {
+      "sha512": "29N3G7EM1WFgNofj4wEaufFaB8Iakjn/CZskq3kHKR93myxJ2iV0k6xLH3rhg9l/QATboPExV0WONT/ZfQcOVg==",
       "type": "package",
-      "path": "fluent.ribbon/8.0.3",
+      "path": "fluent.ribbon/9.0.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Logo.png",
-        "fluent.ribbon.8.0.3.nupkg.sha512",
+        "fluent.ribbon.9.0.0.nupkg.sha512",
         "fluent.ribbon.nuspec",
         "lib/net452/Fluent.dll",
         "lib/net452/Fluent.pdb",
@@ -97,16 +97,19 @@
         "lib/net462/Fluent.dll",
         "lib/net462/Fluent.pdb",
         "lib/net462/Fluent.xml",
-        "lib/netcoreapp3.0/Fluent.dll",
-        "lib/netcoreapp3.0/Fluent.pdb",
-        "lib/netcoreapp3.0/Fluent.xml",
+        "lib/net5.0-windows7.0/Fluent.dll",
+        "lib/net5.0-windows7.0/Fluent.pdb",
+        "lib/net5.0-windows7.0/Fluent.xml",
+        "lib/netcoreapp3.1/Fluent.dll",
+        "lib/netcoreapp3.1/Fluent.pdb",
+        "lib/netcoreapp3.1/Fluent.xml",
         "license/License.txt"
       ]
     },
-    "Microsoft.Xaml.Behaviors.Wpf/1.1.19": {
-      "sha512": "5sPWkbqImc2t1aQwIfJcKsUo7tOg1Tr8+6xVzZJB56Nzt4u9NlpcLofgdX/aRYpPKdWDA3U23Akw1KQzU5e82g==",
+    "Microsoft.Xaml.Behaviors.Wpf/1.1.31": {
+      "sha512": "LZpuf82ACZWldmfMuv3CTUMDh3o0xo0uHUaybR5HgqVLDBJJ9RZLykplQ/bTJd0/VDt3EhD4iDgUgbdIUAM+Kg==",
       "type": "package",
-      "path": "microsoft.xaml.behaviors.wpf/1.1.19",
+      "path": "microsoft.xaml.behaviors.wpf/1.1.31",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
@@ -115,19 +118,23 @@
         "lib/net45/Microsoft.Xaml.Behaviors.dll",
         "lib/net45/Microsoft.Xaml.Behaviors.pdb",
         "lib/net45/Microsoft.Xaml.Behaviors.xml",
-        "lib/netcoreapp3.0/Design/Microsoft.Xaml.Behaviors.DesignTools.dll",
-        "lib/netcoreapp3.0/Microsoft.Xaml.Behaviors.dll",
-        "lib/netcoreapp3.0/Microsoft.Xaml.Behaviors.pdb",
-        "lib/netcoreapp3.0/Microsoft.Xaml.Behaviors.xml",
-        "microsoft.xaml.behaviors.wpf.1.1.19.nupkg.sha512",
+        "lib/net5.0-windows7.0/Design/Microsoft.Xaml.Behaviors.DesignTools.dll",
+        "lib/net5.0-windows7.0/Microsoft.Xaml.Behaviors.dll",
+        "lib/net5.0-windows7.0/Microsoft.Xaml.Behaviors.pdb",
+        "lib/net5.0-windows7.0/Microsoft.Xaml.Behaviors.xml",
+        "lib/netcoreapp3.1/Design/Microsoft.Xaml.Behaviors.DesignTools.dll",
+        "lib/netcoreapp3.1/Microsoft.Xaml.Behaviors.dll",
+        "lib/netcoreapp3.1/Microsoft.Xaml.Behaviors.pdb",
+        "lib/netcoreapp3.1/Microsoft.Xaml.Behaviors.xml",
+        "microsoft.xaml.behaviors.wpf.1.1.31.nupkg.sha512",
         "microsoft.xaml.behaviors.wpf.nuspec",
         "tools/Install.ps1"
       ]
     },
-    "System.Text.Json/4.7.2": {
-      "sha512": "TcMd95wcrubm9nHvJEQs70rC0H/8omiSGGpU4FQ/ZA1URIqD4pjmFJh2Mfv1yH1eHgJDWTi2hMDXwTET+zOOyg==",
+    "System.Text.Json/5.0.1": {
+      "sha512": "/UM3UK1dXKl8Ybysg/21gM4S8DJgkR+yLU8JwqCVbuNqQNImelntgYFAN5QxR8sJJ1kMx//hOUdf0lltosi8cQ==",
       "type": "package",
-      "path": "system.text.json/4.7.2",
+      "path": "system.text.json/5.0.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -140,7 +147,7 @@
         "lib/netcoreapp3.0/System.Text.Json.xml",
         "lib/netstandard2.0/System.Text.Json.dll",
         "lib/netstandard2.0/System.Text.Json.xml",
-        "system.text.json.4.7.2.nupkg.sha512",
+        "system.text.json.5.0.1.nupkg.sha512",
         "system.text.json.nuspec",
         "useSharedDesignerContext.txt",
         "version.txt"
@@ -149,7 +156,7 @@
   },
   "projectFileDependencyGroups": {
     "net5.0-windows7.0": [
-      "Fluent.Ribbon >= 8.0.3"
+      "Fluent.Ribbon >= 9.0.0"
     ]
   },
   "packageFolders": {
@@ -198,7 +205,7 @@
         "dependencies": {
           "Fluent.Ribbon": {
             "target": "Package",
-            "version": "[8.0.3, )"
+            "version": "[9.0.0, )"
           }
         },
         "imports": [
@@ -219,7 +226,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.403\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.404\\RuntimeIdentifierGraph.json"
       }
     }
   }

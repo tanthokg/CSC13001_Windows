@@ -52,3 +52,4 @@ D:\Programming\GitHub\CSC13001_Windows\BatchRename\BatchRename\obj\Debug\net5.0-
 D:\Programming\GitHub\CSC13001_Windows\BatchRename\BatchRename\obj\Debug\net5.0-windows\BatchRename.pdb
 D:\Programming\GitHub\CSC13001_Windows\BatchRename\BatchRename\obj\Debug\net5.0-windows\BatchRename.genruntimeconfig.cache
 D:\Programming\GitHub\CSC13001_Windows\BatchRename\BatchRename\obj\Debug\net5.0-windows\BatchRename.csproj.AssemblyReference.cache
+D:\Programming\GitHub\CSC13001_Windows\BatchRename\BatchRename\bin\Debug\net5.0-windows\System.Text.Json.dll

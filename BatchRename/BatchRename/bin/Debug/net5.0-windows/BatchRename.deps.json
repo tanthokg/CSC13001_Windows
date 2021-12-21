@@ -8,44 +8,51 @@
     ".NETCoreApp,Version=v5.0": {
       "BatchRename/1.0.0": {
         "dependencies": {
-          "Fluent.Ribbon": "8.0.3"
+          "Fluent.Ribbon": "9.0.0"
         },
         "runtime": {
           "BatchRename.dll": {}
         }
       },
-      "ControlzEx/4.4.0": {
+      "ControlzEx/5.0.1": {
         "dependencies": {
-          "Microsoft.Xaml.Behaviors.Wpf": "1.1.19",
-          "System.Text.Json": "4.7.2"
+          "Microsoft.Xaml.Behaviors.Wpf": "1.1.31",
+          "System.Text.Json": "5.0.1"
         },
         "runtime": {
-          "lib/netcoreapp3.1/ControlzEx.dll": {
-            "assemblyVersion": "4.0.0.0",
-            "fileVersion": "4.4.0.50"
+          "lib/net5.0-windows7.0/ControlzEx.dll": {
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.1.15"
           }
         }
       },
-      "Fluent.Ribbon/8.0.3": {
+      "Fluent.Ribbon/9.0.0": {
         "dependencies": {
-          "ControlzEx": "4.4.0"
+          "ControlzEx": "5.0.1"
         },
         "runtime": {
-          "lib/netcoreapp3.0/Fluent.dll": {
-            "assemblyVersion": "8.0.0.0",
-            "fileVersion": "8.0.3.0"
+          "lib/net5.0-windows7.0/Fluent.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.0.0"
           }
         }
       },
-      "Microsoft.Xaml.Behaviors.Wpf/1.1.19": {
+      "Microsoft.Xaml.Behaviors.Wpf/1.1.31": {
         "runtime": {
-          "lib/netcoreapp3.0/Microsoft.Xaml.Behaviors.dll": {
+          "lib/net5.0-windows7.0/Microsoft.Xaml.Behaviors.dll": {
             "assemblyVersion": "1.1.0.0",
-            "fileVersion": "1.1.19.35512"
+            "fileVersion": "1.1.31.10800"
           }
         }
       },
-      "System.Text.Json/4.7.2": {}
+      "System.Text.Json/5.0.1": {
+        "runtime": {
+          "lib/netcoreapp3.0/System.Text.Json.dll": {
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.220.61120"
+          }
+        }
+      }
     }
   },
   "libraries": {
@@ -54,33 +61,33 @@
       "serviceable": false,
       "sha512": ""
     },
-    "ControlzEx/4.4.0": {
+    "ControlzEx/5.0.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-pZ5z4hYWwE4R13UMCVs6vII//nL7hz+Nwn4oJlnsZJRGqJNy6Z9KnJiTZfly6lKFu0pMc1aWBZpx+VqFTQKP1Q==",
-      "path": "controlzex/4.4.0",
-      "hashPath": "controlzex.4.4.0.nupkg.sha512"
+      "sha512": "sha512-DVJJmmnKXcVh3Bs2gKpAdPCT8HrkYTagSbFg0P9xHjp8dox9bKeaoVj9VGhPRzP9+LHs5MUXxN07/oGqeXNNcg==",
+      "path": "controlzex/5.0.1",
+      "hashPath": "controlzex.5.0.1.nupkg.sha512"
     },
-    "Fluent.Ribbon/8.0.3": {
+    "Fluent.Ribbon/9.0.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-iFSeb2SYKdyDa3M4m3qz/6ljIAou/9e5a3NupJsRg1KBZtR9MvoVsK0xYrqx+Dshn0D5SQYTE5wly38f02iAcA==",
-      "path": "fluent.ribbon/8.0.3",
-      "hashPath": "fluent.ribbon.8.0.3.nupkg.sha512"
+      "sha512": "sha512-29N3G7EM1WFgNofj4wEaufFaB8Iakjn/CZskq3kHKR93myxJ2iV0k6xLH3rhg9l/QATboPExV0WONT/ZfQcOVg==",
+      "path": "fluent.ribbon/9.0.0",
+      "hashPath": "fluent.ribbon.9.0.0.nupkg.sha512"
     },
-    "Microsoft.Xaml.Behaviors.Wpf/1.1.19": {
+    "Microsoft.Xaml.Behaviors.Wpf/1.1.31": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-5sPWkbqImc2t1aQwIfJcKsUo7tOg1Tr8+6xVzZJB56Nzt4u9NlpcLofgdX/aRYpPKdWDA3U23Akw1KQzU5e82g==",
-      "path": "microsoft.xaml.behaviors.wpf/1.1.19",
-      "hashPath": "microsoft.xaml.behaviors.wpf.1.1.19.nupkg.sha512"
+      "sha512": "sha512-LZpuf82ACZWldmfMuv3CTUMDh3o0xo0uHUaybR5HgqVLDBJJ9RZLykplQ/bTJd0/VDt3EhD4iDgUgbdIUAM+Kg==",
+      "path": "microsoft.xaml.behaviors.wpf/1.1.31",
+      "hashPath": "microsoft.xaml.behaviors.wpf.1.1.31.nupkg.sha512"
     },
-    "System.Text.Json/4.7.2": {
+    "System.Text.Json/5.0.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-TcMd95wcrubm9nHvJEQs70rC0H/8omiSGGpU4FQ/ZA1URIqD4pjmFJh2Mfv1yH1eHgJDWTi2hMDXwTET+zOOyg==",
-      "path": "system.text.json/4.7.2",
-      "hashPath": "system.text.json.4.7.2.nupkg.sha512"
+      "sha512": "sha512-/UM3UK1dXKl8Ybysg/21gM4S8DJgkR+yLU8JwqCVbuNqQNImelntgYFAN5QxR8sJJ1kMx//hOUdf0lltosi8cQ==",
+      "path": "system.text.json/5.0.1",
+      "hashPath": "system.text.json.5.0.1.nupkg.sha512"
     }
   }
 }

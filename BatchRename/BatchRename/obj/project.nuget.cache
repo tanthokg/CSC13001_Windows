@@ -1,13 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "TG+F9eBennSSPDE8VG6BFfLIY7MBBM2OjGUJaCH7yscNYzpvOXV3guzrklVupm+0thpWRUAxF8v3FXs6F3J+mg==",
+  "dgSpecHash": "+J2XufNka8aKItSho8lmE6Oz7vhyeTRBIPoiR4iGoRrBYQqb5P6LwFw7YB5kR1Pu+MZTWUQKZYyp6+DAtwtBjw==",
   "success": true,
   "projectFilePath": "D:\\Programming\\GitHub\\CSC13001_Windows\\BatchRename\\BatchRename\\BatchRename.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\ASUS\\.nuget\\packages\\controlzex\\4.4.0\\controlzex.4.4.0.nupkg.sha512",
-    "C:\\Users\\ASUS\\.nuget\\packages\\fluent.ribbon\\8.0.3\\fluent.ribbon.8.0.3.nupkg.sha512",
-    "C:\\Users\\ASUS\\.nuget\\packages\\microsoft.xaml.behaviors.wpf\\1.1.19\\microsoft.xaml.behaviors.wpf.1.1.19.nupkg.sha512",
-    "C:\\Users\\ASUS\\.nuget\\packages\\system.text.json\\4.7.2\\system.text.json.4.7.2.nupkg.sha512"
+    "C:\\Users\\ASUS\\.nuget\\packages\\controlzex\\5.0.1\\controlzex.5.0.1.nupkg.sha512",
+    "C:\\Users\\ASUS\\.nuget\\packages\\fluent.ribbon\\9.0.0\\fluent.ribbon.9.0.0.nupkg.sha512",
+    "C:\\Users\\ASUS\\.nuget\\packages\\microsoft.xaml.behaviors.wpf\\1.1.31\\microsoft.xaml.behaviors.wpf.1.1.31.nupkg.sha512",
+    "C:\\Users\\ASUS\\.nuget\\packages\\system.text.json\\5.0.1\\system.text.json.5.0.1.nupkg.sha512"
   ],
   "logs": []
 }
