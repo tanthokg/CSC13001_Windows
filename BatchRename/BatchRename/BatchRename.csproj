@@ -10,6 +10,7 @@
     <None Remove="icons\ic_add.jpg" />
     <None Remove="icons\ic_add_item.png" />
     <None Remove="icons\ic_add_rule.png" />
+    <None Remove="icons\ic_delete_items.png" />
     <None Remove="icons\ic_move_to_low.png" />
     <None Remove="icons\ic_move_to_next.png" />
     <None Remove="icons\ic_move_to_prev.png" />
@@ -29,6 +30,7 @@
   <ItemGroup>
     <Resource Include="icons\ic_add_item.png" />
     <Resource Include="icons\ic_add_rule.png" />
+    <Resource Include="icons\ic_delete_items.png" />
     <Resource Include="icons\ic_move_to_low.png" />
     <Resource Include="icons\ic_move_to_next.png" />
     <Resource Include="icons\ic_move_to_prev.png" />

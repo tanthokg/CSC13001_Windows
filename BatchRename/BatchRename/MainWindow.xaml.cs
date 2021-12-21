@@ -185,5 +185,12 @@ namespace BatchRename
                 }
             }
         }
+
+        private void ResetAddedItems(object sender, RoutedEventArgs e)
+        {
+            filenames.Clear();
+            foldernames.Clear();
+            typeComboBox.IsEnabled = true;
+        }
     }
 }

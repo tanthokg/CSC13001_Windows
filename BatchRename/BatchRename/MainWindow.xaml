@@ -41,7 +41,8 @@
                     <Fluent:Button Header="Last" Icon="icons/ic_move_to_low.png" LargeIcon="icons/ic_move_to_low.png" Padding="0, 4, 4, 0" Click="MoveRuleToLow"/>
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Batch Actions">
-                    <Fluent:Button Header="Reset All" Icon="icons/ic_reset.png" LargeIcon="icons/ic_reset.png" Padding="8, 4, 4, 0" Click="ResetChosenRules"/>
+                    <Fluent:Button Header="Reset Rules" Icon="icons/ic_reset.png" LargeIcon="icons/ic_reset.png" Padding="8, 4, 4, 0" Click="ResetChosenRules"/>
+                    <Fluent:Button Header="Reset Items" Icon="icons/ic_delete_items.png" LargeIcon="icons/ic_delete_items.png" Padding="8, 4, 4, 0" Click="ResetAddedItems"/>
                     <Fluent:Button Header="Preview" Icon="icons/ic_preview.png" LargeIcon="icons/ic_preview.png" Padding="4, 4, 4, 0"/>
                     <Fluent:Button Header="Start" Icon="icons/ic_start.png" LargeIcon="icons/ic_start.png" Padding="4, 4, 8, 0"/>
                 </Fluent:RibbonGroupBox>
