@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,6 +26,9 @@ namespace BatchRename
         private BindingList<string> chosenRules;
         private BindingList<string> itemTypes;
         private BindingList<string> conflictActions;
+        private BindingList<Filename> filenames;
+        private BindingList<Foldername> foldernames;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -32,6 +36,7 @@ namespace BatchRename
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            // Initiate Data Lists/Collections
             rules = new BindingList<string>() {
                 "Replace", "UPPERCASE", "lowercase", "PascalCase", "Add Prefix", "Add Suffix"
             };
@@ -47,10 +52,15 @@ namespace BatchRename
                 "Add a number as suffix",
                 "Add created date as suffix"
             };
+            filenames = new BindingList<Filename>();
+            foldernames = new BindingList<Foldername>();
+
+            // Bind UI with lists/collections
             rulesComboxBox.ItemsSource = rules;
             typeComboBox.ItemsSource = itemTypes;
-            chosenListView.ItemsSource = chosenRules;
             conflictComboBox.ItemsSource = conflictActions;
+
+            chosenListView.ItemsSource = chosenRules;
         }
 
         private void AddRules(object sender, RoutedEventArgs e)
@@ -122,7 +132,64 @@ namespace BatchRename
 
         private void AddItems(object sender, RoutedEventArgs e)
         {
-            typeComboBox.IsEnabled = false;
+            if (typeComboBox.SelectedItem == null)
+            {
+                MessageBox.Show("Please choose item type (files or folders)");
+                return;
+            }
+            if (typeComboBox.SelectedItem.ToString() == "File")
+            {
+                typeComboBox.IsEnabled = false;
+                System.Windows.Forms.FolderBrowserDialog explorerDialog = new System.Windows.Forms.FolderBrowserDialog();
+
+                System.Windows.Forms.DialogResult result = explorerDialog.ShowDialog();
+                if (result == System.Windows.Forms.DialogResult.OK)
+                {
+                    ItemListView.ItemsSource = filenames;
+
+                    string path = explorerDialog.SelectedPath + "\\";
+                    string[] files = Directory.GetFiles(path);
+
+                    foreach (var file in files)
+                    {
+                        string filename = file.Remove(0, path.Length);
+                        filenames.Add(new Filename() { CurrentName = filename, Path = path });
+                    }
+
+                    MessageBox.Show(filenames.Count + " file(s) Added Successfully");
+                }
+
+            }
+            else if (typeComboBox.SelectedItem.ToString() == "Folder")
+            {
+                typeComboBox.IsEnabled = false;
+
+                System.Windows.Forms.FolderBrowserDialog explorerDialog = new System.Windows.Forms.FolderBrowserDialog();
+                System.Windows.Forms.DialogResult result = explorerDialog.ShowDialog();
+                
+                if (result == System.Windows.Forms.DialogResult.OK)
+                {
+                    ItemListView.ItemsSource = foldernames;
+
+                    string path = explorerDialog.SelectedPath + "\\";
+                    string[] folders = Directory.GetDirectories(path);
+
+                    foreach (var folder in folders)
+                    {
+                        string foldername = folder.Remove(0, path.Length);
+                        foldernames.Add(new Foldername() { CurrentName = foldername, Path = path });
+                    }
+
+                    MessageBox.Show(foldernames.Count + " folder(s) Added Successfully");
+                }
+            }
+        }
+
+        private void ResetAddedItems(object sender, RoutedEventArgs e)
+        {
+            filenames.Clear();
+            foldernames.Clear();
+            typeComboBox.IsEnabled = true;
         }
     }
 }

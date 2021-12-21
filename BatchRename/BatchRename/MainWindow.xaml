@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:BatchRename"
         xmlns:Fluent="clr-namespace:Fluent;assembly=Fluent"               
         mc:Ignorable="d"
-        Title="MainWindow" Height="540" Width="800" Loaded="MainWindow_Loaded">
+        Title="MainWindow" Height="600" Width="960" Loaded="MainWindow_Loaded">
     <StackPanel Orientation="Vertical" >
         <Fluent:Ribbon>
             <Fluent:RibbonTabItem Header="Home">
@@ -41,7 +41,8 @@
                     <Fluent:Button Header="Last" Icon="icons/ic_move_to_low.png" LargeIcon="icons/ic_move_to_low.png" Padding="0, 4, 4, 0" Click="MoveRuleToLow"/>
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Batch Actions">
-                    <Fluent:Button Header="Reset All" Icon="icons/ic_reset.png" LargeIcon="icons/ic_reset.png" Padding="8, 4, 4, 0" Click="ResetChosenRules"/>
+                    <Fluent:Button Header="Reset Rules" Icon="icons/ic_reset.png" LargeIcon="icons/ic_reset.png" Padding="8, 4, 4, 0" Click="ResetChosenRules"/>
+                    <Fluent:Button Header="Reset Items" Icon="icons/ic_delete_items.png" LargeIcon="icons/ic_delete_items.png" Padding="8, 4, 4, 0" Click="ResetAddedItems"/>
                     <Fluent:Button Header="Preview" Icon="icons/ic_preview.png" LargeIcon="icons/ic_preview.png" Padding="4, 4, 4, 0"/>
                     <Fluent:Button Header="Start" Icon="icons/ic_start.png" LargeIcon="icons/ic_start.png" Padding="4, 4, 8, 0"/>
                 </Fluent:RibbonGroupBox>
@@ -67,7 +68,7 @@
         <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
             <StackPanel>
                 <Label Content="Chosen Rename Rule(s)" Margin="8,0,0,0"/>
-                <ListView Name="chosenListView" Width="200" Height="360" Margin="8,0,0,0">
+                <ListView Name="chosenListView" Width="200" Height="420" Margin="8,0,0,0">
                     <ListView.Resources>
                         <ContextMenu x:Key="ItemContextMenu">
                             <MenuItem Header="Edit Parameters"/>
@@ -88,17 +89,17 @@
             </StackPanel>
             <StackPanel Margin="8, 0, 8, 0">
                 <Label Content="Chosen Item(s)" Margin="8,0,0,0"/>
-                <ListView Height="360" Width="560" VerticalAlignment="Top">
+                <ListView Name="ItemListView"  Height="420" Width="720" VerticalAlignment="Top">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="Current Name" Width="120" 
-                                            DisplayMemberBinding="{Binding}" />
-                            <GridViewColumn Header="New Name" Width="150" 
-                                            DisplayMemberBinding="{Binding}" />
-                            <GridViewColumn Header="Path" Width="150" 
-                                            DisplayMemberBinding="{Binding}" />
-                            <GridViewColumn Header="Result" Width="150" 
-                                            DisplayMemberBinding="{Binding}" />
+                            <GridViewColumn Header="Current Name" Width="160" 
+                                            DisplayMemberBinding="{Binding CurrentName}" />
+                            <GridViewColumn Header="New Name" Width="160" 
+                                            DisplayMemberBinding="{Binding NewName}" />
+                            <GridViewColumn Header="Path" Width="260" 
+                                            DisplayMemberBinding="{Binding Path}" />
+                            <GridViewColumn Header="Result" Width="100" 
+                                            DisplayMemberBinding="{Binding Result}" />
                         </GridView>
                     </ListView.View>
                 </ListView>
