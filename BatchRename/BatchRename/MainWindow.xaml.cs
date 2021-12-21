@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,6 +26,8 @@ namespace BatchRename
         private BindingList<string> chosenRules;
         private BindingList<string> itemTypes;
         private BindingList<string> conflictActions;
+        private BindingList<Filename> filenames;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -32,6 +35,7 @@ namespace BatchRename
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            // Initiate Data Lists/Collections
             rules = new BindingList<string>() {
                 "Replace", "UPPERCASE", "lowercase", "PascalCase", "Add Prefix", "Add Suffix"
             };
@@ -47,10 +51,15 @@ namespace BatchRename
                 "Add a number as suffix",
                 "Add created date as suffix"
             };
+            filenames = new BindingList<Filename>();
+
+            // Bind UI with lists/collections
             rulesComboxBox.ItemsSource = rules;
-            typeComboBox.ItemsSource = itemTypes;
-            chosenListView.ItemsSource = chosenRules;
+            typeComboBox.ItemsSource = itemTypes;           
             conflictComboBox.ItemsSource = conflictActions;
+
+            chosenListView.ItemsSource = chosenRules;
+            ItemListView.ItemsSource = filenames;
         }
 
         private void AddRules(object sender, RoutedEventArgs e)
@@ -123,6 +132,24 @@ namespace BatchRename
         private void AddItems(object sender, RoutedEventArgs e)
         {
             typeComboBox.IsEnabled = false;
+            System.Windows.Forms.FolderBrowserDialog folderDlg = new System.Windows.Forms.FolderBrowserDialog();
+
+            // show dialog
+            System.Windows.Forms.DialogResult result = folderDlg.ShowDialog();
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                // get all filenames in path
+                string path = folderDlg.SelectedPath + "\\";
+                string[] files = Directory.GetFiles(path);
+
+                // add all to filenameList
+                foreach (var file in files)
+                {
+                    string filename = file.Remove(0, path.Length);
+                    filenames.Add(new Filename() { CurrentName = filename, Path = path}) ;
+                }
+                MessageBox.Show(filenames.Count + " file(s) Added Successfully");
+            }
         }
     }
 }
