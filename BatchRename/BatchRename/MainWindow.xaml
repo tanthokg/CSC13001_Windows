@@ -71,7 +71,7 @@
                 <ListView Name="chosenListView" Width="200" Height="420" Margin="8,0,0,0">
                     <ListView.Resources>
                         <ContextMenu x:Key="ItemContextMenu">
-                            <MenuItem Header="Edit Parameters"/>
+                            <MenuItem Header="Edit Parameters" Click="EditChosenFromList"/>
                             <MenuItem Header="Remove This Rule" Click="RemoveChosenFromList"/>
                         </ContextMenu>
                     </ListView.Resources>

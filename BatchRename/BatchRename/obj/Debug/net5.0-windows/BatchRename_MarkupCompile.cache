@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-D:\Programming\GitHub\CSC13001_Windows\BatchRename\BatchRename\obj\Debug\net5.0-windows\
-BatchRename
+C:\Users\ngola\Source\Repos\CSC13001_Windows\BatchRename\BatchRename\obj\Debug\net5.0-windows\
+BatchRename_wsygqbcg_wpftmp
 none
 false
-TRACE;DEBUG;NET;NET5_0;NETCOREAPP
-D:\Programming\GitHub\CSC13001_Windows\BatchRename\BatchRename\App.xaml
+TRACE;RELEASE;NET;NET5_0;NETCOREAPP
+C:\Users\ngola\Source\Repos\CSC13001_Windows\BatchRename\BatchRename\App.xaml
 11407045341
 
-5-1193120631
-205-1334312263
+8417682062
+4121304083316
 MainWindow.xaml;
 
-False
+True
 

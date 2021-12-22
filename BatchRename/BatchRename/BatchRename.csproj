@@ -28,6 +28,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ruleHandler\ruleHandler.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="icons\ic_add_item.png" />
     <Resource Include="icons\ic_add_rule.png" />
     <Resource Include="icons\ic_delete_items.png" />

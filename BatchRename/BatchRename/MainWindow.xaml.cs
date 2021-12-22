@@ -1,19 +1,11 @@
-﻿using System;
+﻿using ruleHandler;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace BatchRename
 {
@@ -22,8 +14,9 @@ namespace BatchRename
     /// </summary>
     public partial class MainWindow : Fluent.RibbonWindow
     {
-        private BindingList<string> rules;
-        private BindingList<string> chosenRules;
+        private BindingList<IRuleHandler> rules;
+        //temp
+        private BindingList<IRuleHandler> chosenRules;
         private BindingList<string> itemTypes;
         private BindingList<string> conflictActions;
         private BindingList<Filename> filenames;
@@ -37,14 +30,29 @@ namespace BatchRename
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             // Initiate Data Lists/Collections
-            rules = new BindingList<string>() {
-                "Replace", "UPPERCASE", "lowercase", "PascalCase", "Add Prefix", "Add Suffix"
-            };
+            List<IRuleHandler> ruleHandlers = new List<IRuleHandler>();
+            ruleHandlers.Add(new Rule_Replace());
+            ruleHandlers.Add(new Rule_lowercase());
+            ruleHandlers.Add(new Rule_uppercase());
+            ruleHandlers.Add(new Rule_PascalCase());
+            ruleHandlers.Add(new Rule_improperSpaces());
+            ruleHandlers.Add(new Rule_addPrefix());
+            ruleHandlers.Add(new Rule_addSuffix());
+
+
+            rules = new BindingList<IRuleHandler>();
+
+            ruleHandlers.ForEach(E =>
+            {
+                rules.Add(E);
+            });
+
+            //itemTypes
             itemTypes = new BindingList<string>()
             {
                 "File", "Folder"
             };
-            chosenRules = new BindingList<string>();
+            chosenRules = new BindingList<IRuleHandler>();
             conflictActions = new BindingList<string>()
             {
                 "Stop batching",
@@ -71,7 +79,15 @@ namespace BatchRename
                 chosenRules.Add(rules[index]);
             }
         }
-
+        private void EditChosenFromList(object sender, RoutedEventArgs e)
+        {
+            int index = chosenListView.SelectedIndex;
+            if (index == -1)
+			{
+                MessageBox.Show("Invalid rule.");
+                return;
+			}
+		}
         private void RemoveChosenFromList(object sender, RoutedEventArgs e)
         {
             int index = chosenListView.SelectedIndex;
@@ -89,7 +105,7 @@ namespace BatchRename
             int index = chosenListView.SelectedIndex;
             if (index != -1)
             {
-                string temp = chosenRules[index];
+                IRuleHandler temp = chosenRules[index];
                 for (int i = index; i > 0; --i)
                     chosenRules[i] = chosenRules[i - 1];
                 chosenRules[0] = temp;
@@ -101,7 +117,7 @@ namespace BatchRename
             int index = chosenListView.SelectedIndex;
             if (index != -1 && index != 0)
             {
-                string temp = chosenRules[index - 1];
+                IRuleHandler temp = chosenRules[index - 1];
                 chosenRules[index - 1] = chosenRules[index];
                 chosenRules[index] = temp;
             }
@@ -112,7 +128,7 @@ namespace BatchRename
             int index = chosenListView.SelectedIndex;
             if (index != -1 && index != chosenRules.Count - 1)
             {
-                string temp = chosenRules[index + 1];
+                IRuleHandler temp = chosenRules[index + 1];
                 chosenRules[index + 1] = chosenRules[index];
                 chosenRules[index] = temp;
             }
@@ -123,7 +139,7 @@ namespace BatchRename
             int index = chosenListView.SelectedIndex;
             if (index != -1)
             {
-                string temp = chosenRules[index];
+                IRuleHandler temp = chosenRules[index];
                 for (int i = index; i < chosenRules.Count - 1; ++i)
                     chosenRules[i] = chosenRules[i + 1];
                 chosenRules[chosenRules.Count - 1] = temp;
@@ -139,7 +155,6 @@ namespace BatchRename
             }
             if (typeComboBox.SelectedItem.ToString() == "File")
             {
-                typeComboBox.IsEnabled = false;
                 System.Windows.Forms.FolderBrowserDialog explorerDialog = new System.Windows.Forms.FolderBrowserDialog();
 
                 System.Windows.Forms.DialogResult result = explorerDialog.ShowDialog();
@@ -157,13 +172,12 @@ namespace BatchRename
                     }
 
                     MessageBox.Show(filenames.Count + " file(s) Added Successfully");
+
                 }
 
             }
             else if (typeComboBox.SelectedItem.ToString() == "Folder")
             {
-                typeComboBox.IsEnabled = false;
-
                 System.Windows.Forms.FolderBrowserDialog explorerDialog = new System.Windows.Forms.FolderBrowserDialog();
                 System.Windows.Forms.DialogResult result = explorerDialog.ShowDialog();
                 
@@ -189,7 +203,8 @@ namespace BatchRename
         {
             filenames.Clear();
             foldernames.Clear();
-            typeComboBox.IsEnabled = true;
         }
-    }
+
+		
+	}
 }

@@ -1,0 +1,12 @@
+C:\Users\ngola\Source\Repos\CSC13001_Windows\BatchRename\ruleHandler\bin\Debug\net5.0-windows\ruleHandler.deps.json
+C:\Users\ngola\Source\Repos\CSC13001_Windows\BatchRename\ruleHandler\bin\Debug\net5.0-windows\ruleHandler.dll
+C:\Users\ngola\Source\Repos\CSC13001_Windows\BatchRename\ruleHandler\bin\Debug\net5.0-windows\ref\ruleHandler.dll
+C:\Users\ngola\Source\Repos\CSC13001_Windows\BatchRename\ruleHandler\bin\Debug\net5.0-windows\ruleHandler.pdb
+C:\Users\ngola\Source\Repos\CSC13001_Windows\BatchRename\ruleHandler\obj\Debug\net5.0-windows\ruleHandler.csproj.AssemblyReference.cache
+C:\Users\ngola\Source\Repos\CSC13001_Windows\BatchRename\ruleHandler\obj\Debug\net5.0-windows\ruleHandler.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ngola\Source\Repos\CSC13001_Windows\BatchRename\ruleHandler\obj\Debug\net5.0-windows\ruleHandler.AssemblyInfoInputs.cache
+C:\Users\ngola\Source\Repos\CSC13001_Windows\BatchRename\ruleHandler\obj\Debug\net5.0-windows\ruleHandler.AssemblyInfo.cs
+C:\Users\ngola\Source\Repos\CSC13001_Windows\BatchRename\ruleHandler\obj\Debug\net5.0-windows\ruleHandler.csproj.CoreCompileInputs.cache
+C:\Users\ngola\Source\Repos\CSC13001_Windows\BatchRename\ruleHandler\obj\Debug\net5.0-windows\ruleHandler.dll
+C:\Users\ngola\Source\Repos\CSC13001_Windows\BatchRename\ruleHandler\obj\Debug\net5.0-windows\ref\ruleHandler.dll
+C:\Users\ngola\Source\Repos\CSC13001_Windows\BatchRename\ruleHandler\obj\Debug\net5.0-windows\ruleHandler.pdb
