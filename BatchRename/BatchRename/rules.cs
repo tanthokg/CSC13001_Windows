@@ -13,6 +13,10 @@ namespace BatchRename
 		string IRuleHandler.getRuleName() {
 			return "lowercase";
 		}
+		public override string ToString()
+		{
+			return "lowercase";
+		}
 		bool IRuleHandler.isEditable() {
 			return false;
 		}
@@ -28,6 +32,10 @@ namespace BatchRename
 		string IRuleHandler.getRuleName() {
 			return "UPPERCASE";
 		}
+		public override string ToString()
+		{
+			return "UPPERCASE";
+		}
 		bool IRuleHandler.isEditable() {
 			return false;
 		}
@@ -40,6 +48,12 @@ namespace BatchRename
 
 	class Rule_addPrefix : Rule, IRuleHandler {
 		string IRuleHandler.getRuleName()
+		{
+			return "Add Prefix";
+		}
+
+
+		public override string ToString()
 		{
 			return "Add Prefix";
 		}
@@ -63,6 +77,11 @@ namespace BatchRename
 			return "Add Suffix";
 		}
 
+		public override string ToString()
+		{
+			return "Add Suffix";
+		}
+
 		void IRuleHandler.setParameter(ruleParemeters ruleParemeters)
 		{
 			this.paremeters = ruleParemeters;
@@ -75,10 +94,12 @@ namespace BatchRename
 		}
 	}
 	class Rule_improperSpaces : Rule, IRuleHandler {
-		
-		private List<String> target = new List<String>();
-		private string replace = "";
 		string IRuleHandler.getRuleName()
+		{
+			return "Trailing spaces at the end/begining";
+		}
+
+		public override string ToString()
 		{
 			return "Trailing spaces at the end/begining";
 		}
@@ -94,6 +115,12 @@ namespace BatchRename
 		{
 			return "Replace";
 		}
+
+		public override string ToString()
+		{
+			return "Replace";
+		}
+
 		bool IRuleHandler.isEditable() { return true; }
 
 		void IRuleHandler.setParameter(ruleParemeters ruleParemeters) { 
@@ -121,7 +148,12 @@ namespace BatchRename
 
 		string IRuleHandler.getRuleName()
 		{
-			return "Replace";
+			return "PascalCase";
+		}
+
+		public override string ToString()
+		{
+			return "PascalCase";
 		}
 		bool IRuleHandler.isEditable() { return true; }
 
