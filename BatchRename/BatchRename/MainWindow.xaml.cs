@@ -1,4 +1,6 @@
+
 ﻿using ruleHandler;
+﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -6,6 +8,13 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 
 namespace BatchRename
 {
@@ -150,11 +159,13 @@ namespace BatchRename
         {
             if (typeComboBox.SelectedItem == null)
             {
-                MessageBox.Show("Please choose item type (files or folders)");
+                MessageBox.Show("Please choose item type (files or folders)", "Error");
                 return;
             }
             if (typeComboBox.SelectedItem.ToString() == "File")
             {
+
+                /*typeComboBox.IsEnabled = false;
                 System.Windows.Forms.FolderBrowserDialog explorerDialog = new System.Windows.Forms.FolderBrowserDialog();
 
                 System.Windows.Forms.DialogResult result = explorerDialog.ShowDialog();
@@ -171,9 +182,29 @@ namespace BatchRename
                         filenames.Add(new Filename() { CurrentName = filename, Path = path });
                     }
 
+
                     MessageBox.Show(filenames.Count + " file(s) Added Successfully");
 
+                    MessageBox.Show(filenames.Count + " file(s) Added Successfully", "Success");
+                }*/
+                typeComboBox.IsEnabled = false;
+                ItemListView.ItemsSource = filenames;
+
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Multiselect = true;
+                openFileDialog.Filter = "All files (*.*)|*.*";
+                if (openFileDialog.ShowDialog() == true)
+                {
+                    string[] files = openFileDialog.FileNames;
+                    foreach (string file in files)
+                    {
+                        string currentName = Path.GetFileName(file);
+                        string directoryPath = Path.GetDirectoryName(file);
+                        filenames.Add(new Filename() { CurrentName = currentName, Path = directoryPath});
+                    }
                 }
+
+                MessageBox.Show(filenames.Count + " file(s) Added Successfully", "Success");
 
             }
             else if (typeComboBox.SelectedItem.ToString() == "Folder")
@@ -194,7 +225,7 @@ namespace BatchRename
                         foldernames.Add(new Foldername() { CurrentName = foldername, Path = path });
                     }
 
-                    MessageBox.Show(foldernames.Count + " folder(s) Added Successfully");
+                    MessageBox.Show(foldernames.Count + " folder(s) Added Successfully", "Success");
                 }
             }
         }
