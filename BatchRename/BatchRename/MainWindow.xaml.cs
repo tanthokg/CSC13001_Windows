@@ -29,9 +29,12 @@ namespace BatchRename
         private BindingList<string> itemTypes;
         private BindingList<string> conflictActions;
         private BindingList<Filename> filenames;
-        private BindingList<Foldername> foldernames;
+		private BindingList<Foldername> foldernames;
 
-        public MainWindow()
+        private Dictionary<string,List<Filename>> conflictFiles = new Dictionary<string, List<Filename>>();
+        private Dictionary<string, List<Foldername>> conflictFolders = new Dictionary<string, List<Foldername>>();
+
+		public MainWindow()
         {
             InitializeComponent();
         }
@@ -47,7 +50,6 @@ namespace BatchRename
             ruleHandlers.Add(new Rule_improperSpaces());
             ruleHandlers.Add(new Rule_addPrefix());
             ruleHandlers.Add(new Rule_addSuffix());
-
 
             rules = new BindingList<IRuleHandler>();
 
@@ -107,6 +109,8 @@ namespace BatchRename
         private void ResetChosenRules(object sender, RoutedEventArgs e)
         {
             chosenRules.Clear();
+            conflictFiles.Clear();
+            conflictFolders.Clear();
         }
 
         private void MoveRuleToTop(object sender, RoutedEventArgs e)
@@ -234,8 +238,150 @@ namespace BatchRename
         {
             filenames.Clear();
             foldernames.Clear();
+            conflictFiles.Clear();
+            conflictFolders.Clear();
         }
 
-		
+		private void StartProcess(object sender, RoutedEventArgs e)
+		{
+            if(chosenRules.Count == 0)
+			{
+                MessageBox.Show("Process skipped because there is no rule set");
+                return;
+			}
+
+            if(filenames.Count == 0 && foldernames.Count == 0)
+            {
+                MessageBox.Show("Process skipped because there is chosed file(s)/folder(s)");
+                return;
+			}
+
+            this.conflictFiles.Clear(); 
+            this.conflictFolders.Clear();
+
+            foreach (Filename file in filenames) {
+                file.NewName = file.CurrentName;
+                foreach (IRuleHandler handler in chosenRules) {
+                    file.NewName = handler.process(file.NewName);
+                }
+
+                if (!this.conflictFiles.ContainsKey(file.NewName))
+                    this.conflictFiles.Add(file.NewName, new List<Filename> { file });
+                else
+                    this.conflictFiles[file.NewName].Add(file);
+            }
+
+            foreach (Foldername folder in foldernames) {
+                folder.NewName = folder.CurrentName;
+                foreach (IRuleHandler handler in chosenRules) {
+                    folder.NewName = handler.process(folder.NewName, false);
+                }
+
+                if(!this.conflictFolders.ContainsKey(folder.CurrentName))
+                    this.conflictFolders.Add(folder.NewName, new List<Foldername> { folder });
+                else
+                    this.conflictFolders[folder.NewName].Add(folder);
+            }
+
+            bool isOccurConflict = false;
+
+            foreach( var (key, value) in this.conflictFiles)
+			{
+                if(value.Count > 1)
+				{
+                    isOccurConflict = true;
+                    value.ForEach(e => {
+                       e.Result = "Conflicted";
+                    });
+				}
+			}
+
+            foreach( var (key, value) in this.conflictFolders)
+			{
+                if(value.Count > 1)
+				{
+                    isOccurConflict = true;
+                    value.ForEach(e => {
+                       e.Result = "Conflicted";
+                    });
+				}
+			}
+
+            if(isOccurConflict)
+			{
+                MessageBox.Show("Error: There will be some files/folders have the same name at the end of the process, consider to add conflict resolver or change rule set and try again");
+			}
+		}
+
+		private void PreviewProcess(object sender, RoutedEventArgs e)
+		{
+            if(chosenRules.Count == 0)
+			{
+                MessageBox.Show("Process skipped because there is no rule set");
+                return;
+			}
+
+            if(filenames.Count == 0 && foldernames.Count == 0)
+            {
+                MessageBox.Show("Process skipped because there is chosed file(s)/folder(s)");
+                return;
+			}
+
+            this.conflictFiles.Clear(); 
+            this.conflictFolders.Clear();
+
+            foreach (Filename file in filenames) {
+                file.NewName = file.CurrentName;
+                foreach (IRuleHandler handler in chosenRules) {
+                    file.NewName = handler.process(file.NewName);
+                }
+
+                if (!this.conflictFiles.ContainsKey(file.NewName))
+                    this.conflictFiles.Add(file.NewName, new List<Filename> { file });
+                else
+                    this.conflictFiles[file.NewName].Add(file);
+            }
+
+            foreach (Foldername folder in foldernames) {
+                folder.NewName = folder.CurrentName;
+                foreach (IRuleHandler handler in chosenRules) {
+                    folder.NewName = handler.process(folder.NewName, false);
+                }
+
+                if(!this.conflictFolders.ContainsKey(folder.CurrentName))
+                    this.conflictFolders.Add(folder.NewName, new List<Foldername> { folder });
+                else
+                    this.conflictFolders[folder.NewName].Add(folder);
+            }
+
+            bool isOccurConflict = false;
+
+            foreach( var (key, value) in this.conflictFiles)
+			{
+                if(value.Count > 1)
+				{
+                    isOccurConflict = true;
+                    value.ForEach(e => {
+                       e.Result = "Conflicted";
+                    });
+				}
+			}
+
+            foreach( var (key, value) in this.conflictFolders)
+			{
+                if(value.Count > 1)
+				{
+                    isOccurConflict = true;
+                    value.ForEach(e => {
+                       e.Result = "Conflicted";
+                    });
+				}
+			}
+
+            if(isOccurConflict)
+			{
+                MessageBox.Show("There are some files/folders have the same name at the end of the process, consider to add conflict resolver or change rule set");
+			}
+		}
 	}
 }

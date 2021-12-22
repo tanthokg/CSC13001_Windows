@@ -16,7 +16,7 @@ namespace ruleHandler
 		{
 			return;
 		}
-		public string process(string ObjectName);
+		public string process(string ObjectName, bool isFileType = true);
 	}	
 	public class ruleParemeters
 	{
