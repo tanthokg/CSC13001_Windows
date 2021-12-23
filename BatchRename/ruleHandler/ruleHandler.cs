@@ -1,8 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Windows;
 
 namespace ruleHandler
 {
+
+    public interface IRuleEditor
+	{
+        public ruleParemeters GetParameters();
+
+        public bool? showDialog();
+	}
 
     public class Rule
     {
@@ -10,14 +18,22 @@ namespace ruleHandler
     }
     public interface IRuleHandler
     {
-        public string getRuleName();
         public bool isEditable();
         public void setParameter(ruleParemeters ruleParemeters)
         {
             return;
         }
+
+        public ruleParemeters GetParemeters();
         public string process(string ObjectName, bool isFileType = true);
+
+        public IRuleEditor parametersEditorWindow();
+
+        public IRuleHandler getClone();
     }
+
+
+
     public class ruleParemeters
     {
 

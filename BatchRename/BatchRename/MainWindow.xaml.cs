@@ -88,7 +88,7 @@ namespace BatchRename
             int index = rulesComboxBox.SelectedIndex;
             if (index != -1)
             {
-                chosenRules.Add(rules[index]);
+                chosenRules.Add(rules[index].getClone());
             }
         }
         private void EditChosenFromList(object sender, RoutedEventArgs e)
@@ -101,12 +101,14 @@ namespace BatchRename
             }
 
             IRuleHandler rule = chosenRules[index];
-            if (rule.getRuleName() == "Add Prefix" || rule.getRuleName() == "Add Suffix")
-            {
-                var editWindow = new PrefixSuffixParam(rule);
-                if (editWindow.ShowDialog() == true)
-                    chosenRules[index] = editWindow.Rule;
+            if(rule.isEditable()) { 
+                IRuleEditor editWindow = rule.parametersEditorWindow();
+                if (editWindow.showDialog() == true)
+                    chosenRules[index].setParameter(editWindow.GetParameters());
             }
+
+            chosenListView.ItemsSource = chosenRules;
+
         }
         private void RemoveChosenFromList(object sender, RoutedEventArgs e)
         {
