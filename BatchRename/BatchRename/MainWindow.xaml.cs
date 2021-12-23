@@ -313,7 +313,7 @@ namespace BatchRename
                 }
             }
 
-            if(isOccurConflict)
+            if (isOccurConflict)
 			{
                 MessageBox.Show("Error: There will be some files/folders have the same name at the end of the process, consider to add conflict resolver or change rule set and try again");
             }
