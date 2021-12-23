@@ -51,6 +51,7 @@ namespace BatchRename
             ruleHandlers.Add(new Rule_addPrefix());
             ruleHandlers.Add(new Rule_addSuffix());
 
+
             rules = new BindingList<IRuleHandler>();
 
             ruleHandlers.ForEach(E =>
@@ -97,6 +98,14 @@ namespace BatchRename
             {
                 MessageBox.Show("Invalid rule.");
                 return;
+            }
+
+            IRuleHandler rule = chosenRules[index];
+            if (rule.getRuleName() == "Add Prefix" || rule.getRuleName() == "Add Suffix")
+            {
+                var editWindow = new PrefixSuffixParam(rule);
+                if (editWindow.ShowDialog() == true)
+                    chosenRules[index] = editWindow.Rule;
             }
         }
         private void RemoveChosenFromList(object sender, RoutedEventArgs e)
