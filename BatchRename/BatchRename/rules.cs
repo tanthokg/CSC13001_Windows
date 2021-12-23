@@ -83,7 +83,9 @@ namespace BatchRename
 
         public override string ToString()
         {
-            return "Add Prefix";
+            if (paremeters.outputStrings.Length == 0)
+                return "Add Prefix";
+            return "Add Prefix: " + paremeters.outputStrings;
         }
 
         void IRuleHandler.setParameter(ruleParemeters paremeters)
@@ -119,7 +121,9 @@ namespace BatchRename
 
         public override string ToString()
         {
-            return "Add Suffix";
+            if (paremeters.outputStrings.Length == 0)
+                return "Add Suffix";
+            return "Add Suffix: " + paremeters.outputStrings;
         }
 
         void IRuleHandler.setParameter(ruleParemeters ruleParemeters)
