@@ -23,6 +23,11 @@ namespace BatchRename
 
         string IRuleHandler.Process(string ObjectName, bool isFileType)
         {
+
+            if (string.IsNullOrEmpty(ObjectName))
+                return "";
+
+
             string[] parts = ObjectName.Split('.');
             string extension = parts[^1];
             string fileName;

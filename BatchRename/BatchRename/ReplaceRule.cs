@@ -32,9 +32,11 @@ namespace BatchRename
 
             editInput.Height = 80;
             editInput.Width = 360;
-            editInput.TextWrapping = TextWrapping.WrapWithOverflow;
+            editInput.TextWrapping = TextWrapping.Wrap;
+            editInput.AcceptsReturn = true;
+            editInput.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
             editInput.Margin = new Thickness(15, 80, 0, 0);
-            editInput.Text = ruleParameter.OutputStrings;
+            editInput.Text = string.Join("\n",ruleParameter.InputStrings);
 
             editOutput.Height = 80;
             editOutput.Width = 360;
@@ -69,7 +71,6 @@ namespace BatchRename
             string str = editInput.Text;
             if (str.Length != 0)
             {
-                ruleParameter.OutputStrings = str;
                 DialogResult = true;
             }
         }
@@ -81,7 +82,14 @@ namespace BatchRename
         RuleParameter IRuleEditor.GetParameter()
         {
             RuleParameter ruleParameter = new RuleParameter();
-            ruleParameter.OutputStrings = editInput.Text;
+            string[] inputs = editInput.Text.Split("\n");
+
+            foreach(string input in inputs)
+			{
+                    ruleParameter.InputStrings.Add(input.Trim((char)13));
+			}
+
+            ruleParameter.OutputStrings = editOutput.Text;
 
             return ruleParameter;
         }
@@ -93,6 +101,10 @@ namespace BatchRename
     }
     public class ReplaceRule : Rule, IRuleHandler
     {
+        public ReplaceRule()
+		{
+            this.parameter = new RuleParameter();
+		}
 
         public override string ToString()
         {
@@ -112,6 +124,9 @@ namespace BatchRename
 
         string IRuleHandler.Process(string ObjectName, bool isFileType)
         {
+            if (string.IsNullOrEmpty(ObjectName))
+                return "";
+            
             string[] parts = ObjectName.Split('.');
             string extension = parts[^1];
             string fileName;
@@ -121,10 +136,9 @@ namespace BatchRename
                 fileName = ObjectName;
 
             string result = fileName;
-
             this.parameter.InputStrings.ForEach(s =>
             {
-                result = result.Replace(s[0], this.parameter.OutputStrings[0]);
+                result = result.Replace(s, this.parameter.OutputStrings);
             });
 
             if (isFileType)

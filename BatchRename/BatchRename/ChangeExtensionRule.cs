@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Windows;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using RuleHandler;
+using System.Windows;
 using System.Windows.Controls;
+using RuleHandler;
 
 namespace BatchRename
 {
-    public class PascalCaseRuleEditor : Window, IRuleEditor
+    public class ChangeExtensionRuleEditor : Window, IRuleEditor
     {
         public IRuleHandler Rule { get; set; }
 
@@ -18,13 +17,11 @@ namespace BatchRename
         private Button ok = new Button();
         private Button cancel = new Button();
         private TextBox editTextBox = new TextBox();
-        private RuleParameter ruleParameter = new RuleParameter();
 
-
-        public PascalCaseRuleEditor(RuleParameter ruleParameter)
+        public ChangeExtensionRuleEditor(RuleParameter ruleParameter)
         {
             //define UI
-            this.Title = "Parameter Editor for Pascal Case Rule";
+            this.Title = "Parameter Editor for Change Extension Rule";
             this.Width = 400;
             this.Height = 360;
             this.ResizeMode = ResizeMode.NoResize;
@@ -61,7 +58,6 @@ namespace BatchRename
             string str = editTextBox.Text;
             if (str.Length != 0)
             {
-                ruleParameter.InputStrings[0] = str;
                 DialogResult = true;
             }
         }
@@ -73,8 +69,7 @@ namespace BatchRename
         RuleParameter IRuleEditor.GetParameter()
         {
             RuleParameter ruleParameter = new RuleParameter();
-            ruleParameter.InputStrings[0] = editTextBox.Text;
-
+            ruleParameter.OutputStrings = editTextBox.Text;
             return ruleParameter;
         }
 
@@ -83,36 +78,26 @@ namespace BatchRename
             return this.ShowDialog();
         }
     }
-    public class PascalCaseRule : Rule, IRuleHandler
-    {
-
-        public PascalCaseRule()
+	class ChangeExtensionRule : Rule, IRuleHandler
+	{
+        public ChangeExtensionRule()
 		{
             this.parameter = new RuleParameter();
-            this.parameter.InputStrings.Clear();
-            this.parameter.InputStrings.Add("_");
 		}
-        private string upperCaseFirstLetter(string str)
-        {
-            if (str.Length == 0)
-                return str;
-            return str.ToUpper()[0] + str.Substring(1);
-        }
 
         public override string ToString()
         {
-            return "PascalCase";
+            return "Change file\'s extension";
         }
-        bool IRuleHandler.IsEditable() { return true; }
+        bool IRuleHandler.IsEditable()
+        {
+            return true;
+        }
 
-        void IRuleHandler.SetParameter(RuleParameter ruleParemeters)
-        {
-            this.parameter = ruleParemeters;
-        }
-        RuleParameter IRuleHandler.GetParameter()
-        {
-            return this.parameter;
-        }
+        void IRuleHandler.SetParameter(RuleParameter ruleParameter)
+		{
+            this.parameter = ruleParameter;
+		}
 
         string IRuleHandler.Process(string ObjectName, bool isFileType)
         {
@@ -127,31 +112,26 @@ namespace BatchRename
             else
                 fileName = ObjectName;
 
-            string[] result = fileName.Split(this.parameter.InputStrings[0]);
-
-            StringBuilder stringBuilder = new StringBuilder();
-
-            foreach (string str in result)
-            {
-                stringBuilder.Append(upperCaseFirstLetter(str));
-            }
-
-            if (isFileType)
-                return stringBuilder.ToString() + "." + extension;
-            return stringBuilder.ToString();
+            string result = fileName;
+            if (isFileType && !string.IsNullOrEmpty(this.parameter.OutputStrings))
+                return result + "." + this.parameter.OutputStrings;
+            return result;
         }
         IRuleEditor IRuleHandler.ParamsEditorWindow()
         {
-            return new PascalCaseRuleEditor(parameter);
+            return new ChangeExtensionRuleEditor(this.parameter);
         }
-
+        RuleParameter IRuleHandler.GetParameter()
+        {
+            return null;
+        }
         IRuleHandler IRuleHandler.Clone()
         {
-            PascalCaseRule clone = new PascalCaseRule();
+            ChangeExtensionRule clone = new ChangeExtensionRule();
             clone.parameter.InputStrings = this.parameter.InputStrings.Select(x => x.ToString()).ToList();
             clone.parameter.OutputStrings = this.parameter.OutputStrings;
             clone.parameter.Counter = this.parameter.Counter;
             return clone;
         }
-    }
+	} 
 }

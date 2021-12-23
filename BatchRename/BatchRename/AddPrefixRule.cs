@@ -85,6 +85,10 @@ namespace BatchRename
     }
     public class AddPrefixRule : Rule, IRuleHandler
     {
+        public AddPrefixRule()
+		{
+            this.parameter = new RuleParameter();
+		}
 
         public override string ToString()
         {
@@ -104,6 +108,9 @@ namespace BatchRename
 
         string IRuleHandler.Process(string ObjectName, bool isFileType)
         {
+            if (string.IsNullOrEmpty(ObjectName))
+                return "";
+
             string[] parts = ObjectName.Split('.');
             string extension = parts[^1];
             string fileName;
