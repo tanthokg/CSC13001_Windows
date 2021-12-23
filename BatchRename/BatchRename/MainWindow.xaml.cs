@@ -1,5 +1,5 @@
 
-using ruleHandler;
+using RuleHandler;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -43,13 +43,13 @@ namespace BatchRename
         {
             // Initiate Data Lists/Collections
             List<IRuleHandler> ruleHandlers = new List<IRuleHandler>();
-            ruleHandlers.Add(new Rule_Replace());
-            ruleHandlers.Add(new Rule_lowercase());
-            ruleHandlers.Add(new Rule_uppercase());
-            ruleHandlers.Add(new Rule_PascalCase());
-            ruleHandlers.Add(new Rule_improperSpaces());
-            ruleHandlers.Add(new Rule_addPrefix());
-            ruleHandlers.Add(new Rule_addSuffix());
+            ruleHandlers.Add(new ReplaceRule());
+            ruleHandlers.Add(new LowercaseRule());
+            ruleHandlers.Add(new UppercaseRule());
+            ruleHandlers.Add(new PascalCaseRule());
+            ruleHandlers.Add(new ImproperSpacesRule());
+            ruleHandlers.Add(new AddPrefixRule());
+            ruleHandlers.Add(new AddSuffixRule());
 
 
             rules = new BindingList<IRuleHandler>();
@@ -88,7 +88,7 @@ namespace BatchRename
             int index = rulesComboxBox.SelectedIndex;
             if (index != -1)
             {
-                chosenRules.Add(rules[index].getClone());
+                chosenRules.Add(rules[index].Clone());
             }
         }
         private void EditChosenFromList(object sender, RoutedEventArgs e)
@@ -101,13 +101,19 @@ namespace BatchRename
             }
 
             IRuleHandler rule = chosenRules[index];
-            if(rule.isEditable()) { 
-                IRuleEditor editWindow = rule.parametersEditorWindow();
-                if (editWindow.showDialog() == true)
-                    chosenRules[index].setParameter(editWindow.GetParameters());
+            if(rule.IsEditable()) 
+            { 
+                IRuleEditor editWindow = rule.ParamsEditorWindow();
+                if (editWindow.ShowDialog() == true)
+                    chosenRules[index].SetParameter(editWindow.GetParameter());
             }
-
-            chosenListView.ItemsSource = chosenRules;
+            else
+            {
+                MessageBox.Show("This rule does not have any parameter to edit", "Error");
+            }
+            ICollectionView view = CollectionViewSource.GetDefaultView(chosenRules);
+            view.Refresh();
+            // chosenListView.ItemsSource = chosenRules;
 
         }
         private void RemoveChosenFromList(object sender, RoutedEventArgs e)
@@ -275,7 +281,7 @@ namespace BatchRename
                 file.NewName = file.CurrentName;
                 foreach (IRuleHandler handler in chosenRules)
                 {
-                    file.NewName = handler.process(file.NewName);
+                    file.NewName = handler.Process(file.NewName);
                 }
 
                 if (!this.conflictFiles.ContainsKey(file.NewName))
@@ -289,7 +295,7 @@ namespace BatchRename
                 folder.NewName = folder.CurrentName;
                 foreach (IRuleHandler handler in chosenRules)
                 {
-                    folder.NewName = handler.process(folder.NewName, false);
+                    folder.NewName = handler.Process(folder.NewName, false);
                 }
 
                 if (!this.conflictFolders.ContainsKey(folder.CurrentName))
@@ -352,7 +358,7 @@ namespace BatchRename
                 file.NewName = file.CurrentName;
                 foreach (IRuleHandler handler in chosenRules)
                 {
-                    file.NewName = handler.process(file.NewName);
+                    file.NewName = handler.Process(file.NewName);
                 }
 
                 if (!this.conflictFiles.ContainsKey(file.NewName))
@@ -366,7 +372,7 @@ namespace BatchRename
                 folder.NewName = folder.CurrentName;
                 foreach (IRuleHandler handler in chosenRules)
                 {
-                    folder.NewName = handler.process(folder.NewName, false);
+                    folder.NewName = handler.Process(folder.NewName, false);
                 }
 
                 if (!this.conflictFolders.ContainsKey(folder.CurrentName))

@@ -5,25 +5,25 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using ruleHandler;
+using RuleHandler;
 using System.Windows.Controls;
 
 namespace BatchRename
 {
-	class Rule_improperSpaces : Rule, IRuleHandler
+	class ImproperSpacesRule : Rule, IRuleHandler
     {
 
         public override string ToString()
         {
             return "Trailing spaces at the end/begining";
         }
-        bool IRuleHandler.isEditable() { return false; }
-        ruleParemeters IRuleHandler.GetParemeters()
+        bool IRuleHandler.IsEditable() { return false; }
+        RuleParameter IRuleHandler.GetParameter()
 		{
-            return this.paremeters;
+            return this.parameter;
 		}
 
-        string IRuleHandler.process(string ObjectName, bool isFileType)
+        string IRuleHandler.Process(string ObjectName, bool isFileType)
         {
             string[] parts = ObjectName.Split('.');
             string extension = parts[^1];
@@ -38,16 +38,16 @@ namespace BatchRename
                 return rg.Replace(fileName, "") + "." + extension;
             return rg.Replace(fileName, "");
         }
-        IRuleEditor IRuleHandler.parametersEditorWindow()
+        IRuleEditor IRuleHandler.ParamsEditorWindow()
 		{
             return null;
 		}
-        IRuleHandler IRuleHandler.getClone()
+        IRuleHandler IRuleHandler.Clone()
 		{
-            Rule_improperSpaces clone = new Rule_improperSpaces();
-            clone.paremeters.inputStrings = this.paremeters.inputStrings.Select(x => x.ToString()).ToList();
-            clone.paremeters.outputStrings = this.paremeters.outputStrings;
-            clone.paremeters.counter = this.paremeters.counter;
+            ImproperSpacesRule clone = new ImproperSpacesRule();
+            clone.parameter.InputStrings = this.parameter.InputStrings.Select(x => x.ToString()).ToList();
+            clone.parameter.OutputStrings = this.parameter.OutputStrings;
+            clone.parameter.Counter = this.parameter.Counter;
             return clone;
 		}
     }

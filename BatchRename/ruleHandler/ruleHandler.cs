@@ -2,50 +2,50 @@ using System;
 using System.Collections.Generic;
 using System.Windows;
 
-namespace ruleHandler
+namespace RuleHandler
 {
 
     public interface IRuleEditor
-	{
-        public ruleParemeters GetParameters();
+    {
+        public RuleParameter GetParameter();
 
-        public bool? showDialog();
-	}
+        public bool? ShowDialog();
+    }
 
     public class Rule
     {
-        protected ruleParemeters paremeters = new ruleParemeters();
+        protected RuleParameter parameter = new RuleParameter();
     }
     public interface IRuleHandler
     {
-        public bool isEditable();
-        public void setParameter(ruleParemeters ruleParemeters)
+        public bool IsEditable();
+        public void SetParameter(RuleParameter ruleParameter)
         {
             return;
         }
 
-        public ruleParemeters GetParemeters();
-        public string process(string ObjectName, bool isFileType = true);
+        public RuleParameter GetParameter();
+        public string Process(string ObjectName, bool isFileType = true);
 
-        public IRuleEditor parametersEditorWindow();
+        public IRuleEditor ParamsEditorWindow();
 
-        public IRuleHandler getClone();
+        public IRuleHandler Clone();
     }
 
 
 
-    public class ruleParemeters
+    public class RuleParameter
     {
 
-        public ruleParemeters()
+        public RuleParameter()
         {
-            inputStrings = new List<string>();
-            outputStrings = string.Empty;
-            counter = -1;
+            InputStrings = new List<string>();
+            OutputStrings = string.Empty;
+            Counter = -1;
         }
 
-        public List<string> inputStrings { get; set; }
-        public string outputStrings { get; set; }
-        public int counter { get; set; }
+        public List<string> InputStrings { get; set; }
+        public string OutputStrings { get; set; }
+        public int Counter { get; set; }
     }
 }
