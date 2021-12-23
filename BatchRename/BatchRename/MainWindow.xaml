@@ -96,9 +96,9 @@
                                             DisplayMemberBinding="{Binding CurrentName}" />
                             <GridViewColumn Header="New Name" Width="160" 
                                             DisplayMemberBinding="{Binding NewName}" />
-                            <GridViewColumn Header="Path" Width="260" 
+                            <GridViewColumn Header="Path" Width="280" 
                                             DisplayMemberBinding="{Binding Path}" />
-                            <GridViewColumn Header="Result" Width="100" 
+                            <GridViewColumn Header="Result" Width="120" 
                                             DisplayMemberBinding="{Binding Result}" />
                         </GridView>
                     </ListView.View>
