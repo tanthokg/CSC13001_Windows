@@ -303,29 +303,43 @@ namespace BatchRename
             foreach (Filename file in filenames)
             {
                 file.NewName = file.CurrentName;
+                file.Result = "";
                 foreach (IRuleHandler handler in ruleSetForFiles)
                 {
                     file.NewName = handler.Process(file.NewName);
                 }
 
-                if (!this.conflictFiles.ContainsKey(file.NewName))
-                    this.conflictFiles.Add(file.NewName, new List<Filename> { file });
+                if (!this.conflictFiles.ContainsKey(file.Path + "/" + file.NewName))
+                    this.conflictFiles.Add(file.Path + "/" + file.NewName, new List<Filename> { file });
                 else
-                    this.conflictFiles[file.NewName].Add(file);
+                    this.conflictFiles[file.Path + "/" + file.NewName].Add(file);
+
+                string validCheck = Util.checkValid(file.NewName);
+                if (validCheck != "")
+                {
+                    file.Result = validCheck;
+                }
             }
 
             foreach (Foldername folder in foldernames)
             {
                 folder.NewName = folder.CurrentName;
+                folder.Result = "";
                 foreach (IRuleHandler handler in ruleSetForFolders)
                 {
                     folder.NewName = handler.Process(folder.NewName, false);
                 }
 
-                if (!this.conflictFolders.ContainsKey(folder.CurrentName))
-                    this.conflictFolders.Add(folder.NewName, new List<Foldername> { folder });
+                if (!this.conflictFolders.ContainsKey(folder.Path + "/" + folder.NewName))
+                    this.conflictFolders.Add(folder.Path + "/" + folder.NewName, new List<Foldername> { folder });
                 else
-                    this.conflictFolders[folder.NewName].Add(folder);
+                    this.conflictFolders[folder.Path + "/" + folder.NewName].Add(folder);
+
+                string validCheck = Util.checkValid(folder.NewName);
+                if (validCheck != "")
+                {
+                    folder.Result = validCheck;
+                }
             }
 
             bool isOccurConflict = false;
@@ -391,9 +405,17 @@ namespace BatchRename
 
             int folderCounter = 0;
             int fileCounter = 0;
+            bool haveInvalidName = false;
 
             foreach (Filename file in filenames)
             {
+                string validCheck = Util.checkValid(file.NewName);
+                if(validCheck != "")
+				{
+                    file.Result = "Aborted" + validCheck;
+                    haveInvalidName = true;
+                    continue;
+				}
                 try
                 {
                     File.Move(file.Path + "/" + file.CurrentName, file.Path + "/" + file.NewName);
@@ -410,6 +432,14 @@ namespace BatchRename
 
             foreach (Foldername folder in foldernames)
             {
+                string validCheck = Util.checkValid(folder.NewName);
+                if(validCheck != "")
+				{
+                    folder.Result = "Aborted" + validCheck;
+                    haveInvalidName = true;
+                    continue;
+				}
+
                 try
                 {
                     Directory.Move(folder.Path + "/" + folder.CurrentName, folder.Path + "/" + folder.NewName);
@@ -443,6 +473,7 @@ namespace BatchRename
 
             this.conflictFiles.Clear();
             this.conflictFolders.Clear();
+            bool haveInvalidName = false;
 
             List<IRuleHandler> ruleSetForFiles = new List<IRuleHandler>();
             List<IRuleHandler> ruleSetForFolders = new List<IRuleHandler>();
@@ -456,29 +487,45 @@ namespace BatchRename
             foreach (Filename file in filenames)
             {
                 file.NewName = file.CurrentName;
+                file.Result = "";
                 foreach (IRuleHandler handler in ruleSetForFiles)
                 {
                     file.NewName = handler.Process(file.NewName);
                 }
 
-                if (!this.conflictFiles.ContainsKey(file.NewName))
-                    this.conflictFiles.Add(file.NewName, new List<Filename> { file });
+                if (!this.conflictFiles.ContainsKey(file.Path + "/" + file.NewName))
+                    this.conflictFiles.Add(file.Path + "/" + file.NewName, new List<Filename> { file });
                 else
-                    this.conflictFiles[file.NewName].Add(file);
+                    this.conflictFiles[file.Path + "/" + file.NewName].Add(file);
+
+                string validCheck = Util.checkValid(file.NewName);
+                if(validCheck != "")
+				{
+                    file.Result = validCheck;
+                    haveInvalidName = true;
+				}
             }
 
             foreach (Foldername folder in foldernames)
             {
                 folder.NewName = folder.CurrentName;
+                folder.Result = "";
                 foreach (IRuleHandler handler in ruleSetForFolders)
                 {
                     folder.NewName = handler.Process(folder.NewName, false);
                 }
 
-                if (!this.conflictFolders.ContainsKey(folder.CurrentName))
-                    this.conflictFolders.Add(folder.NewName, new List<Foldername> { folder });
+                if (!this.conflictFolders.ContainsKey(folder.Path + "/" + folder.NewName))
+                    this.conflictFolders.Add(folder.Path + "/" + folder.NewName, new List<Foldername> { folder });
                 else
-                    this.conflictFolders[folder.NewName].Add(folder);
+                    this.conflictFolders[folder.Path + "/" + folder.NewName].Add(folder);
+
+                string validCheck = Util.checkValid(folder.NewName);
+                if(validCheck != "")
+				{
+                    folder.Result = validCheck;
+                    haveInvalidName = true;
+				}
             }
 
             bool isOccurConflict = false;
@@ -490,7 +537,7 @@ namespace BatchRename
                     isOccurConflict = true;
                     value.ForEach(e =>
                     {
-                        e.Result = "Conflicted";
+                        e.Result += " | Duplicate name";
                     });
                 }
             }
@@ -502,14 +549,14 @@ namespace BatchRename
                     isOccurConflict = true;
                     value.ForEach(e =>
                     {
-                        e.Result = "Conflicted";
+                        e.Result += " | Duplicate name";
                     });
                 }
             }
 
-            if (isOccurConflict)
+            if (isOccurConflict || haveInvalidName)
             {
-                MessageBox.Show("There are some files/folders have the same name at the end of the process, consider to add conflict resolver or change rule set", "Caution");
+                MessageBox.Show("There are some files/folders have name conflict, consider to add conflict resolver or change rule set", "Caution");
             }
         }
 
