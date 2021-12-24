@@ -101,8 +101,8 @@ namespace BatchRename
             }
 
             IRuleHandler rule = chosenRules[index];
-            if(rule.IsEditable()) 
-            { 
+            if (rule.IsEditable())
+            {
                 IRuleEditor editWindow = rule.ParamsEditorWindow();
                 if (editWindow.ShowDialog() == true)
                     chosenRules[index].SetParameter(editWindow.GetParameter());
@@ -193,13 +193,32 @@ namespace BatchRename
                 if (openFileDialog.ShowDialog() == true)
                 {
                     string[] files = openFileDialog.FileNames;
+                    List<Filename> newFilenames = new List<Filename>();
+
                     foreach (string file in files)
                     {
+                        bool isExisted = false;
                         string currentName = Path.GetFileName(file);
                         string directoryPath = Path.GetDirectoryName(file);
-                        filenames.Add(new Filename() { CurrentName = currentName, Path = directoryPath });
-                        counter++;
+
+                        foreach (var filename in filenames)
+                        {
+                            if (filename.CurrentName == currentName && filename.Path == directoryPath)
+                            {
+                                isExisted = true;
+                                break;
+                            }
+                        }
+
+                        if (!isExisted)
+                        {
+                            newFilenames.Add(new Filename() { CurrentName = currentName, Path = directoryPath });
+                            counter++;
+                        }
                     }
+
+                    foreach (var newFilename in newFilenames)
+                        filenames.Add(newFilename);
                 }
 
                 MessageBox.Show(counter + " file(s) Added Successfully", "Success");
@@ -208,19 +227,38 @@ namespace BatchRename
             {
                 System.Windows.Forms.FolderBrowserDialog explorerDialog = new System.Windows.Forms.FolderBrowserDialog();
                 System.Windows.Forms.DialogResult result = explorerDialog.ShowDialog();
-                int counter = 0;    
+                
+                int counter = 0;
                 if (result == System.Windows.Forms.DialogResult.OK)
                 {
                     ItemListView.ItemsSource = foldernames;
 
                     string path = explorerDialog.SelectedPath + "\\";
                     string[] folders = Directory.GetDirectories(path);
+                    List<Foldername> newFoldernames = new List<Foldername>();
 
                     foreach (var folder in folders)
                     {
-                        string foldername = folder.Remove(0, path.Length);
-                        foldernames.Add(new Foldername() { CurrentName = foldername, Path = path });
+                        bool isExisted = false;
+                        string currentName = folder.Remove(0, path.Length);
+
+                        foreach (var foldername in foldernames)
+                        {
+                            if (foldername.CurrentName == currentName && foldername.Path == path)
+                            {
+                                isExisted = true;
+                                break;
+                            }
+                        }
+
+                        if (!isExisted)
+                        {
+                            newFoldernames.Add(new Foldername() { CurrentName = currentName, Path = path });
+                            counter++;
+                        }
                     }
+                    foreach (var newFoldername in newFoldernames)
+                        foldernames.Add(newFoldername);
 
                     MessageBox.Show(counter + " folder(s) Added Successfully", "Success");
                 }
@@ -255,11 +293,11 @@ namespace BatchRename
             List<IRuleHandler> ruleSetForFiles = new List<IRuleHandler>();
             List<IRuleHandler> ruleSetForFolders = new List<IRuleHandler>();
 
-            foreach(IRuleHandler rule in this.chosenRules)
-			{
+            foreach (IRuleHandler rule in this.chosenRules)
+            {
                 ruleSetForFiles.Add(rule.Clone());
                 ruleSetForFolders.Add(rule.Clone());
-			}
+            }
 
             foreach (Filename file in filenames)
             {
@@ -317,7 +355,8 @@ namespace BatchRename
 
             int index = this.conflictComboBox.SelectedIndex;
 
-            if (isOccurConflict && index == -1) {
+            if (isOccurConflict && index == -1)
+            {
                 MessageBox.Show("There will be some files/folders have the same name at the end of the process, consider to add conflict resolver or change rule set and try again", "Process aborted");
                 return;
             }
@@ -367,11 +406,11 @@ namespace BatchRename
             List<IRuleHandler> ruleSetForFiles = new List<IRuleHandler>();
             List<IRuleHandler> ruleSetForFolders = new List<IRuleHandler>();
 
-            foreach(IRuleHandler rule in this.chosenRules)
-			{
+            foreach (IRuleHandler rule in this.chosenRules)
+            {
                 ruleSetForFiles.Add(rule.Clone());
                 ruleSetForFolders.Add(rule.Clone());
-			}
+            }
 
             foreach (Filename file in filenames)
             {
