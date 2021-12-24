@@ -33,7 +33,7 @@ namespace BatchRename
             editTextBox.Width = 360;
             editTextBox.TextWrapping = TextWrapping.WrapWithOverflow;
             editTextBox.Margin = new Thickness(20, 89, 0, 0);
-            editTextBox.Text = ruleParameter.OutputStrings;
+            editTextBox.Text = ruleParameter.InputStrings[0];
 
             ok.Content = "Submit";
             ok.Name = "buttonSubmit";
@@ -61,7 +61,6 @@ namespace BatchRename
             string str = editTextBox.Text;
             if (str.Length != 0)
             {
-                ruleParameter.InputStrings[0] = str;
                 DialogResult = true;
             }
         }
@@ -73,7 +72,8 @@ namespace BatchRename
         RuleParameter IRuleEditor.GetParameter()
         {
             RuleParameter ruleParameter = new RuleParameter();
-            ruleParameter.InputStrings[0] = editTextBox.Text;
+            ruleParameter.InputStrings.Clear();
+            ruleParameter.InputStrings.Add(editTextBox.Text);
 
             return ruleParameter;
         }
