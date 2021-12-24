@@ -521,15 +521,16 @@ namespace BatchRename
                 return;
             }
 
-            var explorerDialog = new System.Windows.Forms.FolderBrowserDialog();
-            if (explorerDialog.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+            var dialog = new SaveFileDialog();
+            dialog.Filter = "JSON (*.json)|*.json";
+            if (dialog.ShowDialog() == false)
                 return;
 
-            string outputName = "save.json";
+            string path = dialog.FileName;
             StreamWriter output;
             try
             {
-                output = new StreamWriter(outputName);
+                output = new StreamWriter(path);
                 output.WriteLine("[");
                 foreach (var rule in chosenRules)
                 {
@@ -541,7 +542,7 @@ namespace BatchRename
                 output.Close();
                 MessageBox.Show("Preset Saved Successfully!", "Success");
             }
-            catch (System.IO.IOException ioe)
+            catch (IOException ioe)
             {
                 MessageBox.Show("Cannot Save Preset!", "Error");
                 return;
@@ -552,15 +553,13 @@ namespace BatchRename
         {
             this.chosenRules.Clear();
 
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Multiselect = true;
-            openFileDialog.Filter = "JSON (*.json)|*.json";
+            var dialog = new OpenFileDialog();
+            dialog.Filter = "JSON (*.json)|*.json";
 
-            if (openFileDialog.ShowDialog() == false)
+            if (dialog.ShowDialog() == false)
                 return;
 
-            string[] files = openFileDialog.FileNames;
-            string preset = files[0];
+            string preset = dialog.FileName;
             string content = File.ReadAllText(preset);
 
             List<RuleJsonFormat> ruleJsons = new List<RuleJsonFormat>();
@@ -569,7 +568,7 @@ namespace BatchRename
             {
                 ruleJsons = JsonSerializer.Deserialize<List<RuleJsonFormat>>(content);
             }
-            catch (System.Text.Json.JsonException exception)
+            catch (JsonException exception)
             {
                 MessageBox.Show("Cannot parse data from the file, check the file again", "Error");
                 return;
