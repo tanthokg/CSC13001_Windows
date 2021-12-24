@@ -410,12 +410,12 @@ namespace BatchRename
             foreach (Filename file in filenames)
             {
                 string validCheck = Util.checkValid(file.NewName);
-                if(validCheck != "")
-				{
-                    file.Result = "Aborted" + validCheck;
+                if (validCheck != "")
+                {
+                    file.Result = "Aborted " + validCheck;
                     haveInvalidName = true;
                     continue;
-				}
+                }
                 try
                 {
                     File.Move(file.Path + "/" + file.CurrentName, file.Path + "/" + file.NewName);
@@ -433,12 +433,12 @@ namespace BatchRename
             foreach (Foldername folder in foldernames)
             {
                 string validCheck = Util.checkValid(folder.NewName);
-                if(validCheck != "")
-				{
-                    folder.Result = "Aborted" + validCheck;
+                if (validCheck != "")
+                {
+                    folder.Result = "Aborted " + validCheck;
                     haveInvalidName = true;
                     continue;
-				}
+                }
 
                 try
                 {
@@ -499,11 +499,11 @@ namespace BatchRename
                     this.conflictFiles[file.Path + "/" + file.NewName].Add(file);
 
                 string validCheck = Util.checkValid(file.NewName);
-                if(validCheck != "")
-				{
+                if (validCheck != "")
+                {
                     file.Result = validCheck;
                     haveInvalidName = true;
-				}
+                }
             }
 
             foreach (Foldername folder in foldernames)
@@ -521,11 +521,11 @@ namespace BatchRename
                     this.conflictFolders[folder.Path + "/" + folder.NewName].Add(folder);
 
                 string validCheck = Util.checkValid(folder.NewName);
-                if(validCheck != "")
-				{
+                if (validCheck != "")
+                {
                     folder.Result = validCheck;
                     haveInvalidName = true;
-				}
+                }
             }
 
             bool isOccurConflict = false;

@@ -52,18 +52,18 @@ namespace RuleHandler
     }
 
     public class RuleJsonFormat
-	{
+    {
         public string RuleType { get; set; }
         public List<string> InputStrings { get; set; }
         public string OutputStrings { get; set; }
         public int Counter { get; set; }
-	}
+    }
 
     public class Util
-	{
+    {
         public static string checkValid(string str, bool isFileType = true)
-		{
-            if(string.IsNullOrWhiteSpace(str))
+        {
+            if (string.IsNullOrWhiteSpace(str))
                 return "Empty name";
 
             string[] parts = str.Split('.');
@@ -75,10 +75,10 @@ namespace RuleHandler
                 name = str;
 
             char[] invalidCharacter =
-			{
+            {
                 '<',
                 '>',
-				':',
+                ':',
                 '\"',
                 '/',
                 '\\',
@@ -117,7 +117,7 @@ namespace RuleHandler
                 (char)29,
                 (char)30,
                 (char)31
-			};
+            };
 
             string[] invalidName =
             {
@@ -151,8 +151,8 @@ namespace RuleHandler
                     return $"contain \"{c}\"";
 
             //if the name is forbiddent
-            foreach(string s in invalidName)
-                if(name.Equals(s))
+            foreach (string s in invalidName)
+                if (name.Equals(s))
                     return $"forbidden name \"{s}\"";
 
             //if end with spaces or dots
@@ -166,6 +166,6 @@ namespace RuleHandler
                 return "name too long";
 
             return "";
-		}
-	}
+        }
+    }
 }
