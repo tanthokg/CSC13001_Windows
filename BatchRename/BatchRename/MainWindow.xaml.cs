@@ -184,30 +184,6 @@ namespace BatchRename
             }
             if (typeComboBox.SelectedItem.ToString() == "File")
             {
-
-                /*typeComboBox.IsEnabled = false;
-                System.Windows.Forms.FolderBrowserDialog explorerDialog = new System.Windows.Forms.FolderBrowserDialog();
-
-                System.Windows.Forms.DialogResult result = explorerDialog.ShowDialog();
-                if (result == System.Windows.Forms.DialogResult.OK)
-                {
-                    ItemListView.ItemsSource = filenames;
-
-                    string path = explorerDialog.SelectedPath + "\\";
-                    string[] files = Directory.GetFiles(path);
-
-                    foreach (var file in files)
-                    {
-                        string filename = file.Remove(0, path.Length);
-                        filenames.Add(new Filename() { CurrentName = filename, Path = path });
-                    }
-
-
-                    MessageBox.Show(filenames.Count + " file(s) Added Successfully");
-
-                    MessageBox.Show(filenames.Count + " file(s) Added Successfully", "Success");
-                }*/
-                typeComboBox.IsEnabled = false;
                 ItemListView.ItemsSource = filenames;
 
                 OpenFileDialog openFileDialog = new OpenFileDialog();
