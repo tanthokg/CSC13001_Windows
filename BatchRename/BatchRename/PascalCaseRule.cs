@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using RuleHandler;
 using System.Windows.Controls;
+using System.Text.Json;
 
 namespace BatchRename
 {
@@ -103,6 +104,29 @@ namespace BatchRename
         {
             return "PascalCase";
         }
+
+        string IRuleHandler.GetRuleType()
+        {
+            return "PascalCaseRule";
+        }
+        string IRuleHandler.ToJson()
+		{
+            string RuleType = ((IRuleHandler)this).GetRuleType();
+            List<string> InputStrings = this.parameter.InputStrings;
+            string OutputStrings = this.parameter.OutputStrings;
+            int Counter = this.parameter.Counter;
+
+            RuleJsonFormat format = new RuleJsonFormat
+            {
+                RuleType = RuleType,
+                InputStrings = InputStrings,
+                OutputStrings = OutputStrings,
+                Counter = Counter,
+			};
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            return JsonSerializer.Serialize(format, options);
+		}
+
         bool IRuleHandler.IsEditable() { return true; }
 
         void IRuleHandler.SetParameter(RuleParameter ruleParemeters)

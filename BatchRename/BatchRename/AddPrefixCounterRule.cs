@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using RuleHandler;
 
 namespace BatchRename
 {
-    public class AddPreffixCounterRule : Rule, IRuleHandler
+    public class AddPrefixCounterRule : Rule, IRuleHandler
     {
-        public AddPreffixCounterRule()
+        public AddPrefixCounterRule()
         {
             this.parameter = new RuleParameter();
             this.parameter.Counter = 1;
@@ -19,6 +20,29 @@ namespace BatchRename
         {
             return "Add counter as preffix";
         }
+        string IRuleHandler.GetRuleType()
+		{
+            return "AddPrefixCounterRule";
+		}
+
+        string IRuleHandler.ToJson()
+		{
+            string RuleType = ((IRuleHandler)this).GetRuleType();
+            List<string> InputStrings = this.parameter.InputStrings;
+            string OutputStrings = this.parameter.OutputStrings;
+            int Counter = this.parameter.Counter;
+
+            RuleJsonFormat format = new RuleJsonFormat
+            {
+                RuleType = RuleType,
+                InputStrings = InputStrings,
+                OutputStrings = OutputStrings,
+                Counter = Counter,
+			};
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            return JsonSerializer.Serialize(format, options);
+		}
+
         bool IRuleHandler.IsEditable()
         {
             return false;
@@ -57,7 +81,7 @@ namespace BatchRename
         }
         IRuleHandler IRuleHandler.Clone()
         {
-            AddPreffixCounterRule clone = new AddPreffixCounterRule();
+            AddPrefixCounterRule clone = new AddPrefixCounterRule();
             clone.parameter.InputStrings = this.parameter.InputStrings.Select(x => x.ToString()).ToList();
             clone.parameter.OutputStrings = this.parameter.OutputStrings;
             clone.parameter.Counter = this.parameter.Counter;

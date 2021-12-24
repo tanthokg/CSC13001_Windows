@@ -15,6 +15,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
+using System.Text.Json;
 
 namespace BatchRename
 {
@@ -24,7 +25,6 @@ namespace BatchRename
     public partial class MainWindow : Fluent.RibbonWindow
     {
         private BindingList<IRuleHandler> rules;
-        //temp
         private BindingList<IRuleHandler> chosenRules;
         private BindingList<string> itemTypes;
         private BindingList<IRuleHandler> conflictActions;
@@ -51,7 +51,7 @@ namespace BatchRename
             ruleHandlers.Add(new AddPrefixRule());
             ruleHandlers.Add(new AddSuffixRule());
             ruleHandlers.Add(new AddSuffixCounterRule());
-            ruleHandlers.Add(new AddPreffixCounterRule());
+            ruleHandlers.Add(new AddPrefixCounterRule());
             ruleHandlers.Add(new ChangeExtensionRule());
 
             rules = new BindingList<IRuleHandler>();
@@ -69,7 +69,7 @@ namespace BatchRename
             chosenRules = new BindingList<IRuleHandler>();
             conflictActions = new BindingList<IRuleHandler>()
             {
-                new AddPreffixCounterRule(),
+                new AddPrefixCounterRule(),
                 new AddSuffixCounterRule()
             };
             filenames = new BindingList<Filename>();
@@ -101,8 +101,8 @@ namespace BatchRename
             }
 
             IRuleHandler rule = chosenRules[index];
-            if(rule.IsEditable()) 
-            { 
+            if (rule.IsEditable())
+            {
                 IRuleEditor editWindow = rule.ParamsEditorWindow();
                 if (editWindow.ShowDialog() == true)
                     chosenRules[index].SetParameter(editWindow.GetParameter());
@@ -193,13 +193,32 @@ namespace BatchRename
                 if (openFileDialog.ShowDialog() == true)
                 {
                     string[] files = openFileDialog.FileNames;
+                    List<Filename> newFilenames = new List<Filename>();
+
                     foreach (string file in files)
                     {
+                        bool isExisted = false;
                         string currentName = Path.GetFileName(file);
                         string directoryPath = Path.GetDirectoryName(file);
-                        filenames.Add(new Filename() { CurrentName = currentName, Path = directoryPath });
-                        counter++;
+
+                        foreach (var filename in filenames)
+                        {
+                            if (filename.CurrentName == currentName && filename.Path == directoryPath)
+                            {
+                                isExisted = true;
+                                break;
+                            }
+                        }
+
+                        if (!isExisted)
+                        {
+                            newFilenames.Add(new Filename() { CurrentName = currentName, Path = directoryPath });
+                            counter++;
+                        }
                     }
+
+                    foreach (var newFilename in newFilenames)
+                        filenames.Add(newFilename);
                 }
 
                 MessageBox.Show(counter + " file(s) Added Successfully", "Success");
@@ -208,22 +227,42 @@ namespace BatchRename
             {
                 System.Windows.Forms.FolderBrowserDialog explorerDialog = new System.Windows.Forms.FolderBrowserDialog();
                 System.Windows.Forms.DialogResult result = explorerDialog.ShowDialog();
-                int counter = 0;    
+
+                int counter = 0;
                 if (result == System.Windows.Forms.DialogResult.OK)
                 {
                     ItemListView.ItemsSource = foldernames;
 
                     string path = explorerDialog.SelectedPath + "\\";
                     string[] folders = Directory.GetDirectories(path);
+                    List<Foldername> newFoldernames = new List<Foldername>();
 
                     foreach (var folder in folders)
                     {
-                        string foldername = folder.Remove(0, path.Length);
-                        foldernames.Add(new Foldername() { CurrentName = foldername, Path = path });
+                        bool isExisted = false;
+                        string currentName = folder.Remove(0, path.Length);
+
+                        foreach (var foldername in foldernames)
+                        {
+                            if (foldername.CurrentName == currentName && foldername.Path == path)
+                            {
+                                isExisted = true;
+                                break;
+                            }
+                        }
+
+                        if (!isExisted)
+                        {
+                            newFoldernames.Add(new Foldername() { CurrentName = currentName, Path = path });
+                            counter++;
+                        }
                     }
+                    foreach (var newFoldername in newFoldernames)
+                        foldernames.Add(newFoldername);
 
                     MessageBox.Show(counter + " folder(s) Added Successfully", "Success");
                 }
+
             }
         }
 
@@ -255,11 +294,11 @@ namespace BatchRename
             List<IRuleHandler> ruleSetForFiles = new List<IRuleHandler>();
             List<IRuleHandler> ruleSetForFolders = new List<IRuleHandler>();
 
-            foreach(IRuleHandler rule in this.chosenRules)
-			{
+            foreach (IRuleHandler rule in this.chosenRules)
+            {
                 ruleSetForFiles.Add(rule.Clone());
                 ruleSetForFolders.Add(rule.Clone());
-			}
+            }
 
             foreach (Filename file in filenames)
             {
@@ -317,11 +356,13 @@ namespace BatchRename
 
             int index = this.conflictComboBox.SelectedIndex;
 
-            if (isOccurConflict && index == -1) {
+            if (isOccurConflict && index == -1)
+            {
                 MessageBox.Show("There will be some files/folders have the same name at the end of the process, consider to add conflict resolver or change rule set and try again", "Process aborted");
                 return;
             }
 
+            //resolve conflict if selected a conflict resolver
             foreach (var (key, value) in this.conflictFiles)
             {
                 if (value.Count > 1)
@@ -345,6 +386,45 @@ namespace BatchRename
                     });
                 }
             }
+
+            //process
+
+            int folderCounter = 0;
+            int fileCounter = 0;
+
+            foreach (Filename file in filenames)
+            {
+                try
+                {
+                    File.Move(file.Path + "/" + file.CurrentName, file.Path + "/" + file.NewName);
+                    file.CurrentName = file.NewName;
+                }
+                catch (FileNotFoundException exception)
+                {
+                    file.Result = "Source file not exist";
+                    continue;
+                }
+                fileCounter++;
+                file.Result = "Success";
+            }
+
+            foreach (Foldername folder in foldernames)
+            {
+                try
+                {
+                    Directory.Move(folder.Path + "/" + folder.CurrentName, folder.Path + "/" + folder.NewName);
+                    folder.CurrentName = folder.NewName;
+                }
+                catch (DirectoryNotFoundException exception)
+                {
+                    folder.Result = "Source directory not found";
+                    continue;
+                }
+                folderCounter++;
+                folder.Result = "Success";
+            }
+
+            MessageBox.Show($"Result\n   Type file: {fileCounter}/{filenames.Count} success\n   Type folder: {folderCounter}/{foldernames.Count} success", "Process done");
         }
 
         private void PreviewProcess(object sender, RoutedEventArgs e)
@@ -367,11 +447,11 @@ namespace BatchRename
             List<IRuleHandler> ruleSetForFiles = new List<IRuleHandler>();
             List<IRuleHandler> ruleSetForFolders = new List<IRuleHandler>();
 
-            foreach(IRuleHandler rule in this.chosenRules)
-			{
+            foreach (IRuleHandler rule in this.chosenRules)
+            {
                 ruleSetForFiles.Add(rule.Clone());
                 ruleSetForFolders.Add(rule.Clone());
-			}
+            }
 
             foreach (Filename file in filenames)
             {
@@ -430,6 +510,84 @@ namespace BatchRename
             if (isOccurConflict)
             {
                 MessageBox.Show("There are some files/folders have the same name at the end of the process, consider to add conflict resolver or change rule set", "Caution");
+            }
+        }
+
+        private void SaveRulesToJson(object sender, RoutedEventArgs e)
+        {
+            if (chosenRules.Count == 0)
+            {
+                MessageBox.Show("There are no selected rule to save.");
+                return;
+            }
+
+            var dialog = new SaveFileDialog();
+            dialog.Filter = "JSON (*.json)|*.json";
+            if (dialog.ShowDialog() == false)
+                return;
+
+            string path = dialog.FileName;
+            StreamWriter output;
+            try
+            {
+                output = new StreamWriter(path);
+                output.WriteLine("[");
+                foreach (var rule in chosenRules)
+                {
+                    output.Write(rule.ToJson());
+                    if (chosenRules.IndexOf(rule) != chosenRules.Count - 1)
+                        output.WriteLine(",");
+                }
+                output.Write("\n]");
+                output.Close();
+                MessageBox.Show("Preset Saved Successfully!", "Success");
+            }
+            catch (IOException ioe)
+            {
+                MessageBox.Show("Cannot Save Preset!", "Error");
+                return;
+            }
+        }
+
+        private void LoadRulesFromJson(object sender, RoutedEventArgs e)
+        {
+            this.chosenRules.Clear();
+
+            var dialog = new OpenFileDialog();
+            dialog.Filter = "JSON (*.json)|*.json";
+
+            if (dialog.ShowDialog() == false)
+                return;
+
+            string preset = dialog.FileName;
+            string content = File.ReadAllText(preset);
+
+            List<RuleJsonFormat> ruleJsons = new List<RuleJsonFormat>();
+
+            try
+            {
+                ruleJsons = JsonSerializer.Deserialize<List<RuleJsonFormat>>(content);
+            }
+            catch (JsonException exception)
+            {
+                MessageBox.Show("Cannot parse data from the file, check the file again", "Error");
+                return;
+            }
+
+            foreach (RuleJsonFormat ruleJson in ruleJsons)
+            {
+                IRuleHandler item = rules.SingleOrDefault(Item => Item.GetRuleType().Equals(ruleJson.RuleType));
+                if (item != null)
+                {
+                    IRuleHandler target = item.Clone();
+                    target.SetParameter(new RuleParameter
+                    {
+                        InputStrings = ruleJson.InputStrings,
+                        OutputStrings = ruleJson.OutputStrings,
+                        Counter = ruleJson.Counter,
+                    });
+                    this.chosenRules.Add(target);
+                }
             }
         }
     }

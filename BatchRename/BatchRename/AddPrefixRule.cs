@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using RuleHandler;
 using System.Windows.Controls;
+using System.Text.Json;
 
 namespace BatchRename
 {
@@ -94,6 +95,27 @@ namespace BatchRename
         {
             return parameter.OutputStrings.Length == 0 ? "Add Prefix" : "Add Prefix: " + parameter.OutputStrings;
         }
+        string IRuleHandler.GetRuleType()
+		{
+            return "AddPrefixRule";
+		}
+        string IRuleHandler.ToJson()
+		{
+            string RuleType = ((IRuleHandler)this).GetRuleType();
+            List<string> InputStrings = this.parameter.InputStrings;
+            string OutputStrings = this.parameter.OutputStrings;
+            int Counter = this.parameter.Counter;
+
+            RuleJsonFormat format = new RuleJsonFormat
+            {
+                RuleType = RuleType,
+                InputStrings = InputStrings,
+                OutputStrings = OutputStrings,
+                Counter = Counter,
+			};
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            return JsonSerializer.Serialize(format, options);
+		}
 
         void IRuleHandler.SetParameter(RuleParameter paremeters)
         {
