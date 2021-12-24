@@ -227,7 +227,7 @@ namespace BatchRename
             {
                 System.Windows.Forms.FolderBrowserDialog explorerDialog = new System.Windows.Forms.FolderBrowserDialog();
                 System.Windows.Forms.DialogResult result = explorerDialog.ShowDialog();
-                
+
                 int counter = 0;
                 if (result == System.Windows.Forms.DialogResult.OK)
                 {
@@ -262,6 +262,7 @@ namespace BatchRename
 
                     MessageBox.Show(counter + " folder(s) Added Successfully", "Success");
                 }
+
             }
         }
 
@@ -394,13 +395,14 @@ namespace BatchRename
             foreach (Filename file in filenames)
             {
                 try
-				{
-                    File.Move(file.Path +  "/"  + file.CurrentName, file.Path +  "/"  + file.NewName);
+                {
+                    File.Move(file.Path + "/" + file.CurrentName, file.Path + "/" + file.NewName);
                     file.CurrentName = file.NewName;
-				}
-                catch (FileNotFoundException exception){
+                }
+                catch (FileNotFoundException exception)
+                {
                     file.Result = "Source file not exist";
-                    continue; 
+                    continue;
                 }
                 fileCounter++;
                 file.Result = "Success";
@@ -410,10 +412,11 @@ namespace BatchRename
             {
                 try
                 {
-                    Directory.Move(folder.Path + "/"  + folder.CurrentName, folder.Path +  "/"  + folder.NewName);
+                    Directory.Move(folder.Path + "/" + folder.CurrentName, folder.Path + "/" + folder.NewName);
                     folder.CurrentName = folder.NewName;
                 }
-                catch (DirectoryNotFoundException exception) { 
+                catch (DirectoryNotFoundException exception)
+                {
                     folder.Result = "Source directory not found";
                     continue;
                 }
@@ -510,59 +513,73 @@ namespace BatchRename
             }
         }
 
-		private void SaveRulesToJson(object sender, RoutedEventArgs e) {
-            if(chosenRules.Count == 0)
-			{
+        private void SaveRulesToJson(object sender, RoutedEventArgs e)
+        {
+            if (chosenRules.Count == 0)
+            {
                 MessageBox.Show("There are no selected rule to save.");
                 return;
-			}
+            }
+
+            var explorerDialog = new System.Windows.Forms.FolderBrowserDialog();
+            if (explorerDialog.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+                return;
 
             string outputName = "save.json";
             StreamWriter output;
             try
-			{
+            {
                 output = new StreamWriter(outputName);
                 output.WriteLine("[");
                 foreach (var rule in chosenRules)
-			    {
+                {
                     output.Write(rule.ToJson());
                     if (chosenRules.IndexOf(rule) != chosenRules.Count - 1)
                         output.WriteLine(",");
-			    }
+                }
                 output.Write("\n]");
                 output.Close();
-                MessageBox.Show("Done");
-			}
+                MessageBox.Show("Preset Saved Successfully!", "Success");
+            }
             catch (System.IO.IOException ioe)
-			{
-                MessageBox.Show("Error!");
+            {
+                MessageBox.Show("Cannot Save Preset!", "Error");
                 return;
-			}
-		}
+            }
+        }
 
-		private void LoadRulesFromJson(object sender, RoutedEventArgs e)
-		{
+        private void LoadRulesFromJson(object sender, RoutedEventArgs e)
+        {
             this.chosenRules.Clear();
-            string inputName = "save.json";
-            string content = File.ReadAllText(inputName);
+
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Multiselect = true;
+            openFileDialog.Filter = "JSON (*.json)|*.json";
+
+            if (openFileDialog.ShowDialog() == false)
+                return;
+
+            string[] files = openFileDialog.FileNames;
+            string preset = files[0];
+            string content = File.ReadAllText(preset);
 
             List<RuleJsonFormat> ruleJsons = new List<RuleJsonFormat>();
 
-			try
-			{
-               ruleJsons = JsonSerializer.Deserialize<List<RuleJsonFormat>>(content);
-			}
+            try
+            {
+                ruleJsons = JsonSerializer.Deserialize<List<RuleJsonFormat>>(content);
+            }
             catch (System.Text.Json.JsonException exception)
-			{
+            {
                 MessageBox.Show("Cannot parse data from the file, check the file again", "Error");
                 return;
-			}
+            }
 
-            foreach(RuleJsonFormat ruleJson in ruleJsons)
-			{
+            foreach (RuleJsonFormat ruleJson in ruleJsons)
+            {
                 IRuleHandler item = rules.SingleOrDefault(Item => Item.GetRuleType().Equals(ruleJson.RuleType));
-                if(item != null)
-				{
+                if (item != null)
+                {
                     IRuleHandler target = item.Clone();
                     target.SetParameter(new RuleParameter
                     {
@@ -571,8 +588,8 @@ namespace BatchRename
                         Counter = ruleJson.Counter,
                     });
                     this.chosenRules.Add(target);
-				}
-			}
-		}
-	}
+                }
+            }
+        }
+    }
 }
