@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using RuleHandler;
 
@@ -23,6 +24,27 @@ namespace BatchRename
         {
             return false;
         }
+        string IRuleHandler.GetRuleType()
+		{
+            return "AddSuffixCounterRule";
+		}
+        string IRuleHandler.ToJson()
+		{
+            string RuleType = ((IRuleHandler)this).GetRuleType();
+            List<string> InputStrings = this.parameter.InputStrings;
+            string OutputStrings = this.parameter.OutputStrings;
+            int Counter = this.parameter.Counter;
+
+            RuleJsonFormat format = new RuleJsonFormat
+            {
+                RuleType = RuleType,
+                InputStrings = InputStrings,
+                OutputStrings = OutputStrings,
+                Counter = Counter,
+			};
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            return JsonSerializer.Serialize(format, options);
+		}
 
         string IRuleHandler.Process(string ObjectName, bool isFileType)
         {

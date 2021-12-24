@@ -11,8 +11,8 @@
         <Fluent:Ribbon>
             <Fluent:RibbonTabItem Header="Home">
                 <Fluent:RibbonGroupBox Header="Preset">
-                    <Fluent:Button Header="Open" Icon="icons/ic_open.png" LargeIcon="icons/ic_open.png" Padding="8, 4, 4, 0"/>
-                    <Fluent:Button Header="Save" Icon="icons/ic_save.png" LargeIcon="icons/ic_save.png" Padding="4, 4, 8, 0"/>
+                    <Fluent:Button Header="Open" Icon="icons/ic_open.png" LargeIcon="icons/ic_open.png" Padding="8, 4, 4, 0" Click="LoadRulesFromJson"/>
+                    <Fluent:Button Header="Save" Icon="icons/ic_save.png" LargeIcon="icons/ic_save.png" Padding="4, 4, 8, 0" Click="SaveRulesToJson"/>
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Rename Rules">
                     <Fluent:ComboBox Name="rulesComboxBox" Width="150" Height="25" Margin="0, 8, 0, 0" Text="-- Choose a rule --">

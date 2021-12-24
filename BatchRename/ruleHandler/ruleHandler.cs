@@ -19,6 +19,9 @@ namespace RuleHandler
     public interface IRuleHandler
     {
         public bool IsEditable();
+
+        public string ToJson();
+        public string GetRuleType();
         public void SetParameter(RuleParameter ruleParameter)
         {
             return;
@@ -31,8 +34,6 @@ namespace RuleHandler
 
         public IRuleHandler Clone();
     }
-
-
 
     public class RuleParameter
     {
@@ -48,4 +49,12 @@ namespace RuleHandler
         public string OutputStrings { get; set; }
         public int Counter { get; set; }
     }
+
+    public class RuleJsonFormat
+	{
+        public string RuleType { get; set; }
+        public List<string> InputStrings { get; set; }
+        public string OutputStrings { get; set; }
+        public int Counter { get; set; }
+	}
 }
