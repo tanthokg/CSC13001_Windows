@@ -55,7 +55,7 @@ namespace BatchRename
             string extension = parts[^1];
             string fileName;
             if (isFileType)
-                fileName = string.Join("", parts.SkipLast(1));
+                fileName = string.Join(".", parts.SkipLast(1));
             else
                 fileName = ObjectName;
 
