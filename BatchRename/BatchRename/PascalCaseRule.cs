@@ -87,12 +87,12 @@ namespace BatchRename
     {
 
         public PascalCaseRule()
-		{
+        {
             this.parameter = new RuleParameter();
             this.parameter.InputStrings.Clear();
             this.parameter.InputStrings.Add("_");
-		}
-        private string upperCaseFirstLetter(string str)
+        }
+        private string UpperCaseFirstLetter(string str)
         {
             if (str.Length == 0)
                 return str;
@@ -133,7 +133,7 @@ namespace BatchRename
 
             foreach (string str in result)
             {
-                stringBuilder.Append(upperCaseFirstLetter(str));
+                stringBuilder.Append(UpperCaseFirstLetter(str));
             }
 
             if (isFileType)

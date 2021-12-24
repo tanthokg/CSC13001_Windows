@@ -7,13 +7,13 @@ using RuleHandler;
 
 namespace BatchRename
 {
-	class AddSuffixCounterRule : Rule, IRuleHandler
-	{
+    public class AddSuffixCounterRule : Rule, IRuleHandler
+    {
         public AddSuffixCounterRule()
-		{
+        {
             this.parameter = new RuleParameter();
             this.parameter.Counter = 1;
-		}
+        }
 
         public override string ToString()
         {
@@ -39,7 +39,11 @@ namespace BatchRename
 
             string result = fileName;
             if (isFileType)
-                return result + this.parameter.Counter++.ToString() + "." + extension;
+            {
+                string counterString = this.parameter.Counter++.ToString();
+                // counterString = this.parameter.Counter < 11 ? "0" + counterString : counterString;
+                return result + " " + counterString + "." + extension;
+            }
             return result;
         }
         IRuleEditor IRuleHandler.ParamsEditorWindow()
@@ -58,5 +62,5 @@ namespace BatchRename
             clone.parameter.Counter = this.parameter.Counter;
             return clone;
         }
-	} 
+    }
 }
