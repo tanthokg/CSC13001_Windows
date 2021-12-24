@@ -36,7 +36,7 @@ namespace BatchRename
             editInput.AcceptsReturn = true;
             editInput.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
             editInput.Margin = new Thickness(15, 80, 0, 0);
-            editInput.Text = string.Join("\n",ruleParameter.InputStrings);
+            editInput.Text = string.Join("\n", ruleParameter.InputStrings);
 
             editOutput.Height = 80;
             editOutput.Width = 360;
@@ -84,10 +84,10 @@ namespace BatchRename
             RuleParameter ruleParameter = new RuleParameter();
             string[] inputs = editInput.Text.Split("\n");
 
-            foreach(string input in inputs)
-			{
-                    ruleParameter.InputStrings.Add(input.Trim((char)13));
-			}
+            foreach (string input in inputs)
+            {
+                ruleParameter.InputStrings.Add(input.Trim((char)13));
+            }
 
             ruleParameter.OutputStrings = editOutput.Text;
 
@@ -102,13 +102,26 @@ namespace BatchRename
     public class ReplaceRule : Rule, IRuleHandler
     {
         public ReplaceRule()
-		{
+        {
             this.parameter = new RuleParameter();
-		}
+        }
 
         public override string ToString()
         {
-            return "Replace";
+            string result = "Replace", input = " ";
+            foreach (string s in parameter.InputStrings)
+            {
+                if (String.IsNullOrEmpty(s))
+                    break;
+                input += s + ", ";
+            }
+            if (input.Length > 1)
+            {
+                input = input.Substring(0, input.Length - 2);
+                result += input;
+                result += " with " + parameter.OutputStrings;
+            }
+            return result;
         }
 
         bool IRuleHandler.IsEditable() { return true; }
@@ -126,7 +139,7 @@ namespace BatchRename
         {
             if (string.IsNullOrEmpty(ObjectName))
                 return "";
-            
+
             string[] parts = ObjectName.Split('.');
             string extension = parts[^1];
             string fileName;
