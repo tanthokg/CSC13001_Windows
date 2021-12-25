@@ -10,6 +10,10 @@
     <StackPanel Orientation="Vertical" >
         <Fluent:Ribbon>
             <Fluent:RibbonTabItem Header="Home">
+                <Fluent:RibbonGroupBox Header="Project">
+                    <Fluent:Button Header="Open" Icon="icons/ic_open_project.png" LargeIcon="icons/ic_open_project.png" Padding="8, 4, 4, 0" Click="LoadProject"/>
+                    <Fluent:Button Header="Save" Icon="icons/ic_save_project.png" LargeIcon="icons/ic_save_project.png" Padding="4, 4, 8, 0" Click="SaveProject"/>
+                </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Preset">
                     <Fluent:Button Header="Open" Icon="icons/ic_open_preset.png" LargeIcon="icons/ic_open_preset.png" Padding="8, 4, 4, 0" Click="LoadRulesFromJson"/>
                     <Fluent:Button Header="Save" Icon="icons/ic_save_preset.png" LargeIcon="icons/ic_save_preset.png" Padding="4, 4, 8, 0" Click="SaveRulesToJson"/>
@@ -34,10 +38,7 @@
                     <Fluent:Button Header="Add Items" Icon="icons/ic_add_item.png" LargeIcon="icons/ic_add_item.png" Padding="0,4,4,0"
                                    Click="AddItems"/>
                 </Fluent:RibbonGroupBox>
-                <Fluent:RibbonGroupBox Header="Project">
-                    <Fluent:Button Header="Open" Icon="icons/ic_open_project.png" LargeIcon="icons/ic_open_project.png" Padding="8, 4, 4, 0" Click="LoadProject"/>
-                    <Fluent:Button Header="Save" Icon="icons/ic_save_project.png" LargeIcon="icons/ic_save_project.png" Padding="4, 4, 8, 0" Click="SaveProject"/>
-                </Fluent:RibbonGroupBox>
+                
                 <Fluent:RibbonGroupBox Header="Batch Actions">
                     <Fluent:Button Header="Reset Rules" Icon="icons/ic_reset.png" LargeIcon="icons/ic_reset.png" Padding="8, 4, 4, 0" Click="ResetChosenRules"/>
                     <Fluent:Button Header="Reset Items" Icon="icons/ic_delete_items.png" LargeIcon="icons/ic_delete_items.png" Padding="8, 4, 4, 0" Click="ResetAddedItems"/>
@@ -117,6 +118,7 @@
                     <ListView.ItemContainerStyle>
                         <Style TargetType="{x:Type ListViewItem}" >
                             <Setter Property="ContextMenu" Value="{StaticResource ChosenRuleContextMenu}" />
+                            <EventSetter Event="MouseDoubleClick" Handler="ChosenRule_DoubleClick" />
                         </Style>
                     </ListView.ItemContainerStyle>
                 </ListView>

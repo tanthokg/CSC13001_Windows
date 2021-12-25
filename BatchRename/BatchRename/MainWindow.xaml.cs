@@ -672,5 +672,28 @@ namespace BatchRename
 
         }
 
+        private void ChosenRule_DoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            int index = chosenRulesListView.SelectedIndex;
+            if (index == -1)
+            {
+                MessageBox.Show("Invalid rule.");
+                return;
+            }
+
+            IRuleHandler rule = chosenRules[index];
+            if (rule.IsEditable())
+            {
+                IRuleEditor editWindow = rule.ParamsEditorWindow();
+                if (editWindow.ShowDialog() == true)
+                    chosenRules[index].SetParameter(editWindow.GetParameter());
+            }
+            else
+            {
+                MessageBox.Show("This rule does not have any parameter to edit", "Error");
+            }
+            ICollectionView view = CollectionViewSource.GetDefaultView(chosenRules);
+            view.Refresh();
+        }
     }
 }
