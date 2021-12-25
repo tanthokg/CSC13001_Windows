@@ -11,37 +11,42 @@
         <Fluent:Ribbon>
             <Fluent:RibbonTabItem Header="Home">
                 <Fluent:RibbonGroupBox Header="Project">
-                    <Fluent:Button Header="Open" Icon="icons/ic_open_project.png" LargeIcon="icons/ic_open_project.png" Padding="8, 4, 4, 0" Click="LoadProject"/>
-                    <Fluent:Button Header="Save" Icon="icons/ic_save_project.png" LargeIcon="icons/ic_save_project.png" Padding="4, 4, 8, 0" Click="SaveProject"/>
+                    <Fluent:Button Header="Open" Icon="icons/ic_open_project.png" LargeIcon="icons/ic_open_project.png" Padding="4, 4, 4, 0" Click="LoadProject"/>
+                    <Fluent:Button Header="Save" Icon="icons/ic_save_project.png" LargeIcon="icons/ic_save_project.png" Padding="4, 4, 4, 0" Click="SaveProject"/>
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Preset">
-                    <Fluent:Button Header="Open" Icon="icons/ic_open_preset.png" LargeIcon="icons/ic_open_preset.png" Padding="8, 4, 4, 0" Click="LoadRulesFromJson"/>
-                    <Fluent:Button Header="Save" Icon="icons/ic_save_preset.png" LargeIcon="icons/ic_save_preset.png" Padding="4, 4, 8, 0" Click="SaveRulesToJson"/>
+                    <Fluent:Button Header="Open" Icon="icons/ic_open_preset.png" LargeIcon="icons/ic_open_preset.png" Padding="4, 4, 4, 0" Click="LoadRulesFromJson"/>
+                    <Fluent:Button Header="Save" Icon="icons/ic_save_preset.png" LargeIcon="icons/ic_save_preset.png" Padding="4, 4, 4, 0" Click="SaveRulesToJson"/>
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Rename Rules">
-                    <Fluent:ComboBox Name="rulesComboxBox" Width="150" Height="25" Margin="0, 8, 0, 0" Text="-- Choose a rule --">
+                    <Fluent:ComboBox Name="rulesComboxBox" Width="150" Height="25" Margin="0, 12, 0, 0" Text="-- Choose a rule --">
                         <Fluent:ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding}"/>
                             </DataTemplate>
                         </Fluent:ComboBox.ItemTemplate>
                     </Fluent:ComboBox>
-                    <Fluent:ComboBox Name="typeComboBox" Width="150" Height="25" Margin="0,4,0,0" Text="-- Choose items type --">
-                        <Fluent:ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding}"/>
-                            </DataTemplate>
-                        </Fluent:ComboBox.ItemTemplate>
-                    </Fluent:ComboBox>
-                    <Fluent:Button Header="Add Rules" Icon="icons/ic_add_rule.png" LargeIcon="icons/ic_add_rule.png" Padding="4,4,0,0"
+                    <Fluent:Button Header="Add Rules" Icon="icons/ic_add_rule.png" LargeIcon="icons/ic_add_rule.png" Padding="4, 4, 4, 0"
                                    Click="AddRules"/>
-                    <Fluent:Button Header="Add Items" Icon="icons/ic_add_item.png" LargeIcon="icons/ic_add_item.png" Padding="0,4,4,0"
-                                   Click="AddItems"/>
+                    
+                    <Fluent:Button Header="Reset Rules" Icon="icons/ic_reset.png" LargeIcon="icons/ic_reset.png" Padding="4, 4, 4, 0" 
+                                   Click="ResetChosenRules"/>
+
                 </Fluent:RibbonGroupBox>
-                
+                <Fluent:RibbonGroupBox Header="Items Actions">
+                    <Fluent:ComboBox Name="typeComboBox" Width="150" Height="25" Margin="0, 12, 0, 0" Text="-- Choose items type --">
+                        <Fluent:ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}"/>
+                            </DataTemplate>
+                        </Fluent:ComboBox.ItemTemplate>
+                    </Fluent:ComboBox>
+
+                    <Fluent:Button Header="Add Items" Icon="icons/ic_add_item.png" LargeIcon="icons/ic_add_item.png" Padding="4, 4, 4, 0" Click="AddItems"/>
+                    <Fluent:Button Header="Reset Items" Icon="icons/ic_delete_items.png" LargeIcon="icons/ic_delete_items.png" Padding="4, 4, 4, 0" Click="ResetAddedItems"/>
+
+                </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Batch Actions">
-                    <Fluent:Button Header="Reset Rules" Icon="icons/ic_reset.png" LargeIcon="icons/ic_reset.png" Padding="8, 4, 4, 0" Click="ResetChosenRules"/>
-                    <Fluent:Button Header="Reset Items" Icon="icons/ic_delete_items.png" LargeIcon="icons/ic_delete_items.png" Padding="8, 4, 4, 0" Click="ResetAddedItems"/>
                     <Fluent:Button Header="Preview" Icon="icons/ic_preview.png" LargeIcon="icons/ic_preview.png" Padding="4, 4, 4, 0" Click="PreviewProcess"/>
                     <Fluent:Button Header="Start" Icon="icons/ic_start.png" LargeIcon="icons/ic_start.png" Padding="4, 4, 8, 0" Click="StartProcess"/>
                 </Fluent:RibbonGroupBox>
