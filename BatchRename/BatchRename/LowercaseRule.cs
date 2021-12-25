@@ -26,23 +26,6 @@ namespace BatchRename
 		{
             return "LowercaseRule";
 		}
-        string IRuleHandler.ToJson()
-		{
-            string RuleType = ((IRuleHandler)this).GetRuleType();
-            List<string> InputStrings = this.parameter.InputStrings;
-            string OutputStrings = this.parameter.OutputStrings;
-            int Counter = this.parameter.Counter;
-
-            RuleJsonFormat format = new RuleJsonFormat
-            {
-                RuleType = RuleType,
-                InputStrings = InputStrings,
-                OutputStrings = OutputStrings,
-                Counter = Counter,
-			};
-            var options = new JsonSerializerOptions { WriteIndented = true };
-            return JsonSerializer.Serialize(format, options);
-		}
 
         string IRuleHandler.Process(string ObjectName, bool isFileType)
         {
@@ -69,7 +52,7 @@ namespace BatchRename
 
         RuleParameter IRuleHandler.GetParameter()
 		{
-            return null;
+            return this.parameter;
 		}
 
         IRuleEditor IRuleHandler.ParamsEditorWindow()

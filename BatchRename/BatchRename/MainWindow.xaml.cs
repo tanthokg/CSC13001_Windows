@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Text.Json;
+using System.Windows.Threading;
 
 namespace BatchRename
 {
@@ -31,6 +32,10 @@ namespace BatchRename
         private BindingList<Filename> filenames;
         private BindingList<Foldername> foldernames;
 
+        private string CurrentProjectName = "Unsaved Project";
+        private string CurrentProject = "";
+        private string currentPreset = "";
+
         private Dictionary<string, List<Filename>> conflictFiles = new Dictionary<string, List<Filename>>();
         private Dictionary<string, List<Foldername>> conflictFolders = new Dictionary<string, List<Foldername>>();
 
@@ -39,20 +44,99 @@ namespace BatchRename
             InitializeComponent();
         }
 
+        private void autosave()
+        {
+
+            string path = "autosave.json";
+            if (this.CurrentProject != "")
+                path = this.CurrentProject;
+
+            StreamWriter output;
+            try
+            {
+                output = new StreamWriter(path);
+
+                List<RuleJsonFormat> rules = new List<RuleJsonFormat>();
+                List<FileFormat> files = new List<FileFormat>();
+                List<FolderFormat> folders = new List<FolderFormat>();
+
+                foreach(IRuleHandler item in this.chosenRules)
+				{
+                    rules.Add(new RuleJsonFormat
+                    {
+                        RuleType = item.GetRuleType(),
+                        InputStrings = item.GetParameter().InputStrings,
+                        OutputStrings = item.GetParameter().OutputStrings,
+                        Counter = item.GetParameter().Counter,
+                    });
+				}
+
+                foreach(Filename filename in filenames){
+                    files.Add(new FileFormat
+                    {
+                        CurrentName = filename.CurrentName,
+                        NewName = filename.NewName,
+                        Path = filename.Path,
+                        result = filename.Result
+                    });
+                }
+
+                foreach (Foldername foldername in foldernames) { 
+                    folders.Add(new FolderFormat
+                    {
+                        CurrentName = foldername.CurrentName,
+                        NewName = foldername.NewName,
+                        Path =  foldername.Path,
+                        result = foldername.Result
+                    });
+                }
+
+                ProjectFormat projectFormat = new ProjectFormat
+				{
+                    rules = rules,
+                    files = files,
+                    folders = folders
+				};
+
+                var options = new JsonSerializerOptions { WriteIndented = true };
+                string data = JsonSerializer.Serialize(projectFormat, options);
+                output.Write(data);
+                output.Close();
+            }
+            catch (IOException ioe)
+            {
+                return;
+            }
+
+        }
+
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+
+            if(File.Exists("autosave.json"))
+			{
+                //messageBox here if you want to load last save
+			}
+
+            //auto save per 30 sec
+            DispatcherTimer dispatcherTimer = new DispatcherTimer();
+            dispatcherTimer.Tick += (s, ev) => autosave();
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 30);
+            dispatcherTimer.Start();
+
             // Initiate Data Lists/Collections
             List<IRuleHandler> ruleHandlers = new List<IRuleHandler>();
-            ruleHandlers.Add(new ReplaceRule());
-            ruleHandlers.Add(new LowercaseRule());
-            ruleHandlers.Add(new UppercaseRule());
-            ruleHandlers.Add(new PascalCaseRule());
-            ruleHandlers.Add(new ImproperSpacesRule());
             ruleHandlers.Add(new AddPrefixRule());
             ruleHandlers.Add(new AddSuffixRule());
             ruleHandlers.Add(new AddSuffixCounterRule());
             ruleHandlers.Add(new AddPrefixCounterRule());
             ruleHandlers.Add(new ChangeExtensionRule());
+            ruleHandlers.Add(new ImproperSpacesRule());
+            ruleHandlers.Add(new LowercaseRule());
+            ruleHandlers.Add(new PascalCaseRule());
+            ruleHandlers.Add(new ReplaceExtensionRule());
+            ruleHandlers.Add(new ReplaceRule());
+            ruleHandlers.Add(new UppercaseRule());
 
             rules = new BindingList<IRuleHandler>();
 
@@ -143,7 +227,8 @@ namespace BatchRename
             conflictFolders.Clear();
         }
 
-        private void MoveRuleToTop(object sender, RoutedEventArgs e)
+        #region rule ListView position buttons event handler
+		private void MoveRuleToTop(object sender, RoutedEventArgs e)
         {
             int index = chosenRulesListView.SelectedIndex;
             if (index != -1)
@@ -188,8 +273,10 @@ namespace BatchRename
                 chosenRules[chosenRules.Count - 1] = temp;
             }
         }
+        #endregion
 
-        private void AddItems(object sender, RoutedEventArgs e)
+
+		private void AddItems(object sender, RoutedEventArgs e)
         {
             if (typeComboBox.SelectedItem == null)
             {
@@ -288,7 +375,8 @@ namespace BatchRename
             conflictFolders.Clear();
         }
 
-        private void StartProcess(object sender, RoutedEventArgs e)
+		#region process start and preview
+		private void StartProcess(object sender, RoutedEventArgs e)
         {
             if (renameOriginal.IsChecked == true)
             {
@@ -512,6 +600,14 @@ namespace BatchRename
             {
                 file.NewName = file.CurrentName;
                 file.Result = "";
+
+                if(!File.Exists(file.Path + "/" + file.CurrentName))
+				{
+                    file.Result = "Source file not exist";
+                    continue;
+				}
+
+
                 foreach (IRuleHandler handler in ruleSetForFiles)
                 {
                     file.NewName = handler.Process(file.NewName);
@@ -534,6 +630,13 @@ namespace BatchRename
             {
                 folder.NewName = folder.CurrentName;
                 folder.Result = "";
+
+                if(!Directory.Exists(folder.Path + "/" + folder.CurrentName))
+				{
+                    folder.Result = "Directory not exist";
+                    continue;
+				}
+
                 foreach (IRuleHandler handler in ruleSetForFolders)
                 {
                     folder.NewName = handler.Process(folder.NewName, false);
@@ -583,6 +686,8 @@ namespace BatchRename
                 MessageBox.Show("There are some files/folders have name conflict, consider to add conflict resolver or change rule set", "Caution");
             }
         }
+		#endregion
+	
 
         private void SaveRulesToJson(object sender, RoutedEventArgs e)
         {
@@ -592,26 +697,42 @@ namespace BatchRename
                 return;
             }
 
-            var dialog = new SaveFileDialog();
-            dialog.Filter = "JSON (*.json)|*.json";
-            if (dialog.ShowDialog() == false)
-                return;
+            string path;
+            if (this.currentPreset == "")
+            {
+                var dialog = new SaveFileDialog();
+                dialog.Filter = "JSON (*.json)|*.json";
+                if (dialog.ShowDialog() == false)
+                    return;
+                path = dialog.FileName;
+            }
+            else
+                path = this.currentPreset;
 
-            string path = dialog.FileName;
             StreamWriter output;
             try
             {
-                output = new StreamWriter(path);
-                output.WriteLine("[");
+
+                List<RuleJsonFormat> ruleJsonFormats = new List<RuleJsonFormat>();
+
                 foreach (var rule in chosenRules)
                 {
-                    output.Write(rule.ToJson());
-                    if (chosenRules.IndexOf(rule) != chosenRules.Count - 1)
-                        output.WriteLine(",");
+                    ruleJsonFormats.Add(new RuleJsonFormat
+                    {
+                        InputStrings = rule.GetParameter().InputStrings,
+                        OutputStrings = rule.GetParameter().OutputStrings,
+                        Counter = rule.GetParameter().Counter,
+                        RuleType = rule.GetRuleType(),
+                    });
                 }
-                output.Write("\n]");
+
+                output = new StreamWriter(path);
+                var options = new JsonSerializerOptions { WriteIndented = true };
+                string data = JsonSerializer.Serialize(ruleJsonFormats, options);
+                output.Write(data);
                 output.Close();
-                MessageBox.Show("Preset Saved Successfully!", "Success");
+                MessageBox.Show($"Preset Saved Successfully!\nPath: {path}", "Save preset");
+                this.currentPreset = path;
             }
             catch (IOException ioe)
             {
@@ -622,8 +743,6 @@ namespace BatchRename
 
         private void LoadRulesFromJson(object sender, RoutedEventArgs e)
         {
-            this.chosenRules.Clear();
-
             var dialog = new OpenFileDialog();
             dialog.Filter = "JSON (*.json)|*.json";
 
@@ -645,6 +764,8 @@ namespace BatchRename
                 return;
             }
 
+            this.chosenRules.Clear();
+
             foreach (RuleJsonFormat ruleJson in ruleJsons)
             {
                 IRuleHandler item = rules.SingleOrDefault(Item => Item.GetRuleType().Equals(ruleJson.RuleType));
@@ -660,19 +781,163 @@ namespace BatchRename
                     this.chosenRules.Add(target);
                 }
             }
+
+            MessageBox.Show("Loaded successfully!", "Load preset");
+            this.currentPreset = preset;
         }
 
-        private void SaveProject(object sender, RoutedEventArgs e)
+		#region project save, load
+		private void SaveProject(object sender, RoutedEventArgs e)
         {
+            string path;
+            string projectName = "name";
+            if(this.CurrentProject == "")
+			{
+                string getPath = "save.json";
+                // handle save dialog here
+                //also get for me projectName
+        
+                path = getPath;
+			}
+            else
+			{
+                path = this.CurrentProject;
+			}
 
+
+            StreamWriter output;
+            try
+            {
+                output = new StreamWriter(path);
+
+                List<RuleJsonFormat> rules = new List<RuleJsonFormat>();
+                List<FileFormat> files = new List<FileFormat>();
+                List<FolderFormat> folders = new List<FolderFormat>();
+
+                foreach(IRuleHandler item in this.chosenRules)
+				{
+                    rules.Add(new RuleJsonFormat
+                    {
+                        RuleType = item.GetRuleType(),
+                        InputStrings = item.GetParameter().InputStrings,
+                        OutputStrings = item.GetParameter().OutputStrings,
+                        Counter = item.GetParameter().Counter,
+                    });
+				}
+
+                foreach(Filename filename in filenames){
+                    files.Add(new FileFormat
+                    {
+                        CurrentName = filename.CurrentName,
+                        NewName = filename.NewName,
+                        Path = filename.Path,
+                        result = filename.Result
+                    });
+                }
+
+                foreach (Foldername foldername in foldernames) { 
+                    folders.Add(new FolderFormat
+                    {
+                        CurrentName = foldername.CurrentName,
+                        NewName = foldername.NewName,
+                        Path =  foldername.Path,
+                        result = foldername.Result
+                    });
+                }
+
+                ProjectFormat projectFormat = new ProjectFormat
+				{
+                    rules = rules,
+                    files = files,
+                    folders = folders
+				};
+
+                var options = new JsonSerializerOptions { WriteIndented = true };
+                string data = JsonSerializer.Serialize(projectFormat, options);
+                output.Write(data);
+                output.Close();
+                MessageBox.Show($"Project Saved Successfully!\nPath: {path}", "Save project");
+
+                if(File.Exists("autosave.json"))
+                    File.Delete("autosave.json");
+
+                this.CurrentProject = path;
+                this.CurrentProjectName = projectName;
+            }
+            catch (IOException ioe)
+            {
+                MessageBox.Show("Cannot Save Project due to some errors!", "Error");
+                return;
+            }
         }
 
         private void LoadProject(object sender, RoutedEventArgs e)
         {
+            //projectName is load project's path
+            //if user cancel, set it to ""
+            string projectName = "save.json";
 
+            string content = File.ReadAllText(projectName);
+
+            ProjectFormat projectData = new ProjectFormat();
+            try
+            {
+                projectData = JsonSerializer.Deserialize<ProjectFormat>(content);
+            }
+            catch (JsonException exception)
+            {
+                MessageBox.Show("Cannot parse data from the file, check the file again", "Error");
+                return;
+            }
+
+            foreach (RuleJsonFormat ruleJson in projectData.rules)
+            {
+                IRuleHandler item = rules.SingleOrDefault(Item => Item.GetRuleType().Equals(ruleJson.RuleType));
+                if (item != null)
+                {
+                    IRuleHandler target = item.Clone();
+                    target.SetParameter(new RuleParameter
+                    {
+                        InputStrings = ruleJson.InputStrings,
+                        OutputStrings = ruleJson.OutputStrings,
+                        Counter = ruleJson.Counter,
+                    });
+                    this.chosenRules.Add(target);
+                }
+            }
+
+            filenames.Clear();
+            foreach(FileFormat fileFormat in projectData.files)
+			{
+                filenames.Add(new Filename
+                {
+                    CurrentName = fileFormat.CurrentName,
+                    NewName = fileFormat.NewName,
+                    Path = fileFormat.Path,
+                    Result = fileFormat.result
+                });
+			}
+
+            foldernames.Clear();
+            foreach(FolderFormat folderFormat in projectData.folders)
+			{
+                filenames.Add(new Filename
+                {
+                    CurrentName = folderFormat.CurrentName,
+                    NewName = folderFormat.NewName,
+                    Path = folderFormat.Path,
+                    Result = folderFormat.result
+                });
+			}
+
+            MessageBox.Show("Loaded successfully!", "Load project");
+            if(File.Exists("autosave.json"))
+                File.Delete("autosave.json");
+            this.CurrentProject = projectName;
         }
+		#endregion
 
-        private void ChosenRule_DoubleClick(object sender, MouseButtonEventArgs e)
+		private void ChosenRule_DoubleClick(object sender, MouseButtonEventArgs e)
         {
             int index = chosenRulesListView.SelectedIndex;
             if (index == -1)

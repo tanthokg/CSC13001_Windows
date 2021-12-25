@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -20,8 +21,6 @@ namespace RuleHandler
     public interface IRuleHandler
     {
         public bool IsEditable();
-
-        public string ToJson();
         public string GetRuleType();
         public void SetParameter(RuleParameter ruleParameter)
         {
@@ -57,6 +56,28 @@ namespace RuleHandler
         public List<string> InputStrings { get; set; }
         public string OutputStrings { get; set; }
         public int Counter { get; set; }
+    }
+
+    public class FolderFormat
+	{
+        public string NewName { get; set; }
+        public string CurrentName { get; set; }
+        public string Path { get; set; }    
+        public string result { get; set; }  
+	}
+    public class FileFormat
+	{
+        public string NewName { get; set; }
+        public string CurrentName { get; set; }
+        public string Path { get; set; }    
+        public string result { get; set; }  
+	}
+
+    public class ProjectFormat
+    {
+        public List<RuleJsonFormat> rules { get; set; }
+        public List<FileFormat> files { get; set; }
+        public List<FolderFormat> folders { get; set; }
     }
 
     public class Util

@@ -10,28 +10,39 @@ using RuleHandler;
 
 namespace BatchRename
 {
-    public class ChangeExtensionRuleEditor : Window, IRuleEditor
+    public class ReplaceExtensionRuleEditor : Window, IRuleEditor
     {
         public IRuleHandler Rule { get; set; }
 
         private Canvas canvas = new Canvas();
         private Button ok = new Button();
         private Button cancel = new Button();
-        private TextBox editTextBox = new TextBox();
+        private TextBox editInput = new TextBox();
+        private TextBox editOutput = new TextBox();
+        private RuleParameter ruleParameter = new RuleParameter();
 
-        public ChangeExtensionRuleEditor(RuleParameter ruleParameter)
+
+        public ReplaceExtensionRuleEditor(RuleParameter ruleParameter)
         {
             //define UI
-            this.Title = "Parameter Editor for Change Extension Rule";
+            this.Title = "Parameter Editor for Replace Extension";
             this.Width = 400;
-            this.Height = 360;
+            this.Height = 400;
             this.ResizeMode = ResizeMode.NoResize;
 
-            editTextBox.Height = 80;
-            editTextBox.Width = 360;
-            editTextBox.TextWrapping = TextWrapping.WrapWithOverflow;
-            editTextBox.Margin = new Thickness(20, 89, 0, 0);
-            editTextBox.Text = ruleParameter.OutputStrings;
+            editInput.Height = 80;
+            editInput.Width = 360;
+            editInput.TextWrapping = TextWrapping.Wrap;
+            editInput.AcceptsReturn = true;
+            editInput.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
+            editInput.Margin = new Thickness(15, 80, 0, 0);
+            editInput.Text = string.Join("\n", ruleParameter.InputStrings);
+
+            editOutput.Height = 80;
+            editOutput.Width = 360;
+            editOutput.TextWrapping = TextWrapping.WrapWithOverflow;
+            editOutput.Margin = new Thickness(15, 200, 0, 0);
+            editOutput.Text = ruleParameter.OutputStrings;
 
             ok.Content = "Submit";
             ok.Name = "buttonSubmit";
@@ -39,16 +50,17 @@ namespace BatchRename
             ok.Click += this.OnSubmitButtonClick;
             ok.Width = 80;
             ok.Height = 35;
-            ok.Margin = new Thickness(93, 196, 0, 0);
+            ok.Margin = new Thickness(80, 300, 0, 0);
 
             cancel.Click += this.OnCancelButtonClick;
             cancel.IsCancel = true;
             cancel.Content = "Cancel";
             cancel.Width = 80;
             cancel.Height = 35;
-            cancel.Margin = new Thickness(228, 196, 0, 0);
+            cancel.Margin = new Thickness(220, 300, 0, 0);
 
-            canvas.Children.Add(editTextBox);
+            canvas.Children.Add(editInput);
+            canvas.Children.Add(editOutput);
             canvas.Children.Add(ok);
             canvas.Children.Add(cancel);
 
@@ -56,7 +68,7 @@ namespace BatchRename
         }
         private void OnSubmitButtonClick(object sender, RoutedEventArgs e)
         {
-            string str = editTextBox.Text;
+            string str = editInput.Text;
             if (str.Length != 0)
             {
                 DialogResult = true;
@@ -70,7 +82,15 @@ namespace BatchRename
         RuleParameter IRuleEditor.GetParameter()
         {
             RuleParameter ruleParameter = new RuleParameter();
-            ruleParameter.OutputStrings = editTextBox.Text;
+            string[] inputs = editInput.Text.Split("\n");
+
+            foreach (string input in inputs)
+            {
+                ruleParameter.InputStrings.Add(input.Trim((char)13));
+            }
+
+            ruleParameter.OutputStrings = editOutput.Text;
+
             return ruleParameter;
         }
 
@@ -79,20 +99,20 @@ namespace BatchRename
             return this.ShowDialog();
         }
     }
-	class ChangeExtensionRule : Rule, IRuleHandler
+	class ReplaceExtensionRule : Rule, IRuleHandler
 	{
-        public ChangeExtensionRule()
+        public ReplaceExtensionRule()
 		{
             this.parameter = new RuleParameter();
 		}
 
         string IRuleHandler.GetRuleType()
 		{
-            return "ChangeExtensionRule";
+            return "ReplaceExtensionRule";
 		}
         public override string ToString()
         {
-            return this.parameter.OutputStrings.Length == 0 ? "Change file\'s extension" : "Change all file\'s extension to: " + this.parameter.OutputStrings;
+            return this.parameter.OutputStrings.Length == 0 ? "Replace all file\'s extension" : $"Replace file\'s extension: from \"{string.Join("\", \"",this.parameter.InputStrings)}\" to \"{this.parameter.OutputStrings}\"";
         }
         
         bool IRuleHandler.IsEditable()
@@ -120,12 +140,15 @@ namespace BatchRename
 
             string result = fileName;
             if (isFileType && !string.IsNullOrEmpty(this.parameter.OutputStrings))
-                return result + "." + this.parameter.OutputStrings;
+                if(this.parameter.InputStrings.Contains(extension))
+                    return result + "." + this.parameter.OutputStrings;
+                else
+                    return result + "." + extension;
             return result;
         }
         IRuleEditor IRuleHandler.ParamsEditorWindow()
         {
-            return new ChangeExtensionRuleEditor(this.parameter);
+            return new ReplaceExtensionRuleEditor(this.parameter);
         }
         RuleParameter IRuleHandler.GetParameter()
         {
@@ -133,7 +156,7 @@ namespace BatchRename
         }
         IRuleHandler IRuleHandler.Clone()
         {
-            ChangeExtensionRule clone = new ChangeExtensionRule();
+            ReplaceExtensionRule clone = new ReplaceExtensionRule();
             clone.parameter.InputStrings = this.parameter.InputStrings.Select(x => x.ToString()).ToList();
             clone.parameter.OutputStrings = this.parameter.OutputStrings;
             clone.parameter.Counter = this.parameter.Counter;

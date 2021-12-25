@@ -12,6 +12,10 @@ namespace BatchRename
     /// Interaction logic for App.xaml
     /// </summary>
     public partial class App : Application
-    {
-    }
+	{
+		private void AppicationExit(object sender, ExitEventArgs e)
+		{
+			
+		}
+	}
 }

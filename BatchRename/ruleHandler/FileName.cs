@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BatchRename
+namespace RuleHandler
 {
-    class Foldername : INotifyPropertyChanged
+    public class Filename : INotifyPropertyChanged
     {
         private string _currentName;
         private string _newName;
