@@ -121,7 +121,21 @@ namespace BatchRename
             if (index != -1)
                 chosenRules.RemoveAt(index);
         }
-
+        private void RemoveChosenItem(object sender, RoutedEventArgs e)
+        {
+            string chosenType = itemTypes[typeComboBox.SelectedIndex];
+            switch (chosenType)
+            {
+                case "File":
+                    filenames.RemoveAt(ItemListView.SelectedIndex);
+                    break;
+                case "Folder":
+                    foldernames.RemoveAt(ItemListView.SelectedIndex);
+                    break;
+                default:
+                    break;
+            }
+        }
         private void ResetChosenRules(object sender, RoutedEventArgs e)
         {
             chosenRules.Clear();
@@ -276,6 +290,16 @@ namespace BatchRename
 
         private void StartProcess(object sender, RoutedEventArgs e)
         {
+            if (renameOriginal.IsChecked == true)
+            {
+                // Rename on originals as we did
+            }
+            if (moveToNew.IsChecked == true)
+            {
+                // Probably show a a dialog, let user choose where to move new files to?
+                // What if we rename a folder, do we copy all files and subfolders inside it?
+            }
+
             if (chosenRules.Count == 0)
             {
                 MessageBox.Show("Process skipped because there is no rule set", "Process aborted");
@@ -637,5 +661,6 @@ namespace BatchRename
                 }
             }
         }
+
     }
 }

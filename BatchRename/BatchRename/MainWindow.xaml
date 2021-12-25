@@ -49,13 +49,17 @@
             </Fluent:RibbonTabItem>
             <Fluent:RibbonTabItem Header="Options">
                 <Fluent:RibbonGroupBox Header="Resolve Conflicts">
-                    <Fluent:ComboBox Name="conflictComboBox" Width="150" Height="25" Margin="0, 8, 0, 0" Text="-- Choose an action --">
+                    <Fluent:ComboBox Name="conflictComboBox" Width="150" Height="25" Margin="0, 12, 4, 0" Text="-- Choose an action --">
                         <Fluent:ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding}"/>
                             </DataTemplate>
                         </Fluent:ComboBox.ItemTemplate>
                     </Fluent:ComboBox>
+                </Fluent:RibbonGroupBox>
+                <Fluent:RibbonGroupBox Header="Batch Actions">
+                    <Fluent:RadioButton Name="renameOriginal" Header="Rename On Originals" Margin="0, 8, 0, 0" IsChecked="True"/>
+                    <Fluent:RadioButton Name="moveToNew" Header="Move To New Folder"/>
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
             
@@ -70,7 +74,7 @@
                 <Label Content="Chosen Rename Rule(s)" Margin="8,0,0,0"/>
                 <ListView Name="chosenListView" Width="200" Height="420" Margin="8,0,0,0">
                     <ListView.Resources>
-                        <ContextMenu x:Key="ItemContextMenu">
+                        <ContextMenu x:Key="ChosenRuleContextMenu">
                             <MenuItem Header="Edit Parameters" Click="EditChosenFromList"/>
                             <MenuItem Header="Remove This Rule" Click="RemoveChosenFromList"/>
                         </ContextMenu>
@@ -82,7 +86,7 @@
                     </ListView.ItemTemplate>
                     <ListView.ItemContainerStyle>
                         <Style TargetType="{x:Type ListViewItem}" >
-                            <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}" />
+                            <Setter Property="ContextMenu" Value="{StaticResource ChosenRuleContextMenu}" />
                         </Style>
                     </ListView.ItemContainerStyle>
                 </ListView>
@@ -90,6 +94,11 @@
             <StackPanel Margin="8, 0, 8, 0">
                 <Label Content="Chosen Item(s)" Margin="8,0,0,0"/>
                 <ListView Name="ItemListView"  Height="420" Width="720" VerticalAlignment="Top">
+                    <ListView.Resources>
+                        <ContextMenu x:Key="ItemContextMenu">
+                            <MenuItem Header="Remove" Click="RemoveChosenItem"/>
+                        </ContextMenu>
+                    </ListView.Resources>
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Current Name" Width="160" 
@@ -102,6 +111,11 @@
                                             DisplayMemberBinding="{Binding Result}" />
                         </GridView>
                     </ListView.View>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="{x:Type ListViewItem}" >
+                            <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
                 </ListView>
             </StackPanel>
             
