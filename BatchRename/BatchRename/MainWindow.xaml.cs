@@ -80,7 +80,7 @@ namespace BatchRename
             typeComboBox.ItemsSource = itemTypes;
             conflictComboBox.ItemsSource = conflictActions;
 
-            chosenListView.ItemsSource = chosenRules;
+            chosenRulesListView.ItemsSource = chosenRules;
         }
 
         private void AddRules(object sender, RoutedEventArgs e)
@@ -91,9 +91,9 @@ namespace BatchRename
                 chosenRules.Add(rules[index].Clone());
             }
         }
-        private void EditChosenFromList(object sender, RoutedEventArgs e)
+        private void EditChosenRule(object sender, RoutedEventArgs e)
         {
-            int index = chosenListView.SelectedIndex;
+            int index = chosenRulesListView.SelectedIndex;
             if (index == -1)
             {
                 MessageBox.Show("Invalid rule.");
@@ -115,9 +115,9 @@ namespace BatchRename
             view.Refresh();
 
         }
-        private void RemoveChosenFromList(object sender, RoutedEventArgs e)
+        private void RemoveChosenRule(object sender, RoutedEventArgs e)
         {
-            int index = chosenListView.SelectedIndex;
+            int index = chosenRulesListView.SelectedIndex;
             if (index != -1)
                 chosenRules.RemoveAt(index);
         }
@@ -145,7 +145,7 @@ namespace BatchRename
 
         private void MoveRuleToTop(object sender, RoutedEventArgs e)
         {
-            int index = chosenListView.SelectedIndex;
+            int index = chosenRulesListView.SelectedIndex;
             if (index != -1)
             {
                 IRuleHandler temp = chosenRules[index];
@@ -157,7 +157,7 @@ namespace BatchRename
 
         private void MoveRuleToPrev(object sender, RoutedEventArgs e)
         {
-            int index = chosenListView.SelectedIndex;
+            int index = chosenRulesListView.SelectedIndex;
             if (index != -1 && index != 0)
             {
                 IRuleHandler temp = chosenRules[index - 1];
@@ -168,7 +168,7 @@ namespace BatchRename
 
         private void MoveRuleToNext(object sender, RoutedEventArgs e)
         {
-            int index = chosenListView.SelectedIndex;
+            int index = chosenRulesListView.SelectedIndex;
             if (index != -1 && index != chosenRules.Count - 1)
             {
                 IRuleHandler temp = chosenRules[index + 1];
@@ -177,9 +177,9 @@ namespace BatchRename
             }
         }
 
-        private void MoveRuleToLow(object sender, RoutedEventArgs e)
+        private void MoveRuleToBottom(object sender, RoutedEventArgs e)
         {
-            int index = chosenListView.SelectedIndex;
+            int index = chosenRulesListView.SelectedIndex;
             if (index != -1)
             {
                 IRuleHandler temp = chosenRules[index];
@@ -660,6 +660,16 @@ namespace BatchRename
                     this.chosenRules.Add(target);
                 }
             }
+        }
+
+        private void SaveProject(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void LoadProject(object sender, RoutedEventArgs e)
+        {
+
         }
 
     }
