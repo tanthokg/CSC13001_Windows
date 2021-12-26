@@ -459,15 +459,15 @@ namespace BatchRename
             }
             else if (typeComboBox.SelectedItem.ToString() == "Folder")
             {
-                System.Windows.Forms.FolderBrowserDialog explorerDialog = new System.Windows.Forms.FolderBrowserDialog();
-                System.Windows.Forms.DialogResult result = explorerDialog.ShowDialog();
+                var dialog = new System.Windows.Forms.FolderBrowserDialog();
+                var result = dialog.ShowDialog();
 
                 int counter = 0;
-                if (result == System.Windows.Forms.DialogResult.OK)
+                if (System.Windows.Forms.DialogResult.OK == result)
                 {
                     ItemListView.ItemsSource = foldernames;
 
-                    string path = explorerDialog.SelectedPath + "\\";
+                    string path = dialog.SelectedPath + "\\";
                     string[] folders = Directory.GetDirectories(path);
                     List<Foldername> newFoldernames = new List<Foldername>();
 
@@ -514,11 +514,21 @@ namespace BatchRename
             if (renameOriginal.IsChecked == true)
             {
                 // Rename on originals as we did
+                // Move code here
             }
             if (moveToNew.IsChecked == true)
             {
-                // Probably show a a dialog, let user choose where to move new files to?
-                // What if we rename a folder, do we copy all files and subfolders inside it?
+                // Probably show a a dialog, let user choose where to move new files to
+                // What will happen if we rename folders, do we copy all files and subfolders inside?
+                var dialog = new System.Windows.Forms.FolderBrowserDialog();
+                var result = dialog.ShowDialog();
+
+                string path = "";
+                if (System.Windows.Forms.DialogResult.OK == result)
+                {
+                    path = dialog.SelectedPath + "\\";
+                }
+
             }
 
             if (chosenRules.Count == 0)
@@ -917,7 +927,7 @@ namespace BatchRename
             this.currentPresetPath = preset;
         }
 
-        #region project save, load
+        #region save and load project
         private void SaveProject(object sender, RoutedEventArgs e)
         {
             string path;
