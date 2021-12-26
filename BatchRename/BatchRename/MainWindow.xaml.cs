@@ -60,6 +60,86 @@ namespace BatchRename
                 if (MessageBoxResult.Yes == result)
                 {
                     // TODO: save project here
+                    string path;
+                    if (this.currentProjectPath == "")
+                    {
+                        // Handle save dialog here
+                        var dialog = new SaveFileDialog();
+                        dialog.Filter = "JSON (*.json)|*.json";
+                        if (dialog.ShowDialog() == false)
+                            return;
+                        path = dialog.FileName;
+                        // Get the projectName from path
+                    }
+                    else
+                    {
+                        path = this.currentProjectPath;
+                    }
+
+
+                    StreamWriter output;
+                    try
+                    {
+                        output = new StreamWriter(path);
+
+                        List<RuleJsonFormat> rules = new List<RuleJsonFormat>();
+                        List<FileFormat> files = new List<FileFormat>();
+                        List<FolderFormat> folders = new List<FolderFormat>();
+
+                        foreach (IRuleHandler item in this.chosenRules)
+                        {
+                            rules.Add(new RuleJsonFormat
+                            {
+                                RuleType = item.GetRuleType(),
+                                InputStrings = item.GetParameter().InputStrings,
+                                OutputStrings = item.GetParameter().OutputStrings,
+                                Counter = item.GetParameter().Counter,
+                            });
+                        }
+
+                        foreach (Filename filename in filenames)
+                        {
+                            files.Add(new FileFormat
+                            {
+                                CurrentName = filename.CurrentName,
+                                NewName = filename.NewName,
+                                Path = filename.Path,
+                                result = filename.Result
+                            });
+                        }
+
+                        foreach (Foldername foldername in foldernames)
+                        {
+                            folders.Add(new FolderFormat
+                            {
+                                CurrentName = foldername.CurrentName,
+                                NewName = foldername.NewName,
+                                Path = foldername.Path,
+                                result = foldername.Result
+                            });
+                        }
+
+                        ProjectFormat projectFormat = new ProjectFormat
+                        {
+                            rules = rules,
+                            files = files,
+                            folders = folders
+                        };
+
+                        var options = new JsonSerializerOptions { WriteIndented = true };
+                        string data = JsonSerializer.Serialize(projectFormat, options);
+                        output.Write(data);
+                        output.Close();
+
+                        if (File.Exists("autosave.json"))
+                            File.Delete("autosave.json");
+                    }
+                    catch (IOException ioe)
+                    {
+                        MessageBox.Show("Cannot Save Project due to some errors!", "Error");
+                        return;
+                    }
+                    Environment.Exit(0);
                 }
                 else if (MessageBoxResult.No == result)
                 {
@@ -956,6 +1036,7 @@ namespace BatchRename
                 return;
             }
 
+            this.chosenRules.Clear();
             foreach (RuleJsonFormat ruleJson in projectData.rules)
             {
                 IRuleHandler item = rules.SingleOrDefault(Item => Item.GetRuleType().Equals(ruleJson.RuleType));
@@ -987,7 +1068,7 @@ namespace BatchRename
             foldernames.Clear();
             foreach (FolderFormat folderFormat in projectData.folders)
             {
-                filenames.Add(new Filename
+                foldernames.Add(new Foldername
                 {
                     CurrentName = folderFormat.CurrentName,
                     NewName = folderFormat.NewName,
@@ -997,6 +1078,7 @@ namespace BatchRename
             }
 
             MessageBox.Show("Project Loaded Successfully!", "Load Project");
+
             if (File.Exists("autosave.json"))
                 File.Delete("autosave.json");
             this.currentProjectPath = path;
@@ -1014,7 +1096,66 @@ namespace BatchRename
 
                 if (MessageBoxResult.Yes == result)
                 {
-                    // TODO: load autosave here
+                    string path = "autosave.json";
+                    string content = File.ReadAllText(path);
+
+                    ProjectFormat projectData = new ProjectFormat();
+                    try
+                    {
+                        projectData = JsonSerializer.Deserialize<ProjectFormat>(content);
+                    }
+                    catch (JsonException exception)
+                    {
+                        MessageBox.Show("Cannot parse data from chosen file due to incorrect format! Check the file again!", "Error");
+                        return;
+                    }
+
+                    this.chosenRules.Clear();
+                    foreach (RuleJsonFormat ruleJson in projectData.rules)
+                    {
+                        IRuleHandler item = rules.SingleOrDefault(Item => Item.GetRuleType().Equals(ruleJson.RuleType));
+                        if (item != null)
+                        {
+                            IRuleHandler target = item.Clone();
+                            target.SetParameter(new RuleParameter
+                            {
+                                InputStrings = ruleJson.InputStrings,
+                                OutputStrings = ruleJson.OutputStrings,
+                                Counter = ruleJson.Counter,
+                            });
+                            this.chosenRules.Add(target);
+                        }
+                    }
+
+                    filenames.Clear();
+                    foreach (FileFormat fileFormat in projectData.files)
+                    {
+                        filenames.Add(new Filename
+                        {
+                            CurrentName = fileFormat.CurrentName,
+                            NewName = fileFormat.NewName,
+                            Path = fileFormat.Path,
+                            Result = fileFormat.result
+                        });
+                    }
+
+                    foldernames.Clear();
+                    foreach (FolderFormat folderFormat in projectData.folders)
+                    {
+                        foldernames.Add(new Foldername
+                        {
+                            CurrentName = folderFormat.CurrentName,
+                            NewName = folderFormat.NewName,
+                            Path = folderFormat.Path,
+                            Result = folderFormat.result
+                        });
+                    }
+
+                    MessageBox.Show("Project Loaded Successfully!", "Load Project");
+
+                    this.currentProjectPath = "";
+                    this.currentProjectName = "Unsaved Project";
+                    Title = currentProjectName;       
                 }
             }
         }
