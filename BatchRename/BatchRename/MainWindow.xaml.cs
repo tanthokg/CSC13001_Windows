@@ -1087,6 +1087,9 @@ namespace BatchRename
                 });
             }
 
+            ItemListView.ItemsSource = projectData.files.Count > 0 ? filenames : foldernames;
+            typeComboBox.SelectedItem = projectData.files.Count > 0 ? "File" : "Folder";
+
             MessageBox.Show("Project Loaded Successfully!", "Load Project");
 
             if (File.Exists("autosave.json"))
@@ -1168,6 +1171,16 @@ namespace BatchRename
                     Title = currentProjectName;
                 }
             }
+        }
+
+        private void typeComboBox_DropDownClosed(object sender, EventArgs e)
+        {
+            if (typeComboBox.SelectedItem == null)
+                return;
+            if (typeComboBox.SelectedItem == "File")
+                ItemListView.ItemsSource = filenames;
+            if (typeComboBox.SelectedItem == "Folder")
+                ItemListView.ItemsSource = foldernames;
         }
     }
 }
