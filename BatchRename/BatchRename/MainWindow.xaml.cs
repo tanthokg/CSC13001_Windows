@@ -32,9 +32,9 @@ namespace BatchRename
         private BindingList<Filename> filenames;
         private BindingList<Foldername> foldernames;
 
-        private string CurrentProjectName = "Unsaved Project";
-        private string CurrentProject = "";
-        private string currentPreset = "";
+        private string currentProjectName = "Unsaved Project";
+        private string currentProjectPath = "";
+        private string currentPresetPath = "";
 
         private Dictionary<string, List<Filename>> conflictFiles = new Dictionary<string, List<Filename>>();
         private Dictionary<string, List<Foldername>> conflictFolders = new Dictionary<string, List<Foldername>>();
@@ -43,6 +43,7 @@ namespace BatchRename
         {
             InitializeComponent();
             Closing += MainWindow_Closing;
+            DataContext = this;
         }
 
         private void MainWindow_Closing(object sender, CancelEventArgs e)
@@ -57,8 +58,8 @@ namespace BatchRename
         {
 
             string path = "autosave.json";
-            if (this.CurrentProject != "")
-                path = this.CurrentProject;
+            if (this.currentProjectPath != "")
+                path = this.currentProjectPath;
 
             StreamWriter output;
             try
@@ -386,7 +387,7 @@ namespace BatchRename
             conflictFolders.Clear();
         }
 
-        #region process start and preview
+        #region process preview and start batch
         private void StartProcess(object sender, RoutedEventArgs e)
         {
             if (renameOriginal.IsChecked == true)
@@ -579,7 +580,6 @@ namespace BatchRename
 
             MessageBox.Show($"Result\n   Type file: {fileCounter}/{filenames.Count} success\n   Type folder: {folderCounter}/{foldernames.Count} success", "Process done");
         }
-
         private void PreviewProcess(object sender, RoutedEventArgs e)
         {
             if (chosenRules.Count == 0)
@@ -709,7 +709,7 @@ namespace BatchRename
             }
 
             string path;
-            if (this.currentPreset == "")
+            if (this.currentPresetPath == "")
             {
                 var dialog = new SaveFileDialog();
                 dialog.Filter = "JSON (*.json)|*.json";
@@ -718,7 +718,7 @@ namespace BatchRename
                 path = dialog.FileName;
             }
             else
-                path = this.currentPreset;
+                path = this.currentPresetPath;
 
             StreamWriter output;
             try
@@ -743,7 +743,7 @@ namespace BatchRename
                 output.Write(data);
                 output.Close();
                 MessageBox.Show($"Preset Saved Successfully!\nPath: {path}", "Save preset");
-                this.currentPreset = path;
+                this.currentPresetPath = path;
             }
             catch (IOException ioe)
             {
@@ -751,7 +751,6 @@ namespace BatchRename
                 return;
             }
         }
-
         private void LoadRulesFromJson(object sender, RoutedEventArgs e)
         {
             var dialog = new OpenFileDialog();
@@ -794,7 +793,7 @@ namespace BatchRename
             }
 
             MessageBox.Show("Loaded successfully!", "Load preset");
-            this.currentPreset = preset;
+            this.currentPresetPath = preset;
         }
 
         #region project save, load
@@ -802,17 +801,21 @@ namespace BatchRename
         {
             string path;
             string projectName = "name";
-            if (this.CurrentProject == "")
+            if (this.currentProjectPath == "")
             {
-                string getPath = "save.json";
-                // handle save dialog here
-                //also get for me projectName
+                // Handle save dialog here
+                var dialog = new SaveFileDialog();
+                dialog.Filter = "JSON (*.json)|*.json";
+                if (dialog.ShowDialog() == false)
+                    return;
+                path = dialog.FileName;
 
-                path = getPath;
+                // Get the projectName from path
+                projectName = path.Substring(path.LastIndexOf('\\')).Split('.')[0];
             }
             else
             {
-                path = this.CurrentProject;
+                path = this.currentProjectPath;
             }
 
 
@@ -869,13 +872,13 @@ namespace BatchRename
                 string data = JsonSerializer.Serialize(projectFormat, options);
                 output.Write(data);
                 output.Close();
-                MessageBox.Show($"Project Saved Successfully!\nPath: {path}", "Save project");
+                MessageBox.Show($"Project Saved Successfully!\nPath: {path}", "Save Project");
 
                 if (File.Exists("autosave.json"))
                     File.Delete("autosave.json");
 
-                this.CurrentProject = path;
-                this.CurrentProjectName = projectName;
+                this.currentProjectPath = path;
+                this.currentProjectName = projectName;
             }
             catch (IOException ioe)
             {
@@ -883,14 +886,20 @@ namespace BatchRename
                 return;
             }
         }
-
         private void LoadProject(object sender, RoutedEventArgs e)
         {
-            //projectName is load project's path
-            //if user cancel, set it to ""
-            string projectName = "save.json";
+            // path is loaded project's path
+            // if user cancel, it's still empty
 
-            string content = File.ReadAllText(projectName);
+            string path = "";
+            var dialog = new OpenFileDialog();
+            dialog.Filter = "JSON (*.json)|*.json";
+
+            if (dialog.ShowDialog() == false)
+                return;
+
+            path = dialog.FileName;
+            string content = File.ReadAllText(path);
 
             ProjectFormat projectData = new ProjectFormat();
             try
@@ -899,7 +908,7 @@ namespace BatchRename
             }
             catch (JsonException exception)
             {
-                MessageBox.Show("Cannot parse data from the file, check the file again", "Error");
+                MessageBox.Show("Cannot parse data from chosen file due to incorrect format! Check the file again!", "Error");
                 return;
             }
 
@@ -943,10 +952,11 @@ namespace BatchRename
                 });
             }
 
-            MessageBox.Show("Loaded successfully!", "Load project");
+            MessageBox.Show("Project Loaded Successfully!", "Load Project");
             if (File.Exists("autosave.json"))
                 File.Delete("autosave.json");
-            this.CurrentProject = projectName;
+            this.currentProjectPath = path;
+            this.currentProjectName = path.Substring(path.LastIndexOf('\\')).Split('.')[0];
         }
         #endregion
 
