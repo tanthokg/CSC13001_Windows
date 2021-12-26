@@ -42,9 +42,18 @@ namespace BatchRename
         public MainWindow()
         {
             InitializeComponent();
+            Closing += MainWindow_Closing;
         }
 
-        private void autosave()
+        private void MainWindow_Closing(object sender, CancelEventArgs e)
+        {
+            e.Cancel = true;
+
+            if (MessageBox.Show("Do you want to close the application?", "Batch Rename", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                Environment.Exit(0);
+        }
+
+        private void PerformAutosave()
         {
 
             string path = "autosave.json";
@@ -60,8 +69,8 @@ namespace BatchRename
                 List<FileFormat> files = new List<FileFormat>();
                 List<FolderFormat> folders = new List<FolderFormat>();
 
-                foreach(IRuleHandler item in this.chosenRules)
-				{
+                foreach (IRuleHandler item in this.chosenRules)
+                {
                     rules.Add(new RuleJsonFormat
                     {
                         RuleType = item.GetRuleType(),
@@ -69,9 +78,10 @@ namespace BatchRename
                         OutputStrings = item.GetParameter().OutputStrings,
                         Counter = item.GetParameter().Counter,
                     });
-				}
+                }
 
-                foreach(Filename filename in filenames){
+                foreach (Filename filename in filenames)
+                {
                     files.Add(new FileFormat
                     {
                         CurrentName = filename.CurrentName,
@@ -81,22 +91,23 @@ namespace BatchRename
                     });
                 }
 
-                foreach (Foldername foldername in foldernames) { 
+                foreach (Foldername foldername in foldernames)
+                {
                     folders.Add(new FolderFormat
                     {
                         CurrentName = foldername.CurrentName,
                         NewName = foldername.NewName,
-                        Path =  foldername.Path,
+                        Path = foldername.Path,
                         result = foldername.Result
                     });
                 }
 
                 ProjectFormat projectFormat = new ProjectFormat
-				{
+                {
                     rules = rules,
                     files = files,
                     folders = folders
-				};
+                };
 
                 var options = new JsonSerializerOptions { WriteIndented = true };
                 string data = JsonSerializer.Serialize(projectFormat, options);
@@ -113,14 +124,14 @@ namespace BatchRename
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
 
-            if(File.Exists("autosave.json"))
-			{
+            if (File.Exists("autosave.json"))
+            {
                 //messageBox here if you want to load last save
-			}
+            }
 
             //auto save per 30 sec
             DispatcherTimer dispatcherTimer = new DispatcherTimer();
-            dispatcherTimer.Tick += (s, ev) => autosave();
+            dispatcherTimer.Tick += (s, ev) => PerformAutosave();
             dispatcherTimer.Interval = new TimeSpan(0, 0, 30);
             dispatcherTimer.Start();
 
@@ -228,7 +239,7 @@ namespace BatchRename
         }
 
         #region rule ListView position buttons event handler
-		private void MoveRuleToTop(object sender, RoutedEventArgs e)
+        private void MoveRuleToTop(object sender, RoutedEventArgs e)
         {
             int index = chosenRulesListView.SelectedIndex;
             if (index != -1)
@@ -276,7 +287,7 @@ namespace BatchRename
         #endregion
 
 
-		private void AddItems(object sender, RoutedEventArgs e)
+        private void AddItems(object sender, RoutedEventArgs e)
         {
             if (typeComboBox.SelectedItem == null)
             {
@@ -375,8 +386,8 @@ namespace BatchRename
             conflictFolders.Clear();
         }
 
-		#region process start and preview
-		private void StartProcess(object sender, RoutedEventArgs e)
+        #region process start and preview
+        private void StartProcess(object sender, RoutedEventArgs e)
         {
             if (renameOriginal.IsChecked == true)
             {
@@ -601,11 +612,11 @@ namespace BatchRename
                 file.NewName = file.CurrentName;
                 file.Result = "";
 
-                if(!File.Exists(file.Path + "/" + file.CurrentName))
-				{
+                if (!File.Exists(file.Path + "/" + file.CurrentName))
+                {
                     file.Result = "Source file not exist";
                     continue;
-				}
+                }
 
 
                 foreach (IRuleHandler handler in ruleSetForFiles)
@@ -631,11 +642,11 @@ namespace BatchRename
                 folder.NewName = folder.CurrentName;
                 folder.Result = "";
 
-                if(!Directory.Exists(folder.Path + "/" + folder.CurrentName))
-				{
+                if (!Directory.Exists(folder.Path + "/" + folder.CurrentName))
+                {
                     folder.Result = "Directory not exist";
                     continue;
-				}
+                }
 
                 foreach (IRuleHandler handler in ruleSetForFolders)
                 {
@@ -686,8 +697,8 @@ namespace BatchRename
                 MessageBox.Show("There are some files/folders have name conflict, consider to add conflict resolver or change rule set", "Caution");
             }
         }
-		#endregion
-	
+        #endregion
+
 
         private void SaveRulesToJson(object sender, RoutedEventArgs e)
         {
@@ -786,23 +797,23 @@ namespace BatchRename
             this.currentPreset = preset;
         }
 
-		#region project save, load
-		private void SaveProject(object sender, RoutedEventArgs e)
+        #region project save, load
+        private void SaveProject(object sender, RoutedEventArgs e)
         {
             string path;
             string projectName = "name";
-            if(this.CurrentProject == "")
-			{
+            if (this.CurrentProject == "")
+            {
                 string getPath = "save.json";
                 // handle save dialog here
                 //also get for me projectName
-        
+
                 path = getPath;
-			}
+            }
             else
-			{
+            {
                 path = this.CurrentProject;
-			}
+            }
 
 
             StreamWriter output;
@@ -814,8 +825,8 @@ namespace BatchRename
                 List<FileFormat> files = new List<FileFormat>();
                 List<FolderFormat> folders = new List<FolderFormat>();
 
-                foreach(IRuleHandler item in this.chosenRules)
-				{
+                foreach (IRuleHandler item in this.chosenRules)
+                {
                     rules.Add(new RuleJsonFormat
                     {
                         RuleType = item.GetRuleType(),
@@ -823,9 +834,10 @@ namespace BatchRename
                         OutputStrings = item.GetParameter().OutputStrings,
                         Counter = item.GetParameter().Counter,
                     });
-				}
+                }
 
-                foreach(Filename filename in filenames){
+                foreach (Filename filename in filenames)
+                {
                     files.Add(new FileFormat
                     {
                         CurrentName = filename.CurrentName,
@@ -835,22 +847,23 @@ namespace BatchRename
                     });
                 }
 
-                foreach (Foldername foldername in foldernames) { 
+                foreach (Foldername foldername in foldernames)
+                {
                     folders.Add(new FolderFormat
                     {
                         CurrentName = foldername.CurrentName,
                         NewName = foldername.NewName,
-                        Path =  foldername.Path,
+                        Path = foldername.Path,
                         result = foldername.Result
                     });
                 }
 
                 ProjectFormat projectFormat = new ProjectFormat
-				{
+                {
                     rules = rules,
                     files = files,
                     folders = folders
-				};
+                };
 
                 var options = new JsonSerializerOptions { WriteIndented = true };
                 string data = JsonSerializer.Serialize(projectFormat, options);
@@ -858,7 +871,7 @@ namespace BatchRename
                 output.Close();
                 MessageBox.Show($"Project Saved Successfully!\nPath: {path}", "Save project");
 
-                if(File.Exists("autosave.json"))
+                if (File.Exists("autosave.json"))
                     File.Delete("autosave.json");
 
                 this.CurrentProject = path;
@@ -907,8 +920,8 @@ namespace BatchRename
             }
 
             filenames.Clear();
-            foreach(FileFormat fileFormat in projectData.files)
-			{
+            foreach (FileFormat fileFormat in projectData.files)
+            {
                 filenames.Add(new Filename
                 {
                     CurrentName = fileFormat.CurrentName,
@@ -916,11 +929,11 @@ namespace BatchRename
                     Path = fileFormat.Path,
                     Result = fileFormat.result
                 });
-			}
+            }
 
             foldernames.Clear();
-            foreach(FolderFormat folderFormat in projectData.folders)
-			{
+            foreach (FolderFormat folderFormat in projectData.folders)
+            {
                 filenames.Add(new Filename
                 {
                     CurrentName = folderFormat.CurrentName,
@@ -928,16 +941,16 @@ namespace BatchRename
                     Path = folderFormat.Path,
                     Result = folderFormat.result
                 });
-			}
+            }
 
             MessageBox.Show("Loaded successfully!", "Load project");
-            if(File.Exists("autosave.json"))
+            if (File.Exists("autosave.json"))
                 File.Delete("autosave.json");
             this.CurrentProject = projectName;
         }
-		#endregion
+        #endregion
 
-		private void ChosenRule_DoubleClick(object sender, MouseButtonEventArgs e)
+        private void ChosenRule_DoubleClick(object sender, MouseButtonEventArgs e)
         {
             int index = chosenRulesListView.SelectedIndex;
             if (index == -1)
