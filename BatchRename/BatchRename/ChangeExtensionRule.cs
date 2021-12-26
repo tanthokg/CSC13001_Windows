@@ -14,54 +14,12 @@ namespace BatchRename
     {
         public IRuleHandler Rule { get; set; }
 
-        /*private Canvas canvas = new Canvas();
-        private Button ok = new Button();
-        private Button cancel = new Button();
-        private TextBox editTxtBox = new TextBox();
-
-        public ChangeExtensionRuleEditor(RuleParameter ruleParameter)
-        {
-            //define UI
-            this.Title = "Parameter Editor for Change Extension Rule";
-            this.Width = 400;
-            this.Height = 360;
-            this.ResizeMode = ResizeMode.NoResize;
-
-            editTxtBox.Height = 80;
-            editTxtBox.Width = 360;
-            editTxtBox.TextWrapping = TextWrapping.WrapWithOverflow;
-            editTxtBox.Margin = new Thickness(20, 89, 0, 0);
-            editTxtBox.Text = ruleParameter.OutputStrings;
-
-            ok.Content = "Submit";
-            ok.Name = "buttonSubmit";
-            ok.IsDefault = true;
-            ok.Click += this.OnSubmitButtonClick;
-            ok.Width = 80;
-            ok.Height = 35;
-            ok.Margin = new Thickness(93, 196, 0, 0);
-
-            cancel.Click += this.OnCancelButtonClick;
-            cancel.IsCancel = true;
-            cancel.Content = "Cancel";
-            cancel.Width = 80;
-            cancel.Height = 35;
-            cancel.Margin = new Thickness(228, 196, 0, 0);
-
-            canvas.Children.Add(editTxtBox);
-            canvas.Children.Add(ok);
-            canvas.Children.Add(cancel);
-
-            this.AddChild(canvas);
-        }*/
-
         private Canvas canvas = new Canvas();
         private Label label = new Label();
         private Button submitBtn = new Button();
         private Button cancelBtn = new Button();
         private TextBox editTxtBox = new TextBox();
         private RuleParameter ruleParameter = new RuleParameter();
-
 
         public ChangeExtensionRuleEditor (RuleParameter ruleParameter)
         {

@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using RuleHandler;
 using System.Windows.Controls;
 using System.Text.Json;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
 
 namespace BatchRename
 {

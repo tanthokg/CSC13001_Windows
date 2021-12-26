@@ -56,7 +56,7 @@ namespace BatchRename
                 message = "You have unsaved work/project. Do you want to save it before closing?";
                 var result = MessageBox.Show(message, "Batch Rename", MessageBoxButton.YesNoCancel,
                      MessageBoxImage.Question, MessageBoxResult.Yes);
-                
+
                 if (MessageBoxResult.Yes == result)
                 {
                     // TODO: save project here
@@ -65,7 +65,7 @@ namespace BatchRename
                     {
                         // Handle save dialog here
                         var dialog = new SaveFileDialog();
-                        dialog.Filter = "JSON (*.json)|*.json";
+                        dialog.Filter = "PROJ (*.proj)|*.proj";
                         if (dialog.ShowDialog() == false)
                             return;
                         path = dialog.FileName;
@@ -75,7 +75,6 @@ namespace BatchRename
                     {
                         path = this.currentProjectPath;
                     }
-
 
                     StreamWriter output;
                     try
@@ -148,7 +147,7 @@ namespace BatchRename
             }
             else
             {
-                var result = MessageBox.Show(message, "Batch Rename", MessageBoxButton.YesNo, 
+                var result = MessageBox.Show(message, "Batch Rename", MessageBoxButton.YesNo,
                     MessageBoxImage.Question, MessageBoxResult.No);
 
                 if (MessageBoxResult.Yes == result)
@@ -927,7 +926,8 @@ namespace BatchRename
             {
                 // Handle save dialog here
                 var dialog = new SaveFileDialog();
-                dialog.Filter = "JSON (*.json)|*.json";
+                dialog.Filter = "PROJ (*.proj)|*.proj";
+
                 if (dialog.ShowDialog() == false)
                     return;
                 path = dialog.FileName;
@@ -1017,7 +1017,7 @@ namespace BatchRename
 
             string path = "";
             var dialog = new OpenFileDialog();
-            dialog.Filter = "JSON (*.json)|*.json";
+            dialog.Filter = "PROJ (*.proj)|*.proj";
 
             if (dialog.ShowDialog() == false)
                 return;
@@ -1155,7 +1155,7 @@ namespace BatchRename
 
                     this.currentProjectPath = "";
                     this.currentProjectName = "Unsaved Project";
-                    Title = currentProjectName;       
+                    Title = currentProjectName;
                 }
             }
         }

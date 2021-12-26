@@ -78,57 +78,7 @@ namespace BatchRename
 
             this.AddChild(canvas);
         }
-        /*private Canvas canvas = new Canvas();
-        private Button submitBtn = new Button();
-        private Button cancelBtn = new Button();
-        private TextBox editInput = new TextBox();
-        private TextBox editOutput = new TextBox();
-        private RuleParameter ruleParameter = new RuleParameter();
-
-        public ReplaceExtensionRuleEditor(RuleParameter ruleParameter)
-        {
-            //define UI
-            this.Title = "Parameter Editor for Replace Extension";
-            this.Width = 400;
-            this.Height = 400;
-            this.ResizeMode = ResizeMode.NoResize;
-
-            editInput.Height = 80;
-            editInput.Width = 360;
-            editInput.TextWrapping = TextWrapping.Wrap;
-            editInput.AcceptsReturn = true;
-            editInput.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
-            editInput.Margin = new Thickness(15, 80, 0, 0);
-            editInput.Text = string.Join("\n", ruleParameter.InputStrings);
-
-            editOutput.Height = 80;
-            editOutput.Width = 360;
-            editOutput.TextWrapping = TextWrapping.WrapWithOverflow;
-            editOutput.Margin = new Thickness(15, 200, 0, 0);
-            editOutput.Text = ruleParameter.OutputStrings;
-
-            submitBtn.Content = "Submit";
-            submitBtn.Name = "buttonSubmit";
-            submitBtn.IsDefault = true;
-            submitBtn.Click += this.OnSubmitButtonClick;
-            submitBtn.Width = 80;
-            submitBtn.Height = 35;
-            submitBtn.Margin = new Thickness(80, 300, 0, 0);
-
-            cancelBtn.Click += this.OnCancelButtonClick;
-            cancelBtn.IsCancel = true;
-            cancelBtn.Content = "Cancel";
-            cancelBtn.Width = 80;
-            cancelBtn.Height = 35;
-            cancelBtn.Margin = new Thickness(220, 300, 0, 0);
-
-            canvas.Children.Add(editInput);
-            canvas.Children.Add(editOutput);
-            canvas.Children.Add(submitBtn);
-            canvas.Children.Add(cancelBtn);
-
-            this.AddChild(canvas);
-        }*/
+        
         private void OnSubmitButtonClick(object sender, RoutedEventArgs e)
         {
             string str = editInput.Text;

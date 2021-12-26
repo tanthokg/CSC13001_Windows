@@ -10,6 +10,7 @@
     <None Remove="icons\ic_add.jpg" />
     <None Remove="icons\ic_add_item.png" />
     <None Remove="icons\ic_add_rule.png" />
+    <None Remove="icons\ic_cancel.png" />
     <None Remove="icons\ic_delete_items.png" />
     <None Remove="icons\ic_delete_rule.png" />
     <None Remove="icons\ic_move_to_bottom.png" />
@@ -24,6 +25,7 @@
     <None Remove="icons\ic_save_preset.png" />
     <None Remove="icons\ic_save_project.png" />
     <None Remove="icons\ic_start.png" />
+    <None Remove="icons\ic_submit.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,6 +39,7 @@
   <ItemGroup>
     <Resource Include="icons\ic_add_item.png" />
     <Resource Include="icons\ic_add_rule.png" />
+    <Resource Include="icons\ic_cancel.png" />
     <Resource Include="icons\ic_delete_items.png" />
     <Resource Include="icons\ic_delete_rule.png" />
     <Resource Include="icons\ic_move_to_bottom.png" />
@@ -51,6 +54,7 @@
     <Resource Include="icons\ic_save_preset.png" />
     <Resource Include="icons\ic_save_project.png" />
     <Resource Include="icons\ic_start.png" />
+    <Resource Include="icons\ic_submit.png" />
   </ItemGroup>
 
 </Project>
