@@ -16,54 +16,66 @@ namespace BatchRename
         public IRuleHandler Rule { get; set; }
 
         private Canvas canvas = new Canvas();
-        private Button ok = new Button();
-        private Button cancel = new Button();
+        private Label label1 = new Label(), label2 = new Label();
+        private Button submitBtn = new Button();
+        private Button cancelBtn = new Button();
         private TextBox editInput = new TextBox();
         private TextBox editOutput = new TextBox();
         private RuleParameter ruleParameter = new RuleParameter();
 
-
         public ReplaceRuleEditor(RuleParameter ruleParameter)
         {
-            //define UI
+            // Define UI
             this.Title = "Parameter Editor for Replace Rule";
-            this.Width = 400;
-            this.Height = 400;
+            this.Width = 415;
+            this.Height = 365;
             this.ResizeMode = ResizeMode.NoResize;
+
+            label1.Content = "Please type words you want to replace. To replace\nmultiple words, use enter.";
+            label1.Margin = new Thickness(20, 10, 0, 0);
+            label1.FontSize = 16;
 
             editInput.Height = 80;
             editInput.Width = 360;
             editInput.TextWrapping = TextWrapping.Wrap;
             editInput.AcceptsReturn = true;
             editInput.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
-            editInput.Margin = new Thickness(15, 80, 0, 0);
+            editInput.Margin = new Thickness(20, 65, 0, 0);
             editInput.Text = string.Join("\n", ruleParameter.InputStrings);
+
+            label2.Content = "Please type characters you want to replace with";
+            label2.Margin = new Thickness(20, 150, 0, 0);
+            label2.FontSize = 16;
 
             editOutput.Height = 80;
             editOutput.Width = 360;
             editOutput.TextWrapping = TextWrapping.WrapWithOverflow;
-            editOutput.Margin = new Thickness(15, 200, 0, 0);
+            editOutput.Margin = new Thickness(20, 180, 0, 0);
             editOutput.Text = ruleParameter.OutputStrings;
 
-            ok.Content = "Submit";
-            ok.Name = "buttonSubmit";
-            ok.IsDefault = true;
-            ok.Click += this.OnSubmitButtonClick;
-            ok.Width = 80;
-            ok.Height = 35;
-            ok.Margin = new Thickness(80, 300, 0, 0);
+            submitBtn.Content = "Submit";
+            submitBtn.Name = "buttonSubmit";
+            submitBtn.IsDefault = true;
+            submitBtn.Click += this.OnSubmitButtonClick;
+            submitBtn.Width = 170;
+            submitBtn.Height = 40;
+            submitBtn.Margin = new Thickness(20, 270, 0, 0);
+            submitBtn.FontSize = 15;
 
-            cancel.Click += this.OnCancelButtonClick;
-            cancel.IsCancel = true;
-            cancel.Content = "Cancel";
-            cancel.Width = 80;
-            cancel.Height = 35;
-            cancel.Margin = new Thickness(220, 300, 0, 0);
+            cancelBtn.Click += this.OnCancelButtonClick;
+            cancelBtn.IsCancel = true;
+            cancelBtn.Content = "Cancel";
+            cancelBtn.Width = 170;
+            cancelBtn.Height = 40;
+            cancelBtn.Margin = new Thickness(210, 270, 0, 0);
+            cancelBtn.FontSize = 15;
 
+            canvas.Children.Add(label1);
+            canvas.Children.Add(label2);
             canvas.Children.Add(editInput);
             canvas.Children.Add(editOutput);
-            canvas.Children.Add(ok);
-            canvas.Children.Add(cancel);
+            canvas.Children.Add(submitBtn);
+            canvas.Children.Add(cancelBtn);
 
             this.AddChild(canvas);
         }
