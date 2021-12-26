@@ -1,17 +1,16 @@
 ﻿using System;
-using System.Windows;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using RuleHandler;
-using System.Windows.Controls;
 using System.Text.Json;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using RuleHandler;
 
 namespace BatchRename
 {
-    public class ReplaceRuleEditor : Window, IRuleEditor
+    public class ReplaceExtensionRuleEditor : Window, IRuleEditor
     {
         public IRuleHandler Rule { get; set; }
 
@@ -23,15 +22,15 @@ namespace BatchRename
         private TextBox editOutput = new TextBox();
         private RuleParameter ruleParameter = new RuleParameter();
 
-        public ReplaceRuleEditor(RuleParameter ruleParameter)
+        public ReplaceExtensionRuleEditor (RuleParameter ruleParameter)
         {
             // Define UI
-            this.Title = "Parameter Editor for Replace Rule";
+            this.Title = "Parameter Editor for Replace Extension Rule";
             this.Width = 415;
             this.Height = 365;
             this.ResizeMode = ResizeMode.NoResize;
 
-            label1.Content = "Please type words you want to replace. To replace\nmultiple words, use enter.";
+            label1.Content = "Please type extensions you want to replace.\nTo replace multiple ones, use enter.";
             label1.Margin = new Thickness(20, 10, 0, 0);
             label1.FontSize = 16;
 
@@ -79,6 +78,7 @@ namespace BatchRename
 
             this.AddChild(canvas);
         }
+        
         private void OnSubmitButtonClick(object sender, RoutedEventArgs e)
         {
             string str = editInput.Text;
@@ -112,46 +112,32 @@ namespace BatchRename
             return this.ShowDialog();
         }
     }
-    public class ReplaceRule : Rule, IRuleHandler
-    {
-        public ReplaceRule()
-        {
-            this.parameter = new RuleParameter();
-        }
-        
-        string IRuleHandler.GetRuleType()
+	class ReplaceExtensionRule : Rule, IRuleHandler
+	{
+        public ReplaceExtensionRule()
 		{
-            return "ReplaceRule";
+            this.parameter = new RuleParameter();
 		}
 
+        string IRuleHandler.GetRuleType()
+		{
+            return "ReplaceExtensionRule";
+		}
         public override string ToString()
         {
-            string result = "Replace", input = " ";
-            foreach (string s in parameter.InputStrings)
-            {
-                if (String.IsNullOrEmpty(s))
-                    break;
-                input += s + ", ";
-            }
-            if (input.Length > 1)
-            {
-                input = input.Substring(0, input.Length - 2);
-                result += input;
-                result += " with " + parameter.OutputStrings;
-            }
-            return result;
+            return this.parameter.OutputStrings.Length == 0 ? "Replace file\'s extension" 
+                : $"Replace file\'s extension: from \"{string.Join("\", \"",this.parameter.InputStrings)}\" to \"{this.parameter.OutputStrings}\"";
         }
-
-        bool IRuleHandler.IsEditable() { return true; }
+        
+        bool IRuleHandler.IsEditable()
+        {
+            return true;
+        }
 
         void IRuleHandler.SetParameter(RuleParameter ruleParameter)
-        {
+		{
             this.parameter = ruleParameter;
-        }
-        RuleParameter IRuleHandler.GetParameter()
-        {
-            return this.parameter;
-        }
+		}
 
         string IRuleHandler.Process(string ObjectName, bool isFileType)
         {
@@ -167,26 +153,28 @@ namespace BatchRename
                 fileName = ObjectName;
 
             string result = fileName;
-            this.parameter.InputStrings.ForEach(s =>
-            {
-                result = result.Replace(s, this.parameter.OutputStrings);
-            });
-
-            if (isFileType)
-                return result + "." + extension;
+            if (isFileType && !string.IsNullOrEmpty(this.parameter.OutputStrings))
+                if(this.parameter.InputStrings.Contains(extension))
+                    return result + "." + this.parameter.OutputStrings;
+                else
+                    return result + "." + extension;
             return result;
         }
         IRuleEditor IRuleHandler.ParamsEditorWindow()
         {
-            return new ReplaceRuleEditor(parameter);
+            return new ReplaceExtensionRuleEditor(this.parameter);
+        }
+        RuleParameter IRuleHandler.GetParameter()
+        {
+            return this.parameter;
         }
         IRuleHandler IRuleHandler.Clone()
         {
-            ReplaceRule clone = new ReplaceRule();
+            ReplaceExtensionRule clone = new ReplaceExtensionRule();
             clone.parameter.InputStrings = this.parameter.InputStrings.Select(x => x.ToString()).ToList();
             clone.parameter.OutputStrings = this.parameter.OutputStrings;
             clone.parameter.Counter = this.parameter.Counter;
             return clone;
         }
-    }
+	} 
 }

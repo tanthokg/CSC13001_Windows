@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using RuleHandler;
 using System.Windows.Controls;
 using System.Text.Json;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
 
 namespace BatchRename
 {
@@ -16,50 +18,58 @@ namespace BatchRename
         public IRuleHandler Rule { get; set; }
 
         private Canvas canvas = new Canvas();
-        private Button ok = new Button();
-        private Button cancel = new Button();
-        private TextBox editTextBox = new TextBox();
+        private Label label = new Label();
+        private Button submitBtn = new Button();
+        private Button cancelBtn = new Button();
+        private TextBox editTxtBox = new TextBox();
         private RuleParameter ruleParameter = new RuleParameter();
-
 
         public PrefixRuleEditor(RuleParameter ruleParameter)
         {
-            //define UI
+            // Define UI
             this.Title = "Parameter Editor for Add Prefix Rule";
-            this.Width = 400;
-            this.Height = 360;
+            this.Width = 415;
+            this.Height = 235;
             this.ResizeMode = ResizeMode.NoResize;
 
-            editTextBox.Height = 80;
-            editTextBox.Width = 360;
-            editTextBox.TextWrapping = TextWrapping.WrapWithOverflow;
-            editTextBox.Margin = new Thickness(20, 89, 0, 0);
-            editTextBox.Text = ruleParameter.OutputStrings;
 
-            ok.Content = "Submit";
-            ok.Name = "buttonSubmit";
-            ok.IsDefault = true;
-            ok.Click += this.OnSubmitButtonClick;
-            ok.Width = 80;
-            ok.Height = 35;
-            ok.Margin = new Thickness(93, 196, 0, 0);
+            label.Content = "Please type characters you want to add as prefix";
+            label.Margin = new Thickness(20, 10, 0, 0);
+            label.FontSize = 16;
 
-            cancel.Click += this.OnCancelButtonClick;
-            cancel.IsCancel = true;
-            cancel.Content = "Cancel";
-            cancel.Width = 80;
-            cancel.Height = 35;
-            cancel.Margin = new Thickness(228, 196, 0, 0);
+            editTxtBox.Width = 360;
+            editTxtBox.Height = 80;
+            editTxtBox.TextWrapping = TextWrapping.WrapWithOverflow;
+            editTxtBox.Margin = new Thickness(20, 50, 0, 0);
+            editTxtBox.Text = ruleParameter.OutputStrings;
 
-            canvas.Children.Add(editTextBox);
-            canvas.Children.Add(ok);
-            canvas.Children.Add(cancel);
+            submitBtn.Content = "Submit";
+            submitBtn.Name = "buttonSubmit";
+            submitBtn.IsDefault = true;
+            submitBtn.Click += this.OnSubmitButtonClick;
+            submitBtn.Width = 170;
+            submitBtn.Height = 40;
+            submitBtn.Margin = new Thickness(20, 145, 0, 0);
+            submitBtn.FontSize = 15;
+
+            cancelBtn.Click += this.OnCancelButtonClick;
+            cancelBtn.IsCancel = true;
+            cancelBtn.Content = "Cancel";
+            cancelBtn.Width = 170;
+            cancelBtn.Height = 40;
+            cancelBtn.Margin = new Thickness(210, 145, 0, 0);
+            cancelBtn.FontSize = 15;
+
+            canvas.Children.Add(label);
+            canvas.Children.Add(editTxtBox);
+            canvas.Children.Add(submitBtn);
+            canvas.Children.Add(cancelBtn);
 
             this.AddChild(canvas);
         }
         private void OnSubmitButtonClick(object sender, RoutedEventArgs e)
         {
-            string str = editTextBox.Text;
+            string str = editTxtBox.Text;
             if (str.Length != 0)
             {
                 ruleParameter.OutputStrings = str;
@@ -74,7 +84,7 @@ namespace BatchRename
         RuleParameter IRuleEditor.GetParameter()
         {
             RuleParameter ruleParameter = new RuleParameter();
-            ruleParameter.OutputStrings = editTextBox.Text;
+            ruleParameter.OutputStrings = editTxtBox.Text;
 
             return ruleParameter;
         }
@@ -99,24 +109,6 @@ namespace BatchRename
 		{
             return "AddPrefixRule";
 		}
-        string IRuleHandler.ToJson()
-		{
-            string RuleType = ((IRuleHandler)this).GetRuleType();
-            List<string> InputStrings = this.parameter.InputStrings;
-            string OutputStrings = this.parameter.OutputStrings;
-            int Counter = this.parameter.Counter;
-
-            RuleJsonFormat format = new RuleJsonFormat
-            {
-                RuleType = RuleType,
-                InputStrings = InputStrings,
-                OutputStrings = OutputStrings,
-                Counter = Counter,
-			};
-            var options = new JsonSerializerOptions { WriteIndented = true };
-            return JsonSerializer.Serialize(format, options);
-		}
-
         void IRuleHandler.SetParameter(RuleParameter paremeters)
         {
             this.parameter = paremeters;

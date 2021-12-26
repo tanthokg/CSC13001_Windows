@@ -13,5 +13,9 @@ namespace BatchRename
     /// </summary>
     public partial class App : Application
     {
+        private void AppicationExit(object sender, ExitEventArgs e)
+        {
+            
+        }
     }
 }

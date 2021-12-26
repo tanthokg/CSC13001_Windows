@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:BatchRename"
         xmlns:Fluent="clr-namespace:Fluent;assembly=Fluent"               
         mc:Ignorable="d"
-        Title="MainWindow" Height="660" Width="960" Loaded="MainWindow_Loaded">
+        Title="Batch Rename" Height="660" Width="960" Loaded="MainWindow_Loaded" ContentRendered="Window_ContentRendered">
     <StackPanel Orientation="Vertical" >
         <Fluent:Ribbon>
             <Fluent:RibbonTabItem Header="Home">
@@ -34,7 +34,8 @@
 
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Items Actions">
-                    <Fluent:ComboBox Name="typeComboBox" Width="150" Height="25" Margin="0, 12, 0, 0" Text="-- Choose items type --">
+                    <Fluent:ComboBox Name="typeComboBox" Width="150" Height="25" Margin="0, 12, 0, 0" Text="-- Choose items type --"
+                                     DropDownClosed="typeComboBox_DropDownClosed">
                         <Fluent:ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding}"/>

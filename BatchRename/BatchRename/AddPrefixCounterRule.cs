@@ -25,24 +25,6 @@ namespace BatchRename
             return "AddPrefixCounterRule";
 		}
 
-        string IRuleHandler.ToJson()
-		{
-            string RuleType = ((IRuleHandler)this).GetRuleType();
-            List<string> InputStrings = this.parameter.InputStrings;
-            string OutputStrings = this.parameter.OutputStrings;
-            int Counter = this.parameter.Counter;
-
-            RuleJsonFormat format = new RuleJsonFormat
-            {
-                RuleType = RuleType,
-                InputStrings = InputStrings,
-                OutputStrings = OutputStrings,
-                Counter = Counter,
-			};
-            var options = new JsonSerializerOptions { WriteIndented = true };
-            return JsonSerializer.Serialize(format, options);
-		}
-
         bool IRuleHandler.IsEditable()
         {
             return false;
@@ -77,7 +59,7 @@ namespace BatchRename
         }
         RuleParameter IRuleHandler.GetParameter()
         {
-            return null;
+            return this.parameter;
         }
         IRuleHandler IRuleHandler.Clone()
         {
