@@ -32,7 +32,7 @@ namespace BatchRename
         private BindingList<Filename> filenames;
         private BindingList<Foldername> foldernames;
 
-        private string currentProjectName = "Unsaved Project";
+        private string currentProjectName = "";
         private string currentProjectPath = "";
         private string currentPresetPath = "";
 
@@ -43,7 +43,7 @@ namespace BatchRename
         {
             InitializeComponent();
             Closing += MainWindow_Closing;
-            DataContext = this;
+            Title = "Unsaved Project";
         }
 
         private void MainWindow_Closing(object sender, CancelEventArgs e)
@@ -124,6 +124,7 @@ namespace BatchRename
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            // Title = currentProjectName;
 
             if (File.Exists("autosave.json"))
             {
@@ -811,7 +812,7 @@ namespace BatchRename
                 path = dialog.FileName;
 
                 // Get the projectName from path
-                projectName = path.Substring(path.LastIndexOf('\\')).Split('.')[0];
+                projectName = path.Substring(path.LastIndexOf('\\') + 1).Split('.')[0];
             }
             else
             {
@@ -885,6 +886,8 @@ namespace BatchRename
                 MessageBox.Show("Cannot Save Project due to some errors!", "Error");
                 return;
             }
+            Title = currentProjectName;
+
         }
         private void LoadProject(object sender, RoutedEventArgs e)
         {
@@ -956,7 +959,8 @@ namespace BatchRename
             if (File.Exists("autosave.json"))
                 File.Delete("autosave.json");
             this.currentProjectPath = path;
-            this.currentProjectName = path.Substring(path.LastIndexOf('\\')).Split('.')[0];
+            this.currentProjectName = path.Substring(path.LastIndexOf('\\') + 1).Split('.')[0];
+            Title = currentProjectName;
         }
         #endregion
 
