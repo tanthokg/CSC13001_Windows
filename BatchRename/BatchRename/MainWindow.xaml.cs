@@ -50,8 +50,29 @@ namespace BatchRename
         {
             e.Cancel = true;
 
-            if (MessageBox.Show("Do you want to close the application?", "Batch Rename", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                Environment.Exit(0);
+            string message = "Do you want to close the application?";
+            if (File.Exists("autosave.json"))
+            {
+                message = "You have unsaved work/project. Do you want to save it before closing?";
+                var result = MessageBox.Show(message, "Batch Rename", MessageBoxButton.YesNoCancel);
+                if (MessageBoxResult.Yes == result)
+                {
+                    // TODO: save project here
+                }
+                else if (MessageBoxResult.No == result)
+                {
+                    Environment.Exit(0);
+                }
+            }
+            else
+            {
+                var result = MessageBox.Show(message, "Batch Rename", MessageBoxButton.YesNo);
+                if (MessageBoxResult.Yes == result)
+                {
+                    Environment.Exit(0);
+                }
+            }
+
         }
 
         private void PerformAutosave()
@@ -124,14 +145,7 @@ namespace BatchRename
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            // Title = currentProjectName;
-
-            if (File.Exists("autosave.json"))
-            {
-                //messageBox here if you want to load last save
-            }
-
-            //auto save per 30 sec
+            // Perform Autosave every 30 seconds
             DispatcherTimer dispatcherTimer = new DispatcherTimer();
             dispatcherTimer.Tick += (s, ev) => PerformAutosave();
             dispatcherTimer.Interval = new TimeSpan(0, 0, 30);
@@ -211,6 +225,29 @@ namespace BatchRename
             ICollectionView view = CollectionViewSource.GetDefaultView(chosenRules);
             view.Refresh();
 
+        }
+        private void ChosenRule_DoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            int index = chosenRulesListView.SelectedIndex;
+            if (index == -1)
+            {
+                MessageBox.Show("Invalid rule.");
+                return;
+            }
+
+            IRuleHandler rule = chosenRules[index];
+            if (rule.IsEditable())
+            {
+                IRuleEditor editWindow = rule.ParamsEditorWindow();
+                if (editWindow.ShowDialog() == true)
+                    chosenRules[index].SetParameter(editWindow.GetParameter());
+            }
+            else
+            {
+                MessageBox.Show("This rule does not have any parameter to edit", "Error");
+            }
+            ICollectionView view = CollectionViewSource.GetDefaultView(chosenRules);
+            view.Refresh();
         }
         private void RemoveChosenRule(object sender, RoutedEventArgs e)
         {
@@ -964,28 +1001,16 @@ namespace BatchRename
         }
         #endregion
 
-        private void ChosenRule_DoubleClick(object sender, MouseButtonEventArgs e)
+        private void Window_ContentRendered(object sender, EventArgs e)
         {
-            int index = chosenRulesListView.SelectedIndex;
-            if (index == -1)
+            if (File.Exists("autosave.json"))
             {
-                MessageBox.Show("Invalid rule.");
-                return;
+                var result = MessageBox.Show("Do you want to recover your project using autosave?", "Autosave Detected", MessageBoxButton.YesNo);
+                if (MessageBoxResult.Yes == result)
+                {
+                    // TODO: load autosave here
+                }
             }
-
-            IRuleHandler rule = chosenRules[index];
-            if (rule.IsEditable())
-            {
-                IRuleEditor editWindow = rule.ParamsEditorWindow();
-                if (editWindow.ShowDialog() == true)
-                    chosenRules[index].SetParameter(editWindow.GetParameter());
-            }
-            else
-            {
-                MessageBox.Show("This rule does not have any parameter to edit", "Error");
-            }
-            ICollectionView view = CollectionViewSource.GetDefaultView(chosenRules);
-            view.Refresh();
         }
     }
 }

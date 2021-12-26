@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:BatchRename"
         xmlns:Fluent="clr-namespace:Fluent;assembly=Fluent"               
         mc:Ignorable="d"
-        Title="{Binding}" Height="660" Width="960" Loaded="MainWindow_Loaded">
+        Title="Batch Rename" Height="660" Width="960" Loaded="MainWindow_Loaded" ContentRendered="Window_ContentRendered">
     <StackPanel Orientation="Vertical" >
         <Fluent:Ribbon>
             <Fluent:RibbonTabItem Header="Home">
