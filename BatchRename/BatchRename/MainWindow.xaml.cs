@@ -54,7 +54,9 @@ namespace BatchRename
             if (File.Exists("autosave.json"))
             {
                 message = "You have unsaved work/project. Do you want to save it before closing?";
-                var result = MessageBox.Show(message, "Batch Rename", MessageBoxButton.YesNoCancel);
+                var result = MessageBox.Show(message, "Batch Rename", MessageBoxButton.YesNoCancel,
+                     MessageBoxImage.Question, MessageBoxResult.Yes);
+                
                 if (MessageBoxResult.Yes == result)
                 {
                     // TODO: save project here
@@ -66,7 +68,9 @@ namespace BatchRename
             }
             else
             {
-                var result = MessageBox.Show(message, "Batch Rename", MessageBoxButton.YesNo);
+                var result = MessageBox.Show(message, "Batch Rename", MessageBoxButton.YesNo, 
+                    MessageBoxImage.Question, MessageBoxResult.No);
+
                 if (MessageBoxResult.Yes == result)
                 {
                     Environment.Exit(0);
@@ -1005,7 +1009,9 @@ namespace BatchRename
         {
             if (File.Exists("autosave.json"))
             {
-                var result = MessageBox.Show("Do you want to recover your project using autosave?", "Autosave Detected", MessageBoxButton.YesNo);
+                var result = MessageBox.Show("Do you want to recover your project using autosave?", "Autosave Detected", MessageBoxButton.YesNo,
+                    MessageBoxImage.Question, MessageBoxResult.Yes);
+
                 if (MessageBoxResult.Yes == result)
                 {
                     // TODO: load autosave here
