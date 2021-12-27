@@ -10,34 +10,47 @@ using RuleHandler;
 
 namespace BatchRename
 {
-    public class ChangeExtensionRuleEditor : Window, IRuleEditor
+    public class ReplaceExtensionRuleEditor : Window, IRuleEditor
     {
         public IRuleHandler Rule { get; set; }
 
         private Canvas canvas = new Canvas();
-        private Label label = new Label();
+        private Label label1 = new Label(), label2 = new Label();
         private Button submitBtn = new Button();
         private Button cancelBtn = new Button();
-        private TextBox editTxtBox = new TextBox();
+        private TextBox editInput = new TextBox();
+        private TextBox editOutput = new TextBox();
         private RuleParameter ruleParameter = new RuleParameter();
 
-        public ChangeExtensionRuleEditor (RuleParameter ruleParameter)
+        public ReplaceExtensionRuleEditor(RuleParameter ruleParameter)
         {
             // Define UI
-            this.Title = "Parameter Editor for Change Extension Rule";
+            this.Title = "Parameter Editor for Replace Extension Rule";
             this.Width = 415;
-            this.Height = 235;
+            this.Height = 365;
             this.ResizeMode = ResizeMode.NoResize;
 
-            label.Content = "Please type extension you want to rename to";
-            label.Margin = new Thickness(20, 10, 0, 0);
-            label.FontSize = 16;
+            label1.Content = "Please type extensions you want to replace.\nTo replace multiple ones, use enter.";
+            label1.Margin = new Thickness(20, 10, 0, 0);
+            label1.FontSize = 16;
 
-            editTxtBox.Width = 360;
-            editTxtBox.Height = 80;
-            editTxtBox.TextWrapping = TextWrapping.WrapWithOverflow;
-            editTxtBox.Margin = new Thickness(20, 50, 0, 0);
-            editTxtBox.Text = ruleParameter.OutputStrings;
+            editInput.Height = 80;
+            editInput.Width = 360;
+            editInput.TextWrapping = TextWrapping.Wrap;
+            editInput.AcceptsReturn = true;
+            editInput.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
+            editInput.Margin = new Thickness(20, 65, 0, 0);
+            editInput.Text = string.Join("\n", ruleParameter.InputStrings);
+
+            label2.Content = "Please type characters you want to replace with";
+            label2.Margin = new Thickness(20, 150, 0, 0);
+            label2.FontSize = 16;
+
+            editOutput.Height = 80;
+            editOutput.Width = 360;
+            editOutput.TextWrapping = TextWrapping.WrapWithOverflow;
+            editOutput.Margin = new Thickness(20, 180, 0, 0);
+            editOutput.Text = ruleParameter.OutputStrings;
 
             submitBtn.Content = "Submit";
             submitBtn.Name = "buttonSubmit";
@@ -45,7 +58,7 @@ namespace BatchRename
             submitBtn.Click += this.OnSubmitButtonClick;
             submitBtn.Width = 170;
             submitBtn.Height = 40;
-            submitBtn.Margin = new Thickness(20, 145, 0, 0);
+            submitBtn.Margin = new Thickness(20, 270, 0, 0);
             submitBtn.FontSize = 15;
 
             cancelBtn.Click += this.OnCancelButtonClick;
@@ -53,19 +66,22 @@ namespace BatchRename
             cancelBtn.Content = "Cancel";
             cancelBtn.Width = 170;
             cancelBtn.Height = 40;
-            cancelBtn.Margin = new Thickness(210, 145, 0, 0);
+            cancelBtn.Margin = new Thickness(210, 270, 0, 0);
             cancelBtn.FontSize = 15;
 
-            canvas.Children.Add(label);
-            canvas.Children.Add(editTxtBox);
+            canvas.Children.Add(label1);
+            canvas.Children.Add(label2);
+            canvas.Children.Add(editInput);
+            canvas.Children.Add(editOutput);
             canvas.Children.Add(submitBtn);
             canvas.Children.Add(cancelBtn);
 
             this.AddChild(canvas);
         }
+
         private void OnSubmitButtonClick(object sender, RoutedEventArgs e)
         {
-            string str = editTxtBox.Text;
+            string str = editInput.Text;
             if (str.Length != 0)
             {
                 DialogResult = true;
@@ -79,7 +95,15 @@ namespace BatchRename
         RuleParameter IRuleEditor.GetParameter()
         {
             RuleParameter ruleParameter = new RuleParameter();
-            ruleParameter.OutputStrings = editTxtBox.Text;
+            string[] inputs = editInput.Text.Split("\n");
+
+            foreach (string input in inputs)
+            {
+                ruleParameter.InputStrings.Add(input.Trim((char)13));
+            }
+
+            ruleParameter.OutputStrings = editOutput.Text;
+
             return ruleParameter;
         }
 
@@ -88,31 +112,32 @@ namespace BatchRename
             return this.ShowDialog();
         }
     }
-	class ChangeExtensionRule : Rule, IRuleHandler
-	{
-        public ChangeExtensionRule()
-		{
+    class ReplaceExtensionRule : Rule, IRuleHandler
+    {
+        public ReplaceExtensionRule()
+        {
             this.parameter = new RuleParameter();
-		}
+        }
 
         string IRuleHandler.GetRuleType()
-		{
-            return "ChangeExtensionRule";
-		}
+        {
+            return "ReplaceExtensionRule";
+        }
         public override string ToString()
         {
-            return this.parameter.OutputStrings.Length == 0 ? "Change file\'s extension" : "Change all file\'s extension to: " + this.parameter.OutputStrings;
+            return this.parameter.OutputStrings.Length == 0 ? "Replace file\'s extension"
+                : $"Replace file\'s extension: from \"{string.Join("\", \"", this.parameter.InputStrings)}\" to \"{this.parameter.OutputStrings}\"";
         }
-        
+
         bool IRuleHandler.IsEditable()
         {
             return true;
         }
 
         void IRuleHandler.SetParameter(RuleParameter ruleParameter)
-		{
+        {
             this.parameter = ruleParameter;
-		}
+        }
 
         string IRuleHandler.Process(string ObjectName, bool isFileType)
         {
@@ -129,12 +154,15 @@ namespace BatchRename
 
             string result = fileName;
             if (isFileType && !string.IsNullOrEmpty(this.parameter.OutputStrings))
-                return result + "." + this.parameter.OutputStrings;
+                if (this.parameter.InputStrings.Contains(extension))
+                    return result + "." + this.parameter.OutputStrings;
+                else
+                    return result + "." + extension;
             return result;
         }
         IRuleEditor IRuleHandler.ParamsEditorWindow()
         {
-            return new ChangeExtensionRuleEditor(this.parameter);
+            return new ReplaceExtensionRuleEditor(this.parameter);
         }
         RuleParameter IRuleHandler.GetParameter()
         {
@@ -142,11 +170,11 @@ namespace BatchRename
         }
         IRuleHandler IRuleHandler.Clone()
         {
-            ChangeExtensionRule clone = new ChangeExtensionRule();
+            ReplaceExtensionRule clone = new ReplaceExtensionRule();
             clone.parameter.InputStrings = this.parameter.InputStrings.Select(x => x.ToString()).ToList();
             clone.parameter.OutputStrings = this.parameter.OutputStrings;
             clone.parameter.Counter = this.parameter.Counter;
             return clone;
         }
-	} 
+    }
 }

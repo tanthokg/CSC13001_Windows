@@ -1,41 +1,38 @@
 ﻿using System;
-using System.Windows;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
+using System.Text.Json;
 using System.Threading.Tasks;
 using RuleHandler;
-using System.Windows.Controls;
-using System.Text.Json;
 
 namespace BatchRename
 {
-	class ImproperSpacesRule : Rule, IRuleHandler
+    public class AddPrefixCounterRule : Rule, IRuleHandler
     {
-
-		public ImproperSpacesRule()
-		{
+        public AddPrefixCounterRule()
+        {
             this.parameter = new RuleParameter();
-		}
+            this.parameter.Counter = 1;
+        }
+
         public override string ToString()
         {
-            return "Remove trailing spaces at the end/begining";
+            return "Add counter as preffix";
         }
         string IRuleHandler.GetRuleType()
-		{
-            return "ImproperSpacesRule";
-		}
-        
-        bool IRuleHandler.IsEditable() { return false; }
-        RuleParameter IRuleHandler.GetParameter()
-		{
-            return this.parameter;
-		}
+        {
+            return "AddPrefixCounterRule";
+        }
+
+        bool IRuleHandler.IsEditable()
+        {
+            return false;
+        }
 
         string IRuleHandler.Process(string ObjectName, bool isFileType)
         {
-            if(string.IsNullOrEmpty(ObjectName))
+            if (string.IsNullOrEmpty(ObjectName))
                 return "";
 
             string[] parts = ObjectName.Split('.');
@@ -46,22 +43,31 @@ namespace BatchRename
             else
                 fileName = ObjectName;
 
-            Regex rg = new Regex(@"^\s+|\s+$");
+            string result = fileName;
             if (isFileType)
-                return rg.Replace(fileName, "") + "." + extension;
-            return rg.Replace(fileName, "");
+            {
+                string counterString = this.parameter.Counter++.ToString();
+                // counterString = this.parameter.Counter < 11 ? "0" + counterString : counterString;
+                return counterString + " " + result + "." + extension;
+
+            }
+            return result;
         }
         IRuleEditor IRuleHandler.ParamsEditorWindow()
-		{
+        {
             return null;
-		}
+        }
+        RuleParameter IRuleHandler.GetParameter()
+        {
+            return this.parameter;
+        }
         IRuleHandler IRuleHandler.Clone()
-		{
-            ImproperSpacesRule clone = new ImproperSpacesRule();
+        {
+            AddPrefixCounterRule clone = new AddPrefixCounterRule();
             clone.parameter.InputStrings = this.parameter.InputStrings.Select(x => x.ToString()).ToList();
             clone.parameter.OutputStrings = this.parameter.OutputStrings;
             clone.parameter.Counter = this.parameter.Counter;
             return clone;
-		}
+        }
     }
 }

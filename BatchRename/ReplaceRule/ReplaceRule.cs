@@ -118,11 +118,11 @@ namespace BatchRename
         {
             this.parameter = new RuleParameter();
         }
-        
+
         string IRuleHandler.GetRuleType()
-		{
+        {
             return "ReplaceRule";
-		}
+        }
 
         public override string ToString()
         {

@@ -98,18 +98,18 @@ namespace BatchRename
     {
 
         public AddSuffixRule()
-		{
+        {
             this.parameter = new RuleParameter();
-		}
+        }
         public override string ToString()
         {
             return parameter.OutputStrings.Length == 0 ? "Add Suffix" : "Add Suffix: " + parameter.OutputStrings;
         }
 
         string IRuleHandler.GetRuleType()
-		{
+        {
             return "AddSuffixRule";
-		}
+        }
 
         void IRuleHandler.SetParameter(RuleParameter ruleParameter)
         {

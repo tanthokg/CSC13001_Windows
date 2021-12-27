@@ -1,33 +1,37 @@
 ﻿using System;
+using System.Windows;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using RuleHandler;
+using System.Windows.Controls;
+using System.Text.Json;
 
 namespace BatchRename
 {
-    public class AddSuffixCounterRule : Rule, IRuleHandler
+    public class UppercaseRule : Rule, IRuleHandler
     {
-        public AddSuffixCounterRule()
+
+        public UppercaseRule()
         {
             this.parameter = new RuleParameter();
-            this.parameter.Counter = 1;
         }
 
         public override string ToString()
         {
-            return "Add counter as suffix";
+            return "UPPERCASE";
         }
+        string IRuleHandler.GetRuleType()
+        {
+            return "UppercaseRule";
+        }
+
         bool IRuleHandler.IsEditable()
         {
             return false;
         }
-        string IRuleHandler.GetRuleType()
-		{
-            return "AddSuffixCounterRule";
-		}
 
         string IRuleHandler.Process(string ObjectName, bool isFileType)
         {
@@ -42,13 +46,9 @@ namespace BatchRename
             else
                 fileName = ObjectName;
 
-            string result = fileName;
+            string result = fileName.ToUpper();
             if (isFileType)
-            {
-                string counterString = this.parameter.Counter++.ToString();
-                // counterString = this.parameter.Counter < 11 ? "0" + counterString : counterString;
-                return result + " " + counterString + "." + extension;
-            }
+                return result + "." + extension;
             return result;
         }
         IRuleEditor IRuleHandler.ParamsEditorWindow()
@@ -61,7 +61,7 @@ namespace BatchRename
         }
         IRuleHandler IRuleHandler.Clone()
         {
-            AddSuffixCounterRule clone = new AddSuffixCounterRule();
+            UppercaseRule clone = new UppercaseRule();
             clone.parameter.InputStrings = this.parameter.InputStrings.Select(x => x.ToString()).ToList();
             clone.parameter.OutputStrings = this.parameter.OutputStrings;
             clone.parameter.Counter = this.parameter.Counter;

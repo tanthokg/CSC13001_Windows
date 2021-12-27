@@ -23,9 +23,9 @@ namespace BatchRename
         }
 
         string IRuleHandler.GetRuleType()
-		{
+        {
             return "LowercaseRule";
-		}
+        }
 
         string IRuleHandler.Process(string ObjectName, bool isFileType)
         {
@@ -51,23 +51,23 @@ namespace BatchRename
         }
 
         RuleParameter IRuleHandler.GetParameter()
-		{
+        {
             return this.parameter;
-		}
+        }
 
         IRuleEditor IRuleHandler.ParamsEditorWindow()
-		{
+        {
             return null;
-		}
+        }
 
         IRuleHandler IRuleHandler.Clone()
-		{
+        {
             LowercaseRule clone = new LowercaseRule();
             clone.parameter.InputStrings = this.parameter.InputStrings.Select(x => x.ToString()).ToList();
             clone.parameter.OutputStrings = this.parameter.OutputStrings;
             clone.parameter.Counter = this.parameter.Counter;
             return clone;
-		}
+        }
 
     }
 }

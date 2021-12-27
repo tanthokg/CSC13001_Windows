@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ruleHandler\ruleHandler.csproj" />
+    <ProjectReference Include="..\Core\Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -55,6 +55,10 @@
     <Resource Include="icons\ic_save_project.png" />
     <Resource Include="icons\ic_start.png" />
     <Resource Include="icons\ic_submit.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="rules\" />
   </ItemGroup>
 
 </Project>
